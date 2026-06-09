@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NurBank — World's #1 Islamic Digital Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060b18;--surface:#0d1525;--surface2:#121e32;--surface3:#1a2740;--surface4:#202f4a;
+  --border:#1a2a42;--border2:#243550;--border3:#2e4060;
+  --text:#edf2fc;--text2:#8faac8;--text3:#4a6080;--text4:#2a4060;
+  --gold:#d4a843;--gold2:#f0c060;--gold3:#ffd980;--gold-bg:rgba(212,168,67,0.08);--gold-glow:rgba(212,168,67,0.2);
+  --teal:#0ec4a0;--teal2:#1adbb5;--teal-bg:rgba(14,196,160,0.08);--teal-dark:#0a9a7f;
+  --blue:#3b82f6;--blue2:#60a5fa;--blue-bg:rgba(59,130,246,0.1);
+  --purple:#8b5cf6;--purple-bg:rgba(139,92,246,0.1);
+  --red:#ef4444;--red-bg:rgba(239,68,68,0.1);
+  --green:#10b981;--green-bg:rgba(16,185,129,0.1);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);
+  --r:10px;--r-lg:16px;--r-xl:22px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border3);border-radius:3px}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);position:relative;overflow:hidden;padding:20px}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:float 8s ease-in-out infinite}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(212,168,67,0.12),transparent 70%);top:-100px;left:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(14,196,160,0.08),transparent 70%);bottom:-80px;right:-80px;animation-delay:3s}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(139,92,246,0.07),transparent 70%);top:40%;left:40%;animation-delay:5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.login-wrap{width:100%;max-width:1020px;display:grid;grid-template-columns:1fr 1fr;border-radius:var(--r-xl);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.7);border:0.5px solid var(--border3);position:relative;z-index:1}
+.login-left{background:linear-gradient(145deg,#060f22,#0a1a35 60%,#060f22);padding:52px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-100px;right:-100px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,0.1),transparent 70%);pointer-events:none}
+.brand-logo{display:flex;align-items:center;gap:14px;margin-bottom:36px}
+.brand-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#060f22;box-shadow:0 4px 20px rgba(212,168,67,0.4)}
+.brand-name{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold2);letter-spacing:-0.5px}
+.brand-tag{font-size:10px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-top:2px}
+.login-hero-title{font-family:'Playfair Display',serif;font-size:32px;color:#fff;line-height:1.2;margin-bottom:16px}
+.login-hero-title em{color:var(--gold2);font-style:normal}
+.login-hero-sub{font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:24px;max-width:320px}
+.ai-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(139,92,246,0.15);border:0.5px solid rgba(139,92,246,0.4);border-radius:20px;font-size:11px;color:#a78bfa;margin-bottom:14px}
+.ai-pulse{width:8px;height:8px;background:#a78bfa;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.login-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.login-stat{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px}
+.login-stat-val{font-size:19px;font-weight:700;color:var(--gold2)}
+.login-stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+.login-right{background:var(--surface);padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.login-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:28px}
+.login-tab{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text2);border:none;background:none;transition:all .2s;font-family:'Sora',sans-serif}
+.login-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.login-title{font-size:22px;font-weight:700;margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--text3);margin-bottom:20px}
+.form-g{margin-bottom:13px}
+.form-lbl{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px}
+.form-inp{width:100%;padding:11px 15px;border:0.5px solid var(--border3);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:all .2s}
+.form-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+.form-inp::placeholder{color:var(--text3)}
+.demo-box{background:var(--gold-bg);border:0.5px solid rgba(212,168,67,0.25);border-radius:10px;padding:13px;margin-bottom:16px}
+.demo-box-t{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.demo-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+.btn{padding:10px 18px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:'Sora',sans-serif}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#060f22}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,168,67,0.35)}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;border:0.5px solid var(--border3);color:var(--text2)}
+.btn-outline:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{opacity:.9}
+.btn-purple{background:var(--purple);color:#fff}
+.btn-red{background:var(--red-bg);color:var(--red);border:0.5px solid rgba(239,68,68,.3)}
+.btn-sm{padding:5px 12px;font-size:11px;border-radius:8px}
+.btn-xs{padding:3px 9px;font-size:10px;border-radius:6px}
+.btn-w100{width:100%}
+
+/* APP SHELL */
+#app-shell{display:none;flex-direction:column;height:100vh;overflow:hidden}
+#app-shell.visible{display:flex}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:54px;background:var(--surface);border-bottom:0.5px solid var(--border);flex-shrink:0;z-index:200}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.topbar-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#060f22}
+.topbar-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold2)}
+.role-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.role-client{background:var(--teal-bg);color:var(--teal);border:0.5px solid rgba(14,196,160,.3)}
+.role-admin{background:var(--gold-bg);color:var(--gold);border:0.5px solid rgba(212,168,67,.3)}
+.topbar-right{display:flex;align-items:center;gap:7px}
+.topbar-btn{background:none;border:0.5px solid var(--border3);color:var(--text2);padding:5px 11px;border-radius:8px;cursor:pointer;font-size:11px;font-family:'Sora',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
+.topbar-btn:hover{background:var(--surface2);color:var(--text)}
+.nb-count{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:8px}
+.user-chip{display:flex;align-items:center;gap:8px;padding:4px 10px;background:var(--surface2);border:0.5px solid var(--border3);border-radius:8px;cursor:pointer;transition:all .15s}
+.user-chip:hover{border-color:var(--border2)}
+.user-avatar{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#060f22}
+
+/* LAYOUT */
+.app-body{display:flex;flex:1;overflow:hidden}
+.sidebar{width:210px;background:var(--surface);border-right:0.5px solid var(--border);overflow-y:auto;flex-shrink:0;padding:8px 7px 20px}
+.main-content{flex:1;overflow-y:auto;padding:18px 20px}
+.nav-section{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--text4);padding:12px 10px 4px;font-weight:700}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;cursor:pointer;color:var(--text2);font-size:12px;font-weight:500;margin-bottom:1px;transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--gold-bg);color:var(--gold);border:0.5px solid rgba(212,168,67,.2)}
+.nav-ico{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;padding:2px 5px;border-radius:8px;font-weight:700}
+
+/* CARDS */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.card-t{font-size:13px;font-weight:700;color:var(--text)}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+
+/* METRICS */
+.metric{background:var(--surface2);border-radius:var(--r);padding:14px;border:0.5px solid var(--border)}
+.metric-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:5px}
+.metric-val{font-size:18px;font-weight:800;color:var(--text)}
+.metric-chg{font-size:11px;margin-top:3px}
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--text3)}
+
+/* ACCOUNT CARDS */
+.acct-card{border-radius:var(--r-lg);padding:22px;position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;color:#fff;user-select:none}
+.acct-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.ac-blue{background:linear-gradient(135deg,#1e3a6b,#0d2247)}
+.ac-teal{background:linear-gradient(135deg,#0a4a3a,#053028)}
+.ac-purple{background:linear-gradient(135deg,#3a2060,#220f45)}
+.ac-gold{background:linear-gradient(135deg,#5a3200,#3a2000)}
+.ac-pat{position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.ac-glow{position:absolute;top:0;right:0;width:100px;height:100px;background:radial-gradient(circle,rgba(255,255,255,0.1),transparent 70%)}
+.ac-chip{width:32px;height:24px;background:rgba(255,255,255,.2);border-radius:5px;margin-bottom:16px}
+.ac-lbl{font-size:9px;opacity:.6;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.ac-num{font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.65;letter-spacing:.18em;margin-bottom:10px}
+.ac-bal{font-size:24px;font-weight:800;margin-bottom:12px;letter-spacing:-1px}
+.ac-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.7}
+
+/* TRANSACTIONS */
+.txn-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:0.5px solid var(--border)}
+.txn-item:last-child{border-bottom:none}
+.txn-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.txn-info{flex:1}
+.txn-name{font-size:12px;font-weight:600}
+.txn-meta{font-size:10px;color:var(--text3);margin-top:2px}
+.txn-amt{font-size:12px;font-weight:800;letter-spacing:-.3px}
+.amt-in{color:var(--green)}.amt-out{color:var(--red)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.bg-green{background:var(--green-bg);color:var(--green)}.bg-red{background:var(--red-bg);color:var(--red)}
+.bg-gold{background:var(--gold-bg);color:var(--gold)}.bg-teal{background:var(--teal-bg);color:var(--teal)}
+.bg-blue{background:var(--blue-bg);color:var(--blue)}.bg-purple{background:var(--purple-bg);color:var(--purple)}
+.bg-amber{background:var(--amber-bg);color:var(--amber)}
+
+/* FORMS */
+.fg{margin-bottom:12px}
+.fl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.fi{width:100%;padding:9px 13px;border:0.5px solid var(--border3);border-radius:9px;background:var(--surface2);color:var(--text);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:all .2s}
+.fi:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+.fi::placeholder{color:var(--text3)}
+select.fi{cursor:pointer}
+.fi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:7px 11px;color:var(--text3);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.08em;border-bottom:0.5px solid var(--border3);background:var(--surface2)}
+.tbl td{padding:10px 11px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tbody tr:hover td{background:var(--surface2)}
+.tbl tbody tr:last-child td{border-bottom:none}
+
+/* PROGRESS */
+.prog{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .8s ease}
+
+/* HEPI RING */
+.hepi-ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.hepi-ring svg{transform:rotate(-90deg)}
+.hepi-ring-label{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hepi-d{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.hepi-d-lbl{font-size:11px;color:var(--text2);width:140px;flex-shrink:0}
+.hepi-d-bar{flex:1;height:6px;background:var(--surface3);border-radius:4px;overflow:hidden}
+.hepi-d-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.hepi-d-val{font-size:11px;font-weight:800;width:26px;text-align:right;flex-shrink:0}
+
+/* TABS */
+.tab-bar{display:flex;gap:3px;background:var(--surface2);border-radius:11px;padding:4px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:6px 13px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text2);border:none;background:none;font-family:'Sora',sans-serif;transition:all .15s;white-space:nowrap}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* AI CHAT */
+.ai-wrap{display:flex;flex-direction:column;height:440px}
+.ai-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:9px}
+.ai-bubble{padding:11px 15px;border-radius:14px;font-size:12px;line-height:1.75;max-width:90%}
+.ai-bot{background:var(--surface2);border:0.5px solid var(--border3);color:var(--text);border-bottom-left-radius:3px;position:relative}
+.ai-bot-badge{position:absolute;top:-8px;left:12px;font-size:9px;background:var(--purple);color:#fff;padding:2px 7px;border-radius:8px;font-weight:700}
+.ai-user{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#060f22;font-weight:600;align-self:flex-end;border-bottom-right-radius:3px}
+.ai-typing{display:flex;gap:5px;align-items:center;padding:12px 15px;background:var(--surface2);border:0.5px solid var(--border3);border-radius:14px;border-bottom-left-radius:3px;width:66px}
+.ai-dot{width:7px;height:7px;background:var(--purple);border-radius:50%;animation:bounce .9s infinite}
+.ai-dot:nth-child(2){animation-delay:.15s}.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ai-input-row{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
+.ai-input-row .fi{flex:1;resize:none;min-height:40px;max-height:100px;overflow-y:auto}
+
+/* MODALS */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px)}
+.modal-ov.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--r-xl);border:0.5px solid var(--border3);padding:26px;width:480px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7)}
+.modal-t{font-size:16px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.modal-close{margin-left:auto;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;transition:color .15s}
+.modal-close:hover{color:var(--text)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-item{background:var(--surface);border:0.5px solid var(--border3);border-radius:12px;padding:12px 16px;font-size:12px;color:var(--text);box-shadow:0 10px 32px rgba(0,0,0,.5);transform:translateX(120%);opacity:0;transition:all .35s;max-width:300px;display:flex;align-items:center;gap:10px;pointer-events:auto}
+.toast-item.show{transform:translateX(0);opacity:1}
+.toast-success{border-left:3px solid var(--green)}.toast-error{border-left:3px solid var(--red)}
+.toast-info{border-left:3px solid var(--blue)}.toast-gold{border-left:3px solid var(--gold)}
+.toast-purple{border-left:3px solid var(--purple)}
+
+/* UTILS */
+.divider{height:.5px;background:var(--border);margin:13px 0}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-2{gap:8px}.gap-3{gap:12px}
+.mt-2{margin-top:8px}.mt-3{margin-top:13px}.mt-4{margin-top:18px}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:13px}.mb-4{margin-bottom:18px}
+.text-gold{color:var(--gold)}.text-teal{color:var(--teal)}.text-green{color:var(--green)}
+.text-red{color:var(--red)}.text-purple{color:var(--purple)}.text-blue{color:var(--blue)}
+.text-sm{font-size:11px}.text-xs{font-size:10px}.text-muted{color:var(--text3)}
+.fw-bold{font-weight:700}.fw-black{font-weight:800}
+.mono{font-family:'JetBrains Mono',monospace}
+.info-box{padding:11px 15px;border-radius:10px;font-size:11px;line-height:1.7}
+.info-teal{background:var(--teal-bg);border:0.5px solid rgba(14,196,160,.25);color:var(--teal)}
+.info-gold{background:var(--gold-bg);border:0.5px solid rgba(212,168,67,.25);color:var(--gold)}
+.info-blue{background:var(--blue-bg);border:0.5px solid rgba(59,130,246,.25);color:var(--blue)}
+.info-red{background:var(--red-bg);border:0.5px solid rgba(239,68,68,.25);color:var(--red)}
+.info-purple{background:var(--purple-bg);border:0.5px solid rgba(139,92,246,.25);color:var(--purple)}
+.info-green{background:var(--green-bg);border:0.5px solid rgba(16,185,129,.25);color:var(--green)}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.toggle-wrap:last-child{border-bottom:none}
+.toggle-info{flex:1}
+.toggle-t{font-size:12px;font-weight:600}
+.toggle-s{font-size:10px;color:var(--text3);margin-top:2px}
+.toggle{position:relative;width:38px;height:21px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.t-slider{position:absolute;inset:0;background:var(--surface3);border-radius:11px;cursor:pointer;transition:.2s;border:.5px solid var(--border2)}
+.t-slider::before{content:'';position:absolute;width:15px;height:15px;left:3px;top:3px;background:var(--text3);border-radius:50%;transition:.2s}
+input:checked+.t-slider{background:var(--teal);border-color:var(--teal)}
+input:checked+.t-slider::before{left:19px;background:#fff}
+
+/* OTP */
+.otp-row{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.otp-digit{width:42px;height:52px;border:.5px solid var(--border3);border-radius:10px;text-align:center;font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;background:var(--surface2);color:var(--text);outline:none;transition:all .2s}
+.otp-digit:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+
+/* GOAL CARD */
+.goal-card{border:.5px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:9px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-enter{animation:fadeUp .25s ease}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{animation:spin .8s linear infinite;display:inline-block}
+
+/* LIVE TICKER */
+.ticker-wrap{overflow:hidden;background:var(--surface2);border:.5px solid var(--border);border-radius:8px;padding:6px 12px;margin-bottom:14px}
+.ticker-inner{display:flex;gap:26px;animation:ticker 40s linear infinite;width:max-content}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:6px;font-size:11px;white-space:nowrap}
+
+/* CHART BARS */
+.chart-area{height:160px;display:flex;align-items:flex-end;gap:5px;padding:10px 0}
+.chart-bar{flex:1;border-radius:5px 5px 0 0;position:relative;cursor:pointer;transition:.15s;min-width:20px}
+.chart-bar:hover{opacity:.8}
+.chart-bar-tip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text3);white-space:nowrap;display:none}
+.chart-bar:hover .chart-bar-tip{display:block}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;margin-bottom:20px}
+.step{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.step-dot{width:28px;height:28px;border-radius:50%;background:var(--surface3);border:2px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:all .3s}
+.step-dot.active-dot{background:var(--gold);border-color:var(--gold);color:#060f22}
+.step-dot.done-dot{background:var(--green);border-color:var(--green);color:#fff}
+.step-line{flex:1;height:2px;background:var(--border3);margin-top:-18px;z-index:-1}
+.step-line.done-line{background:var(--green)}
+.step-lbl{font-size:10px;color:var(--text3);font-weight:600;text-align:center}
+
+/* REVIEW BOX */
+.review-box{background:var(--surface2);border-radius:var(--r);padding:13px;margin-bottom:13px;border:.5px solid var(--border3)}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px}
+.review-row:not(:last-child){border-bottom:.5px solid var(--border)}
+.review-key{color:var(--text3)}
+.review-val{font-weight:700}
+
+/* ADMIN */
+.alert-row{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border-radius:10px;margin-bottom:7px;border-left:3px solid}
+.alert-hi{background:var(--red-bg);border-color:var(--red)}
+.alert-med{background:var(--amber-bg);border-color:var(--amber)}
+.alert-lo{background:var(--blue-bg);border-color:var(--blue)}
+.cust-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.cust-row:last-child{border-bottom:none}
+.c-av{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+
+/* GPS */
+.gps-bar{display:flex;align-items:center;gap:8px;padding:7px 13px;background:var(--surface2);border:.5px solid var(--border);border-radius:8px;font-size:11px;margin-bottom:11px}
+.gps-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+/* ZAKAT NISAB LIVE */
+.zakat-live-box{background:var(--teal-bg);border:.5px solid rgba(14,196,160,.3);border-radius:var(--r);padding:14px;margin-top:12px}
+
+/* SPENDING WHEEL */
+.spend-category{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--border)}
+
+/* RATE TICKER */
+.rate-card{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;transition:.2s}
+.rate-card:hover{border-color:var(--border2)}
+.rate-val{font-size:16px;font-weight:800;color:var(--gold2)}
+.rate-lbl{font-size:10px;color:var(--text3);margin-top:3px}
+.rate-chg{font-size:10px;margin-top:2px}
+
+@media(max-width:900px){
+  .login-wrap{grid-template-columns:1fr}
+  .login-left{display:none}
+  .g4{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  <div class="login-wrap">
+    <div class="login-left">
+      <div>
+        <div class="brand-logo"><div class="brand-icon">N</div><div><div class="brand-name">NurBank</div><div class="brand-tag">Islamic Digital Banking · Est. 2019</div></div></div>
+        <div class="ai-badge"><div class="ai-pulse"></div>Claude AI · Real Intelligence · Universal Advisor</div>
+        <div class="login-hero-title">Banking built on <em>values</em>,<br>powered by <em>intelligence</em></div>
+        <div class="login-hero-sub">The world's most advanced halal banking platform — powered by Claude AI, GPS fraud protection, real-time market data, and HEPI ethical scoring. Ask anything, anytime.</div>
+      </div>
+      <div class="login-stats">
+        <div class="login-stat"><div class="login-stat-val">87/100</div><div class="login-stat-lbl">Your HEPI Score</div></div>
+        <div class="login-stat"><div class="login-stat-val">0% Riba</div><div class="login-stat-lbl">Interest-Free</div></div>
+        <div class="login-stat"><div class="login-stat-val">Claude AI</div><div class="login-stat-lbl">24/7 Advisor</div></div>
+        <div class="login-stat"><div class="login-stat-val">BDT 8,450</div><div class="login-stat-lbl">Zakat Distributed</div></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="setLoginRole('client',this)">🏦 Client Portal</button>
+        <button class="login-tab" onclick="setLoginRole('admin',this)">🔐 Admin Panel</button>
+      </div>
+      <div id="login-client-form">
+        <div class="login-title">Welcome back</div>
+        <div class="login-sub">Sign in to your NurBank account</div>
+        <div class="demo-box">
+          <div class="demo-box-t">🔑 Demo Credentials</div>
+          <div class="demo-row"><span>Username</span><span>ahmad.raza</span></div>
+          <div class="demo-row"><span>Password</span><span>nur1234</span></div>
+        </div>
+        <div class="form-g"><label class="form-lbl">Username</label><input class="form-inp" id="c-user" value="ahmad.raza" placeholder="Username"></div>
+        <div class="form-g"><label class="form-lbl">Password</label><input class="form-inp" type="password" id="c-pass" value="nur1234" placeholder="••••••••"></div>
+        <button class="btn btn-gold btn-w100 mb-2" onclick="doLogin('client')">Sign In →</button>
+      </div>
+      <div id="login-admin-form" style="display:none">
+        <div class="login-title">Admin Access</div>
+        <div class="login-sub">Authorized bank staff only</div>
+        <div class="demo-box">
+          <div class="demo-box-t">🔑 Admin Credentials</div>
+          <div class="demo-row"><span>Staff ID</span><span>NB-STAFF-001</span></div>
+          <div class="demo-row"><span>Password</span><span>admin2026</span></div>
+        </div>
+        <div class="form-g"><label class="form-lbl">Staff ID</label><input class="form-inp" id="a-user" value="NB-STAFF-001"></div>
+        <div class="form-g"><label class="form-lbl">Password</label><input class="form-inp" type="password" id="a-pass" value="admin2026"></div>
+        <div class="form-g"><label class="form-lbl">Role</label><select class="form-inp" id="a-role"><option>Branch Manager</option><option>Loan Officer</option><option>Compliance Officer</option></select></div>
+        <button class="btn btn-gold btn-w100" onclick="doLogin('admin')">Access Admin Panel →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app-shell">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" onclick="goHome()"><div class="topbar-icon">N</div><span class="topbar-name">NurBank</span></div>
+      <div id="topbar-badge"></div>
+      <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace" id="topbar-date"></span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-btn" id="gps-indicator" style="display:flex;gap:5px;align-items:center;cursor:pointer" onclick="showPage('gps-security')">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0"></span>
+        <span id="gps-location-text">Detecting...</span>
+      </div>
+      <div class="topbar-btn" id="forex-ticker" style="font-family:'JetBrains Mono',monospace;font-size:10px">USD: ৳110.4</div>
+      <button class="topbar-btn" onclick="openModal('notif')">🔔 <span class="nb-count" id="notif-count">4</span></button>
+      <div class="user-chip" onclick="openModal('profile')">
+        <div class="user-avatar" id="topbar-avatar">AR</div>
+        <span style="font-size:11px;font-weight:600" id="topbar-uname">Ahmad Raza</span>
+      </div>
+      <button class="topbar-btn" onclick="doLogout()">↩ Sign Out</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main-content" id="main-content"></main>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-ov" id="modal-notif" onclick="if(event.target===this)closeModal('notif')">
+  <div class="modal"><div class="modal-t">🔔 Notifications <button class="modal-close" onclick="closeModal('notif')">×</button></div><div id="notif-list"></div></div>
+</div>
+
+<div class="modal-ov" id="modal-profile" onclick="if(event.target===this)closeModal('profile')">
+  <div class="modal"><div class="modal-t">👤 Profile <button class="modal-close" onclick="closeModal('profile')">×</button></div><div id="profile-content"></div></div>
+</div>
+
+<div class="modal-ov" id="modal-pay" onclick="if(event.target===this)closeModal('pay')">
+  <div class="modal">
+    <div class="modal-t">◈ Bill Payment <button class="modal-close" onclick="closeModal('pay')">×</button></div>
+    <div class="fg"><label class="fl">Service Category</label><select class="fi" id="pay-cat" onchange="loadPayAccounts()"><option>Electricity (DESCO)</option><option>Water (WASA)</option><option>Mobile Top-up (Grameenphone)</option><option>Mobile Top-up (Robi)</option><option>Internet (Fiber@Home)</option><option>Education Fee</option><option>Hospital Bill</option><option>Sadaqah / Charity</option><option>Waqf Contribution</option></select></div>
+    <div class="fg"><label class="fl">Consumer/Account Number</label><input class="fi" id="pay-acct" placeholder="Enter your account/consumer number"></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" id="pay-amount" placeholder="0.00" oninput="updatePayPreview()"></div>
+    <div id="pay-preview" style="display:none" class="review-box">
+      <div class="review-row"><span class="review-key">Service</span><span class="review-val" id="pay-service-name">—</span></div>
+      <div class="review-row"><span class="review-key">Service Fee</span><span class="review-val text-green">FREE (HEPI Waived)</span></div>
+      <div class="review-row"><span class="review-key fw-bold">Total Payable</span><span class="review-val fw-bold" id="pay-total">—</span></div>
+    </div>
+    <div class="info-teal info-box mb-3">✦ Shariah-compliant. No haram merchant payments allowed. All transactions screened.</div>
+    <div class="flex gap-2"><button class="btn btn-outline" style="flex:1" onclick="closeModal('pay')">Cancel</button><button class="btn btn-gold" style="flex:1" onclick="submitPayment()">Pay Now ↗</button></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-otp">
+  <div class="modal" style="text-align:center">
+    <div class="modal-t" style="justify-content:center">🔐 Verify Transaction</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Enter the 6-digit OTP sent to your registered mobile</div>
+    <div class="otp-row">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,0)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,1)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,2)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,3)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,4)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,5)">
+    </div>
+    <div class="info-purple info-box mb-3" style="text-align:left">Demo: Enter any 6 digits to confirm the transaction</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:14px">OTP valid for <span id="otp-timer">02:00</span> · <button onclick="toast('OTP resent!','success')" style="background:none;border:none;color:var(--teal);cursor:pointer;font-size:11px">Resend OTP</button></div>
+    <div class="flex gap-2"><button class="btn btn-outline" style="flex:1" onclick="closeModal('otp')">Cancel</button><button class="btn btn-gold" style="flex:1" onclick="confirmTransfer()">Confirm ✓</button></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-loan" onclick="if(event.target===this)closeModal('loan')">
+  <div class="modal">
+    <div class="modal-t">⬡ Islamic Financing Application <button class="modal-close" onclick="closeModal('loan')">×</button></div>
+    <div class="info-teal info-box mb-3">✦ Riba-free financing using Murabaha, Ijarah & Diminishing Musharakah structures.</div>
+    <div class="fg"><label class="fl">Finance Type</label><select class="fi" id="loan-type"><option>Home Finance — Diminishing Musharakah</option><option>Auto Finance — Ijarah</option><option>SME Finance — Murabaha</option><option>Personal — Qard Hasan</option></select></div>
+    <div class="fi-row">
+      <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" id="loan-app-amt" placeholder="0.00" oninput="previewLoanApp()"></div>
+      <div class="fg"><label class="fl">Tenure (months)</label><input class="fi" type="number" id="loan-app-tenure" value="60" oninput="previewLoanApp()"></div>
+    </div>
+    <div class="fg"><label class="fl">Purpose / Description</label><textarea class="fi" rows="2" placeholder="Describe the purpose of this financing..."></textarea></div>
+    <div id="loan-app-preview" style="display:none" class="review-box">
+      <div class="review-row"><span class="review-key">Profit Rate</span><span class="review-val text-teal" id="loan-app-rate">—</span></div>
+      <div class="review-row"><span class="review-key">Monthly Installment</span><span class="review-val" id="loan-app-emi">—</span></div>
+    </div>
+    <div class="info-gold info-box mb-3">✓ Your HEPI Score <strong id="hepi-in-loan">87</strong> qualifies you for <strong>-0.5% preferential profit rate</strong></div>
+    <div class="flex gap-2"><button class="btn btn-outline" style="flex:1" onclick="closeModal('loan')">Cancel</button><button class="btn btn-gold" style="flex:1" onclick="submitLoanApp()">Submit Application →</button></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-zakatpay" onclick="if(event.target===this)closeModal('zakatpay')">
+  <div class="modal">
+    <div class="modal-t">⊕ Pay Your Zakat <button class="modal-close" onclick="closeModal('zakatpay')">×</button></div>
+    <div class="info-teal info-box mb-3">Calculated Zakat Due: <strong id="modal-zakat-val">Calculating...</strong></div>
+    <div class="fg"><label class="fl">Amount to Pay (BDT)</label><input class="fi" type="number" id="zakatpay-amt" placeholder="Full or partial amount"></div>
+    <div class="fg"><label class="fl">Distribute To</label><select class="fi" id="zakatpay-org">
+      <option>BRAC Education Fund (Impact: 94/100)</option>
+      <option>Manabik Shahajya Sangstha (Impact: 89/100)</option>
+      <option>NurBank Microfinance Pool (Impact: 91/100)</option>
+      <option>Islamic Relief Bangladesh (Impact: 88/100)</option>
+      <option>Muslim Aid Bangladesh (Impact: 86/100)</option>
+    </select></div>
+    <div class="fg"><label class="fl">Zakat Category</label><select class="fi"><option>Al-Fuqara (The Poor)</option><option>Al-Masakin (The Needy)</option><option>Fee Sabilillah (Way of Allah)</option><option>Ibn Al-Sabil (Traveler in need)</option></select></div>
+    <div class="flex gap-2"><button class="btn btn-outline" style="flex:1" onclick="closeModal('zakatpay')">Cancel</button><button class="btn btn-teal" style="flex:2" onclick="payZakat()">Pay Zakat — JazakAllah Khairan ⊕</button></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-customer" onclick="if(event.target===this)closeModal('customer')">
+  <div class="modal"><div class="modal-t">👤 Customer Profile <button class="modal-close" onclick="closeModal('customer')">×</button></div><div id="customer-modal-content"></div></div>
+</div>
+
+<div class="modal-ov" id="modal-deposit" onclick="if(event.target===this)closeModal('deposit')">
+  <div class="modal">
+    <div class="modal-t">◑ New Mudarabah Deposit <button class="modal-close" onclick="closeModal('deposit')">×</button></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" id="dep-amt" placeholder="Minimum BDT 10,000" oninput="previewDeposit()"></div>
+    <div class="fg"><label class="fl">Tenure</label><select class="fi" id="dep-tenure" onchange="previewDeposit()">
+      <option value="3">3 months — 6.5% p.a.</option>
+      <option value="6">6 months — 7.2% p.a.</option>
+      <option value="12" selected>12 months — 8.0% p.a.</option>
+      <option value="24">24 months — 8.5% p.a.</option>
+    </select></div>
+    <div id="dep-preview" style="display:none" class="review-box">
+      <div class="review-row"><span class="review-key">Principal</span><span class="review-val" id="dep-principal">—</span></div>
+      <div class="review-row"><span class="review-key">Profit Rate</span><span class="review-val text-teal" id="dep-rate">—</span></div>
+      <div class="review-row"><span class="review-key">Expected Profit</span><span class="review-val text-green" id="dep-profit">—</span></div>
+      <div class="review-row"><span class="review-key fw-bold">Total at Maturity</span><span class="review-val fw-bold" id="dep-maturity">—</span></div>
+    </div>
+    <div class="flex gap-2 mt-3"><button class="btn btn-outline" style="flex:1" onclick="closeModal('deposit')">Cancel</button><button class="btn btn-gold" style="flex:1" onclick="createDeposit()">Create Deposit →</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// GLOBAL STATE
+// ═══════════════════════════════════════════
+const S = {
+  role: null, user: null, page: null,
+  gpsCoords: {lat:23.7808,lng:90.4142},
+  gpsAddress: 'Gulshan-2, Dhaka',
+  transferAmt: 0, transferRecip: '',
+  aiCtx: {client:[], admin:[]},
+  zakatDue: 0,
+  forexRates: {USD:110.42,EUR:119.80,GBP:140.20,SAR:29.44,AED:30.07,MYR:24.80},
+  otpTimer: null,
+  spending: {Food:4500,Education:12000,Utilities:3200,Healthcare:8200,Transport:2100,Charity:7000,Other:3800},
+  deposits: [
+    {id:'D001',name:'Term Deposit #1',amt:50000,tenure:3,rate:6.5,startDate:'15 Jan 2026',maturity:'15 Apr 2026',status:'Active'},
+    {id:'D002',name:'Term Deposit #2',amt:100000,tenure:6,rate:7.2,startDate:'23 Oct 2025',maturity:'23 Apr 2026',status:'Active'},
+    {id:'D003',name:'Term Deposit #3',amt:200000,tenure:12,rate:8.0,startDate:'23 Apr 2025',maturity:'23 Apr 2026',status:'Maturing Soon'},
+  ],
+  notifications: [
+    {icon:'⊕',title:'Zakat due in 12 days',body:'BDT 15,070 calculated from your total zakatable wealth. Pay now to earn HEPI +2.',type:'gold',time:'Just now',unread:true},
+    {icon:'✦',title:'HEPI Score updated: 87 (+4)',body:'Excellent tier! Preferential home finance rate of 8.5% now available.',type:'teal',time:'2 hours ago',unread:true},
+    {icon:'📍',title:'GPS: New location verified',body:'Session secured from Gulshan-2, Dhaka. Location fingerprint saved.',type:'blue',time:'Today',unread:true},
+    {icon:'🤖',title:'Claude AI insight',body:'You can save BDT 8,200/month by switching to Murabaha home finance.',type:'purple',time:'Yesterday',unread:true},
+    {icon:'💰',title:'Salary credited',body:'BDT 85,000 from Employer via NEFT. Account balance updated.',type:'info',time:'22 Apr 2026',unread:false},
+  ]
+};
+
+const CLIENTS = {
+  'ahmad.raza': {
+    id:'C001', name:'Ahmad Raza', initials:'AR',
+    balance:245000, savings:237800, invest:120000,
+    hepi:87, zakatPaid:8450, phone:'+880-17xx-xxx-891',
+    address:'House 14, Road 7, Gulshan-2, Dhaka 1212',
+    nid:'1234567890123', since:'March 2019', branch:'Gulshan-2',
+    email:'ahmad.raza@email.com', nationality:'Bangladeshi',
+    occupation:'Senior Software Engineer', employer:'TechCorp BD Ltd'
+  }
+};
+const ADMINS = {
+  'NB-STAFF-001': {id:'NB-STAFF-001',name:'Hasan Ali',initials:'HA',role:'Branch Manager',branch:'Gulshan-2, Dhaka'}
+};
+
+let TXN_DATA = [
+  {id:'T001',date:'23 Apr 2026',desc:'Salary Credit — TechCorp BD',cat:'Income',amt:85000,dir:'in',icon:'💰',bg:'rgba(16,185,129,0.12)',type:'NEFT',ref:'NB2604230001'},
+  {id:'T002',date:'22 Apr 2026',desc:'DESCO Electricity Bill',cat:'Utilities',amt:3200,dir:'out',icon:'⚡',bg:'rgba(245,158,11,0.12)',type:'Bill Pay',ref:'NB2604220002'},
+  {id:'T003',date:'20 Apr 2026',desc:'Transfer → Farida Raza',cat:'Family',amt:15000,dir:'out',icon:'⇄',bg:'rgba(59,130,246,0.12)',type:'BEFTN',ref:'NB2604200003'},
+  {id:'T004',date:'18 Apr 2026',desc:'Green Sukuk Profit Share',cat:'Investment',amt:1800,dir:'in',icon:'📈',bg:'rgba(139,92,246,0.12)',type:'Credit',ref:'NB2604180004'},
+  {id:'T005',date:'17 Apr 2026',desc:'Sadaqah — Islamic Relief BD',cat:'Charity',amt:2000,dir:'out',icon:'🕌',bg:'rgba(14,196,160,0.12)',type:'NEFT',ref:'NB2604170005'},
+  {id:'T006',date:'15 Apr 2026',desc:'Mudarabah Profit (Monthly)',cat:'Savings',amt:1030,dir:'in',icon:'◑',bg:'rgba(14,196,160,0.1)',type:'Credit',ref:'NB2604150006'},
+  {id:'T007',date:'14 Apr 2026',desc:'School Fee — Arif (Term 2)',cat:'Education',amt:12000,dir:'out',icon:'🎓',bg:'rgba(245,158,11,0.1)',type:'Bill Pay',ref:'NB2604140007'},
+  {id:'T008',date:'12 Apr 2026',desc:'Grocery — Agora Superstore',cat:'Food',amt:4500,dir:'out',icon:'🛒',bg:'rgba(212,168,67,0.08)',type:'Card',ref:'NB2604120008'},
+  {id:'T009',date:'10 Apr 2026',desc:'Freelance Payment — Upwork',cat:'Income',amt:22000,dir:'in',icon:'💻',bg:'rgba(16,185,129,0.1)',type:'RTGS',ref:'NB2604100009'},
+  {id:'T010',date:'8 Apr 2026',desc:'ATM Withdrawal',cat:'Cash',amt:5000,dir:'out',icon:'💵',bg:'rgba(212,168,67,0.08)',type:'ATM',ref:'NB2604080010'},
+  {id:'T011',date:'5 Apr 2026',desc:'Square Hospital — Doctor Fee',cat:'Health',amt:8200,dir:'out',icon:'🏥',bg:'rgba(239,68,68,0.1)',type:'Card',ref:'NB2604050011'},
+  {id:'T012',date:'3 Apr 2026',desc:'International Remittance (Received)',cat:'Family',amt:45000,dir:'in',icon:'✈️',bg:'rgba(59,130,246,0.1)',type:'SWIFT',ref:'NB2604030012'},
+  {id:'T013',date:'1 Apr 2026',desc:'Waqf Contribution',cat:'Charity',amt:5000,dir:'out',icon:'🌟',bg:'rgba(14,196,160,0.1)',type:'NEFT',ref:'NB2604010013'},
+  {id:'T014',date:'28 Mar 2026',desc:'Monthly Transport (Uber)',cat:'Transport',amt:2100,dir:'out',icon:'🚗',bg:'rgba(59,130,246,0.08)',type:'Card',ref:'NB2603280014'},
+];
+
+const SAVED_RECIPIENTS = [
+  {name:'Farida Raza',acct:'0031 8823 2291 01',bank:'NurBank',type:'Family',branch:'Gulshan-2'},
+  {name:'Karim Brothers Ltd',acct:'1051 2244 7723 01',bank:'Islami Bank BD',type:'Business',branch:'Motijheel'},
+  {name:'Ammi — Gulshan',acct:'0031 9912 4451 02',bank:'NurBank',type:'Family',branch:'Dhanmondi'},
+  {name:'Al-Arafah Charity',acct:'3201 0011 9910 05',bank:'Al-Arafah Islami Bank',type:'Charity',branch:'Kakrail'},
+  {name:'Tech Solutions BD',acct:'0821 5533 8812 09',bank:'Dhaka Bank',type:'Business',branch:'Banani'},
+];
+
+const ADMIN_CUSTOMERS = [
+  {id:'C001',name:'Ahmad Raza',acct:'4821',balance:245000,hepi:87,status:'Active',risk:'Low',city:'Dhaka',kyc:'Verified',since:'Mar 2019'},
+  {id:'C002',name:'Fatima Begum',acct:'3345',balance:125000,hepi:72,status:'Active',risk:'Low',city:'Chittagong',kyc:'Verified',since:'Jan 2020'},
+  {id:'C003',name:'Karim Ahmed',acct:'7812',balance:890000,hepi:91,status:'Active',risk:'Low',city:'Dhaka',kyc:'Verified',since:'Jun 2019'},
+  {id:'C004',name:'Rana Islam',acct:'5521',balance:42000,hepi:55,status:'Flagged',risk:'High',city:'Rajshahi',kyc:'Pending',since:'Nov 2021'},
+  {id:'C005',name:'Nasrin Khatun',acct:'8834',balance:310000,hepi:83,status:'Active',risk:'Low',city:'Sylhet',kyc:'Verified',since:'Feb 2020'},
+  {id:'C006',name:'Bashir Uddin',acct:'6643',balance:18000,hepi:47,status:'Active',risk:'Medium',city:'Dhaka',kyc:'Partial',since:'Jul 2022'},
+  {id:'C007',name:'Sumaiya Hossain',acct:'9912',balance:567000,hepi:94,status:'Active',risk:'Low',city:'Dhaka',kyc:'Verified',since:'Apr 2019'},
+];
+
+const PENDING_TXNS = [
+  {id:'PT001',from:'Rana Islam',to:'Unknown Account',fromAcct:'5521',amt:95000,type:'RTGS',flag:'AML Alert — large outward transfer, 8x 90-day average',risk:'High',time:'10:24 AM'},
+  {id:'PT002',from:'Bashir Uddin',to:'Remit International',fromAcct:'6643',amt:42000,type:'SWIFT',flag:'First international transfer — enhanced KYC required',risk:'Medium',time:'11:15 AM'},
+  {id:'PT003',from:'Ahmad Raza',to:'Al-Arafah Charity',fromAcct:'4821',amt:5000,type:'NEFT',flag:'Routine charity payment — pre-approved beneficiary',risk:'Low',time:'12:02 PM'},
+];
+
+const GOLD_PRICE_PER_GRAM = 9250;
+const NISAB_GOLD_GRAMS = 85;
+const NISAB_BDT = GOLD_PRICE_PER_GRAM * NISAB_GOLD_GRAMS;
+const ZAKAT_RATE = 0.025;
+
+
+function fmt(n){return Number(n).toLocaleString('en-BD');}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
+
+function txnRow(tx){
+  return `<div class="txn-item">
+    <div class="txn-ico" style="background:${tx.bg}">${tx.icon}</div>
+    <div class="txn-info"><div class="txn-name">${tx.desc}</div><div class="txn-meta">${tx.date} · ${tx.type} · ${tx.ref}</div></div>
+    <div class="txn-amt ${tx.dir==='in'?'amt-in':'amt-out'}">${tx.dir==='in'?'+':'-'}৳${fmt(tx.amt)}</div>
+  </div>`;
+}
+
+function hepiRing(score, size){
+  const r=size/2-6; const c=size/2;
+  const circ=2*Math.PI*r;
+  const fill=(score/100)*circ;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--surface3)" stroke-width="5"/>
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--teal)" stroke-width="5"
+      stroke-dasharray="${fill} ${circ}" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function hepiDim(label, val, pct, color){
+  return `<div class="hepi-d">
+    <div class="hepi-d-lbl">${label}</div>
+    <div class="hepi-d-bar"><div class="hepi-d-fill" style="width:${Math.round(pct*100)}%;background:${color}"></div></div>
+    <div class="hepi-d-val" style="color:${color}">${val}</div>
+  </div>`;
+}
+
+function togWrap(title, sub, checked){
+  return `<div class="toggle-wrap">
+    <div class="toggle-info"><div class="toggle-t">${title}</div><div class="toggle-s">${sub}</div></div>
+    <label class="toggle"><input type="checkbox" ${checked?'checked':''} onchange="toast(this.checked?'${title} enabled':'${title} disabled','info')"><span class="t-slider"></span></label>
+  </div>`;
+}
+
+
+function setLoginRole(role, btn) {
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('login-client-form').style.display = role==='client'?'block':'none';
+  document.getElementById('login-admin-form').style.display = role==='admin'?'block':'none';
+}
+
+function doLogin(role) {
+  if(role==='client'){
+    const u=document.getElementById('c-user').value.trim();
+    const p=document.getElementById('c-pass').value.trim();
+    if(!CLIENTS[u]||p!=='nur1234'){toast('Invalid credentials. Try ahmad.raza / nur1234','error');return;}
+    S.role='client'; S.user=CLIENTS[u];
+  } else {
+    const u=document.getElementById('a-user').value.trim();
+    const p=document.getElementById('a-pass').value.trim();
+    if(!ADMINS[u]||p!=='admin2026'){toast('Invalid admin credentials','error');return;}
+    S.role='admin'; S.user=ADMINS[u];
+    S.user.roleLabel=document.getElementById('a-role').value;
+  }
+  launchApp();
+}
+
+function doLogout() {
+  if(S.otpTimer) clearInterval(S.otpTimer);
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('app-shell').classList.remove('visible');
+  document.getElementById('login-screen').style.display='flex';
+  S.role=null; S.user=null;
+  S.aiCtx={client:[],admin:[]};
+}
+
+function launchApp() {
+  document.getElementById('login-screen').style.display='none';
+  const shell=document.getElementById('app-shell');
+  shell.style.display='flex'; shell.classList.add('visible');
+  const now=new Date();
+  document.getElementById('topbar-date').textContent=now.toLocaleDateString('en-BD',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('topbar-uname').textContent=S.user.name;
+  document.getElementById('topbar-avatar').textContent=S.user.initials;
+  const rb=document.getElementById('topbar-badge');
+  if(S.role==='client') rb.innerHTML='<span class="role-badge role-client">Client Portal</span>';
+  else rb.innerHTML='<span class="role-badge role-admin">'+cap(S.user.roleLabel||S.user.role||'Admin')+'</span>';
+  buildSidebar();
+  buildNotifList();
+  buildProfileModal();
+  initGPS();
+  startForexTicker();
+  if(S.role==='client') showPage('dashboard');
+  else showPage('admin-dashboard');
+  toast('Welcome, '+S.user.name.split(' ')[0]+'! NurBank AI is active.','purple');
+}
+
+
+function initGPS() {
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      S.gpsCoords={lat:pos.coords.latitude,lng:pos.coords.longitude};
+      document.getElementById('gps-location-text').textContent='GPS Active ●';
+    },()=>{
+      document.getElementById('gps-location-text').textContent='Dhaka, BD';
+    });
+  }
+}
+
+function startForexTicker(){
+  const el=document.getElementById('forex-ticker');
+  const pairs=[['USD',S.forexRates.USD],['EUR',S.forexRates.EUR],['SAR',S.forexRates.SAR],['AED',S.forexRates.AED]];
+  let i=0;
+  setInterval(()=>{
+    const p=pairs[i%pairs.length];
+    el.textContent=p[0]+': ৳'+(p[1]+(Math.random()*.4-.2)).toFixed(2);
+    i++;
+  },3000);
+}
+
+function buildSidebar(){
+  const el=document.getElementById('sidebar');
+  if(S.role==='client'){
+    el.innerHTML=`
+      <div class="nav-section">Main</div>
+      <button class="nav-item" onclick="showPage('dashboard',this)"><span class="nav-ico">⊞</span>Dashboard</button>
+      <button class="nav-item" onclick="showPage('accounts',this)"><span class="nav-ico">◉</span>Accounts</button>
+      <button class="nav-item" onclick="showPage('transfer',this)"><span class="nav-ico">⇄</span>Transfer</button>
+      <button class="nav-item" onclick="showPage('payments',this)"><span class="nav-ico">◈</span>Bill Payments</button>
+      <button class="nav-item" onclick="showPage('history',this)"><span class="nav-ico">≡</span>History</button>
+      <div class="nav-section">Finance</div>
+      <button class="nav-item" onclick="showPage('loans',this)"><span class="nav-ico">⬡</span>Financing</button>
+      <button class="nav-item" onclick="showPage('savings',this)"><span class="nav-ico">◑</span>Savings</button>
+      <button class="nav-item" onclick="showPage('invest',this)"><span class="nav-ico">△</span>Investments</button>
+      <div class="nav-section">Halal & HEPI</div>
+      <button class="nav-item" onclick="showPage('hepi',this)"><span class="nav-ico">✦</span>HEPI Score</button>
+      <button class="nav-item" onclick="showPage('zakat',this)"><span class="nav-ico">⊕</span>Zakat Calculator</button>
+      <button class="nav-item" onclick="showPage('spending',this)"><span class="nav-ico">📊</span>Spending Analytics</button>
+      <div class="nav-section">AI & Security</div>
+      <button class="nav-item" onclick="showPage('ai-advisor',this)"><span class="nav-ico">🤖</span>Claude AI Advisor</button>
+      <button class="nav-item" onclick="showPage('gps-security',this)"><span class="nav-ico">📍</span>GPS Security</button>
+      <button class="nav-item" onclick="showPage('forex',this)"><span class="nav-ico">💱</span>Forex & Rates</button>
+      <div class="nav-section">Settings</div>
+      <button class="nav-item" onclick="showPage('security',this)"><span class="nav-ico">⊘</span>Security</button>
+      <button class="nav-item" onclick="showPage('settings',this)"><span class="nav-ico">⊛</span>Settings</button>`;
+  } else {
+    el.innerHTML=`
+      <div class="nav-section">Overview</div>
+      <button class="nav-item" onclick="showPage('admin-dashboard',this)"><span class="nav-ico">⊞</span>Dashboard</button>
+      <button class="nav-item" onclick="showPage('admin-customers',this)"><span class="nav-ico">👥</span>Customers</button>
+      <button class="nav-item" onclick="showPage('admin-transactions',this)"><span class="nav-ico">≡</span>Transactions<span class="nav-badge">3</span></button>
+      <div class="nav-section">Operations</div>
+      <button class="nav-item" onclick="showPage('admin-financing',this)"><span class="nav-ico">⬡</span>Financing</button>
+      <button class="nav-item" onclick="showPage('admin-compliance',this)"><span class="nav-ico">⚖️</span>Compliance</button>
+      <div class="nav-section">Analytics</div>
+      <button class="nav-item" onclick="showPage('admin-hepi',this)"><span class="nav-ico">✦</span>HEPI Reports</button>
+      <button class="nav-item" onclick="showPage('admin-ai',this)"><span class="nav-ico">🤖</span>Claude AI Assistant</button>
+      <button class="nav-item" onclick="showPage('admin-reports',this)"><span class="nav-ico">📊</span>Reports</button>
+      <div class="nav-section">System</div>
+      <button class="nav-item" onclick="showPage('admin-settings',this)"><span class="nav-ico">⊛</span>Settings</button>`;
+  }
+}
+
+function showPage(id,btn){
+  S.page=id;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');
+  });
+  document.getElementById('main-content').innerHTML='<div class="page-enter" id="page-'+id+'">'+buildPage(id)+'</div>';
+  setTimeout(()=>initPage(id),10);
+}
+
+function goHome(){showPage(S.role==='client'?'dashboard':'admin-dashboard');}
+
+function buildPage(id){
+  const pages = {
+    'dashboard': ()=>`
+      <div class="flex items-center justify-between mb-3">
+        <div><div style="font-size:20px;font-weight:800;margin-bottom:2px">Good morning, ${S.user.name.split(' ')[0]} 👋</div><div style="font-size:12px;color:var(--text3)" id="live-clock">Loading...</div></div>
+        <span class="badge bg-teal" style="font-size:11px;padding:6px 14px">✦ HEPI: ${S.user.hepi} — Excellent</span>
+      </div>
+      <div class="ticker-wrap mb-3"><div class="ticker-inner" id="ticker-inner"></div></div>
+      <div class="g4 mb-3" id="dash-metrics"></div>
+      <div class="g2"><div><div class="card mb-3" id="dash-accounts-card"></div><div class="card" id="dash-quick-actions"></div></div>
+      <div><div class="card mb-3" id="dash-recent-txn"></div><div class="card" id="dash-hepi-mini"></div></div></div>`,
+    'accounts': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">My Accounts</div><div class="text-muted text-sm mb-3">All your NurBank accounts</div><div class="g3 mb-3" id="acct-cards"></div><div class="card" id="acct-detail"></div>`,
+    'transfer': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Fund Transfer</div><div class="text-muted text-sm mb-3">BEFTN · RTGS · SWIFT · Instant Transfer — zero riba</div><div class="step-indicator" id="transfer-steps"></div><div class="g21"><div class="card" id="transfer-form-card"></div><div><div class="card mb-3" id="transfer-recipients"></div><div class="card" id="transfer-limits"></div></div></div>`,
+    'payments': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Bill Payments & Services</div><div class="text-muted text-sm mb-3">Pay utilities, schedule recurring payments</div><div class="g4 mb-3" id="pay-services"></div><div class="card" id="pay-scheduled"></div>`,
+    'history': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Transaction History</div><div class="text-muted text-sm mb-3">Complete record of all account activity</div><div class="card" id="history-card"></div>`,
+    'loans': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Islamic Financing</div><div class="text-muted text-sm mb-3">Riba-free financing — Murabaha · Ijarah · Diminishing Musharakah</div><div class="info-teal info-box mb-3">✦ All products are Shariah-compliant. No interest charged — only halal profit-sharing structures.</div><div class="g3 mb-3" id="loan-products"></div><div class="card" id="emi-calc-card"></div>`,
+    'savings': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Savings & Mudarabah</div><div class="text-muted text-sm mb-3">Profit-sharing savings products</div><div class="g2 mb-3" id="savings-top"></div><div class="card" id="savings-goals-card"></div>`,
+    'invest': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Halal Investments</div><div class="text-muted text-sm mb-3">Shariah-screened Sukuk & funds</div><div class="info-purple info-box mb-3">✦ All investments Shariah-screened. Excluded sectors: alcohol, tobacco, gambling, weapons, conventional interest-based finance.</div><div class="g2 mb-3" id="invest-portfolio"></div>`,
+    'hepi': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">HEPI Score — Halal Ethics & Progress Indicator</div><div class="text-muted text-sm mb-3">Rooted in Maqasid al-Islam · Your banking conscience score</div><div class="tab-bar" id="hepi-tabs"><button class="tab active" onclick="hepiTab(0,this)">Overview</button><button class="tab" onclick="hepiTab(1,this)">Your Score</button><button class="tab" onclick="hepiTab(2,this)">vs Conventional</button><button class="tab" onclick="hepiTab(3,this)">Impact Report</button><button class="tab" onclick="hepiTab(4,this)">Improve</button></div><div id="hepi-content"></div>`,
+    'zakat': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Zakat Calculator & Distribution</div><div class="text-muted text-sm mb-3">Calculate precisely, pay instantly, track your annual Zakat</div><div class="g2" id="zakat-content"></div>`,
+    'spending': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Spending Analytics</div><div class="text-muted text-sm mb-3">Intelligent analysis of your spending — halal vs haram tracking</div><div class="g2" id="spending-content"></div>`,
+    'ai-advisor': ()=>`
+      <div style="font-size:20px;font-weight:800;margin-bottom:4px">🤖 Claude AI Universal Advisor</div>
+      <div class="text-muted text-sm mb-3">Powered by Anthropic Claude — Ask <em>anything</em> about banking, Islamic finance, Zakat, investments, world affairs, science, or any topic</div>
+      <div class="g21"><div class="card">
+        <div class="card-h"><span class="card-t">Ask Claude — Universal Knowledge</span><div class="flex gap-2 items-center"><span class="badge bg-purple" style="font-size:9px">claude-sonnet-4-20250514</span><div style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div></div></div>
+        <div class="ai-wrap"><div class="ai-msgs" id="ai-advisor-msgs"></div></div>
+        <div class="ai-input-row mt-2">
+          <textarea class="fi" id="ai-input-client" placeholder="Ask anything — banking, finance, Zakat, history, science, Islamic law, world affairs..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI('client')}"></textarea>
+          <button class="btn btn-gold" onclick="sendAI('client')" style="padding:11px 16px;align-self:flex-end">↗</button>
+        </div>
+        <div class="text-xs text-muted mt-2">Real Claude AI · Ask absolutely anything · Islamic finance specialist · Universal knowledge</div>
+      </div>
+      <div><div class="card mb-3" id="ai-suggestions-card"></div><div class="card" id="ai-info-card"></div></div></div>`,
+    'gps-security': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">📍 GPS Security Center</div><div class="text-muted text-sm mb-3">Real-time location-based fraud protection</div><div class="g2" id="gps-content"></div>`,
+    'forex': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">💱 Forex Rates & Remittance</div><div class="text-muted text-sm mb-3">Live exchange rates for BDT — remittance & international transfer</div><div class="g2" id="forex-content"></div>`,
+    'security': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Security & Privacy</div><div class="text-muted text-sm mb-3">Protect your account</div><div class="g2" id="security-content"></div>`,
+    'settings': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Settings & Preferences</div><div class="text-muted text-sm mb-3">Manage your profile</div><div class="g2" id="settings-content"></div>`,
+    'admin-dashboard': ()=>`<div class="flex items-center justify-between mb-3"><div><div style="font-size:20px;font-weight:800;margin-bottom:2px">Branch Operations — Gulshan-2</div><div style="font-size:12px;color:var(--text3)">NurBank · ${S.user.name} · ${cap(S.user.roleLabel||'')}</div></div><div class="flex gap-2"><span class="badge bg-gold">Live ●</span><span class="badge bg-teal">HEPI Active</span></div></div><div class="g4 mb-3" id="admin-metrics"></div><div class="g2 mb-3"><div class="card" id="admin-pending-card"></div><div class="card" id="admin-alerts-card"></div></div><div class="g2"><div class="card" id="admin-customers-card"></div><div class="card" id="admin-chart-card"></div></div>`,
+    'admin-customers': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Customer Management</div><div class="text-muted text-sm mb-3">View and manage all customer accounts</div><div class="card" id="admin-cust-full"></div>`,
+    'admin-transactions': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Transaction Monitoring</div><div class="text-muted text-sm mb-3">Review, approve, and flag transactions</div><div class="card mb-3" id="admin-pending-txns-card"></div><div class="card" id="admin-all-txns-card"></div>`,
+    'admin-financing': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Financing Applications</div><div class="text-muted text-sm mb-3">Review Islamic financing applications</div><div class="card" id="admin-financing-card"></div>`,
+    'admin-compliance': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Shariah & Regulatory Compliance</div><div class="text-muted text-sm mb-3">AML, Bangladesh Bank, and Shariah Board requirements</div><div class="card" id="admin-compliance-card"></div>`,
+    'admin-hepi': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">HEPI Branch Reports</div><div class="text-muted text-sm mb-3">Branch HEPI performance and customer impact metrics</div><div class="card" id="admin-hepi-card"></div>`,
+    'admin-ai': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">🤖 Claude AI Banking Assistant</div><div class="text-muted text-sm mb-3">AI-powered insights for operations, compliance, and HEPI</div><div class="g21"><div class="card"><div class="card-h"><span class="card-t">Banking Operations AI</span><span class="badge bg-gold">Admin Mode</span></div><div class="ai-wrap"><div class="ai-msgs" id="ai-admin-msgs"></div></div><div class="ai-input-row mt-2"><textarea class="fi" id="ai-input-admin" placeholder="Ask about AML, compliance, HEPI, Bangladesh Bank regulations, customer risk, Shariah rulings..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI('admin')}"></textarea><button class="btn btn-gold" onclick="sendAI('admin')" style="padding:11px 16px;align-self:flex-end">↗</button></div></div><div class="card" id="admin-ai-panel"></div></div>`,
+    'admin-reports': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">Reports & Analytics</div><div class="text-muted text-sm mb-3">Financial, compliance, and HEPI reports</div><div class="card" id="admin-reports-card"></div>`,
+    'admin-settings': ()=>`<div style="font-size:20px;font-weight:800;margin-bottom:4px">System Settings</div><div class="text-muted text-sm mb-3">Branch configuration</div><div class="card" id="admin-settings-card"></div>`,
+  };
+  return (pages[id]?pages[id]():'<div class="card">Page not found</div>');
+}
+
+function initPage(id){
+  const map={
+    'dashboard':initDashboard,'accounts':initAccounts,'transfer':initTransfer,
+    'payments':initPayments,'history':initHistory,'loans':initLoans,
+    'savings':initSavings,'invest':initInvest,'hepi':()=>hepiTab(0),
+    'zakat':initZakat,'spending':initSpending,'ai-advisor':initAIAdvisor,
+    'gps-security':initGPSSecurity,'forex':initForex,'security':initSecurity,'settings':initSettings,
+    'admin-dashboard':initAdminDashboard,'admin-customers':initAdminCustomersFull,
+    'admin-transactions':initAdminTransactions,'admin-financing':initAdminFinancing,
+    'admin-compliance':initAdminCompliance,'admin-hepi':initAdminHEPI,
+    'admin-ai':initAdminAI,'admin-reports':initAdminReports,'admin-settings':initAdminSettings,
+  };
+  if(map[id]) map[id]();
+}
+
+function initDashboard(){
+  const clk=document.getElementById('live-clock');
+  if(clk){
+    const update=()=>{const n=new Date();clk.textContent=n.toLocaleDateString('en-BD',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});};
+    update(); setInterval(update,1000);
+  }
+  const u=S.user;
+  const tickers=[
+    {l:'USD/BDT',v:'৳'+S.forexRates.USD.toFixed(2),c:'+0.12%',up:true},
+    {l:'EUR/BDT',v:'৳'+S.forexRates.EUR.toFixed(2),c:'-0.2%',up:false},
+    {l:'SAR/BDT',v:'৳'+S.forexRates.SAR.toFixed(2),c:'+0.04%',up:true},
+    {l:'Gold/oz',v:'$2,312',c:'+0.8%',up:true},
+    {l:'Green Sukuk',v:'7.2% p.a.',c:'↑',up:true},
+    {l:'HEPI Avg',v:'74.2',c:'↑2.1',up:true},
+    {l:'BEFTN',v:'Online',c:'✓',up:true},
+    {l:'RTGS',v:'Online',c:'✓',up:true},
+    {l:'BB Policy Rate',v:'8.00%',c:'Unchanged',up:true},
+    {l:'Nisab',v:'৳'+fmt(NISAB_BDT),c:'(85g gold)',up:true},
+  ];
+  const inner=document.getElementById('ticker-inner');
+  if(inner){
+    const items=[...tickers,...tickers].map(t=>`<div class="ticker-item"><span class="text-muted">${t.l}</span><span class="fw-bold">${t.v}</span><span class="${t.up?'text-green':'text-red'}">${t.c}</span></div>`).join('');
+    inner.innerHTML=items;
+  }
+  const totalWealth=u.balance+u.savings+u.invest;
+  document.getElementById('dash-metrics').innerHTML=`
+    <div class="metric"><div class="metric-lbl">Total Wealth</div><div class="metric-val">৳${fmt(totalWealth)}</div><div class="metric-chg up">↑ 3.2% MoM</div></div>
+    <div class="metric"><div class="metric-lbl">Monthly Income</div><div class="metric-val">৳85,000</div><div class="metric-chg up">↑ 5.0%</div></div>
+    <div class="metric"><div class="metric-lbl">Monthly Expenses</div><div class="metric-val">৳${fmt(Object.values(S.spending).reduce((a,b)=>a+b,0))}</div><div class="metric-chg dn">↑ 1.8%</div></div>
+    <div class="metric"><div class="metric-lbl">Zakat Due</div><div class="metric-val text-gold">৳${fmt(calcZakatDue())}</div><div class="metric-chg" style="color:var(--amber)">⏰ 12 days left</div></div>`;
+  document.getElementById('dash-accounts-card').innerHTML=`
+    <div class="card-h"><span class="card-t">My Accounts</span><button class="btn btn-outline btn-sm" onclick="showPage('accounts')">View all</button></div>
+    <div class="acct-card ac-blue mb-2" onclick="showPage('accounts')" style="padding:20px"><div class="ac-pat"></div><div class="ac-glow"></div><div class="ac-chip"></div><div class="ac-lbl">Current Account (Wadiah)</div><div class="ac-num">•••• •••• •••• 4821</div><div class="ac-bal">৳${fmt(u.balance)}</div><div class="ac-foot"><span>${u.name}</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border:none">Halal ✓</span></div></div>
+    <div class="acct-card ac-teal" onclick="showPage('savings')" style="padding:20px"><div class="ac-pat"></div><div class="ac-glow"></div><div class="ac-chip"></div><div class="ac-lbl">Mudarabah Savings</div><div class="ac-num">•••• •••• •••• 9034</div><div class="ac-bal">৳${fmt(u.savings)}</div><div class="ac-foot"><span>5.2% profit p.a.</span><span>Active ●</span></div></div>`;
+  document.getElementById('dash-quick-actions').innerHTML=`
+    <div class="card-h"><span class="card-t">Quick Actions</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+      ${[['⇄','Transfer','transfer'],['◈','Pay Bills','payments'],['⬡','Financing','loans'],['🤖','Ask AI','ai-advisor'],['⊕','Zakat','zakat'],['📍','GPS','gps-security'],['💱','Forex','forex'],['△','Invest','invest']].map(([i,l,p])=>`<button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:10px 6px;font-size:11px;border-radius:var(--r)" onclick="showPage('${p}')"><span style="font-size:18px">${i}</span>${l}</button>`).join('')}
+    </div>`;
+  document.getElementById('dash-recent-txn').innerHTML=`
+    <div class="card-h"><span class="card-t">Recent Transactions</span><button class="btn btn-outline btn-sm" onclick="showPage('history')">See all</button></div>
+    ${TXN_DATA.slice(0,5).map(txnRow).join('')}`;
+  document.getElementById('dash-hepi-mini').innerHTML=`
+    <div class="card-h"><span class="card-t">HEPI Score</span><button class="btn btn-outline btn-sm" onclick="showPage('hepi')">Details ✦</button></div>
+    <div class="flex gap-3 items-center">
+      <div class="hepi-ring" style="flex-shrink:0">${hepiRing(u.hepi,88)}<div class="hepi-ring-label"><span style="font-size:19px;font-weight:800;color:var(--teal)">${u.hepi}</span><span style="font-size:9px;color:var(--text3)">/100</span></div></div>
+      <div style="flex:1">
+        ${hepiDim('Human Value','88',.88,'var(--teal)')}
+        ${hepiDim('Ethical Align','92',.92,'var(--purple)')}
+        ${hepiDim('Eco Steward','78',.78,'var(--green)')}
+        ${hepiDim('Social Justice','85',.85,'var(--amber)')}
+      </div>
+    </div>`;
+}
+
+function initAccounts(){
+  const u=S.user;
+  document.getElementById('acct-cards').innerHTML=`
+    <div class="acct-card ac-blue" style="padding:22px"><div class="ac-pat"></div><div class="ac-glow"></div><div class="ac-chip"></div><div class="ac-lbl">Current Account (Wadiah)</div><div class="ac-num">•••• •••• •••• 4821</div><div class="ac-bal">৳${fmt(u.balance)}</div><div class="ac-foot"><span>Halal Certified</span><span>Active ●</span></div></div>
+    <div class="acct-card ac-teal" style="padding:22px"><div class="ac-pat"></div><div class="ac-glow"></div><div class="ac-chip"></div><div class="ac-lbl">Mudarabah Savings</div><div class="ac-num">•••• •••• •••• 9034</div><div class="ac-bal">৳${fmt(u.savings)}</div><div class="ac-foot"><span>5.2% profit share</span><span>Active ●</span></div></div>
+    <div class="acct-card ac-purple" style="padding:22px"><div class="ac-pat"></div><div class="ac-glow"></div><div class="ac-chip"></div><div class="ac-lbl">Sukuk Investment</div><div class="ac-num">•••• •••• •••• 3312</div><div class="ac-bal">৳${fmt(u.invest)}</div><div class="ac-foot"><span>+8.1% YTD</span><span>Growing ↑</span></div></div>`;
+  document.getElementById('acct-detail').innerHTML=`
+    <div class="card-h"><span class="card-t">Account Details — Current #4821</span></div>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">Account Holder</label><div style="font-size:14px;font-weight:800">${u.name}</div></div>
+        <div class="fg"><label class="fl">Account Type</label><div>Halal Current Account (Wadiah)</div></div>
+        <div class="fg"><label class="fl">IBAN</label><div class="mono" style="font-size:11px">BD29 0010 0109 0134 6391 73</div></div>
+        <div class="fg"><label class="fl">Branch</label><div>${u.branch}, Dhaka</div></div>
+        <div class="fg"><label class="fl">Routing Number</label><div class="mono">015270312</div></div>
+        <div class="fg"><label class="fl">SWIFT Code</label><div class="mono">NURBDHDH</div></div>
+      </div>
+      <div>
+        <div class="fg"><label class="fl">Available Balance</label><div class="text-green fw-black" style="font-size:20px">৳${fmt(u.balance)}</div></div>
+        <div class="fg"><label class="fl">Ledger Balance</label><div class="fw-bold">৳${fmt(u.balance+500)}</div></div>
+        <div class="fg"><label class="fl">HEPI Compliance</label><span class="badge bg-teal">✓ Fully Shariah Compliant</span></div>
+        <div class="fg"><label class="fl">Zakat Status</label><span class="badge bg-amber">⏰ Due: ৳${fmt(calcZakatDue())}</span></div>
+        <div class="fg"><label class="fl">Member Since</label><div>${u.since}</div></div>
+        <div class="fg"><label class="fl">KYC Status</label><span class="badge bg-green">✓ Verified</span></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="flex gap-2">
+      <button class="btn btn-gold" onclick="showPage('transfer')">⇄ Transfer</button>
+      <button class="btn btn-outline" onclick="toast('Statement emailed to '+S.user.email,'info')">↓ Statement</button>
+      <button class="btn btn-outline" onclick="toast('Card management: Debit card active','info')">◈ Card</button>
+      <button class="btn btn-outline" onclick="openModal('deposit')">◑ New Deposit</button>
+    </div>`;
+}
+
+let currentTxType='NurBank';
+
+function initTransfer(){
+  renderTransferSteps(1);
+  document.getElementById('transfer-form-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Send Money</span></div>
+    <div class="fg"><label class="fl">From Account</label>
+      <select class="fi" id="tx-from">
+        <option value="${S.user.balance}">Current •••• 4821 — ৳${fmt(S.user.balance)}</option>
+        <option value="${S.user.savings}">Savings •••• 9034 — ৳${fmt(S.user.savings)}</option>
+      </select>
+    </div>
+    <div class="tab-bar" style="margin-bottom:12px">
+      <button class="tab active" onclick="setTab(this);setTransferType('NurBank')">NurBank</button>
+      <button class="tab" onclick="setTab(this);setTransferType('BEFTN')">BEFTN</button>
+      <button class="tab" onclick="setTab(this);setTransferType('RTGS')">RTGS</button>
+      <button class="tab" onclick="setTab(this);setTransferType('SWIFT')">SWIFT</button>
+      <button class="tab" onclick="setTab(this);setTransferType('bKash')">bKash/Nagad</button>
+    </div>
+    <div id="tx-type-info" class="info-teal info-box mb-3" style="font-size:10px">NurBank Instant Transfer · Free · Available 24/7 · Limit: ৳5,00,000/day</div>
+    <div class="fg"><label class="fl">Recipient Account Number</label><input class="fi" id="rcpt-acct" placeholder="Account number or IBAN" oninput="lookupRecipient()"></div>
+    <div class="fg"><label class="fl">Recipient Name</label><input class="fi" id="rcpt-name" placeholder="Auto-fills after account lookup" readonly></div>
+    <div class="fg"><label class="fl">Recipient Bank</label><input class="fi" id="rcpt-bank" placeholder="Auto-fills" readonly></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" id="tx-amount" placeholder="0.00" oninput="calcTransfer()"></div>
+    <div class="fg"><label class="fl">Purpose</label><select class="fi" id="tx-purpose"><option>Family Support</option><option>Business Payment</option><option>Charity/Sadaqah</option><option>Education Fee</option><option>Medical</option><option>Investment</option><option>Personal</option></select></div>
+    <div class="fg"><label class="fl">Note / Reference</label><input class="fi" id="tx-note" placeholder="Optional note for recipient"></div>
+    <div id="transfer-preview" style="display:none" class="review-box">
+      <div class="review-row"><span class="review-key">Amount</span><span class="review-val" id="prev-amount">—</span></div>
+      <div class="review-row"><span class="review-key">Transfer Type</span><span class="review-val" id="prev-type">—</span></div>
+      <div class="review-row"><span class="review-key">Charge</span><span class="review-val text-green">৳0.00 (HEPI Waived)</span></div>
+      <div class="review-row"><span class="review-key fw-bold">Total Debit</span><span class="review-val fw-bold" id="prev-total">—</span></div>
+    </div>
+    <button class="btn btn-gold btn-w100" onclick="initTransferOTP()">Review & Send ⇄</button>`;
+  document.getElementById('transfer-recipients').innerHTML=`
+    <div class="card-h"><span class="card-t">Saved Recipients</span><button class="btn btn-outline btn-xs" onclick="toast('Add recipient form','info')">+ Add</button></div>
+    ${SAVED_RECIPIENTS.map(r=>`
+      <div class="txn-item" style="padding:7px 0">
+        <div class="txn-ico" style="background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:800">${r.name[0]}</div>
+        <div class="txn-info"><div class="txn-name">${r.name}</div><div class="txn-meta">${r.acct} · ${r.bank}</div></div>
+        <button class="btn btn-outline btn-xs" onclick="selectRecipient('${r.name}','${r.acct}','${r.bank}')">Select</button>
+      </div>`).join('')}`;
+  document.getElementById('transfer-limits').innerHTML=`
+    <div class="card-h"><span class="card-t">Today's Limits</span></div>
+    ${[['NurBank Instant','৳5,00,000','৳0 used'],['BEFTN Daily','৳5,00,000','৳15,000 used'],['RTGS Daily','৳50,00,000','৳0 used'],['SWIFT Daily','৳20,00,000','৳0 used']].map(([t,l,u])=>`<div class="review-row"><span class="review-key">${t}</span><div class="text-right"><div class="fw-bold">${l}</div><div class="text-xs text-muted">${u}</div></div></div>`).join('')}`;
+}
+
+function setTab(btn){
+  btn.closest('.tab-bar').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setTransferType(t){
+  currentTxType=t;
+  const info=document.getElementById('tx-type-info');
+  if(!info) return;
+  const types={
+    'NurBank':'NurBank Instant Transfer · Free · 24/7 · Limit: ৳5,00,000/day',
+    'BEFTN':'Bangladesh EFT Network · Free (HEPI) · Next day · Cutoff: 3:30 PM',
+    'RTGS':'Real Time Gross Settlement · Free (HEPI) · Instant · Min ৳1,00,000',
+    'SWIFT':'International Wire Transfer · Free (HEPI 80+) · 2-3 days',
+    'bKash':'Mobile Financial Service · Instant · ৳10 charge · Max ৳25,000',
+  };
+  info.textContent=types[t]||'';
+}
+
+function initPayments(){
+  const services=[
+    {i:'⚡',n:'Electricity',s:'DESCO/DPDC/REB'},{i:'💧',n:'Water',s:'WASA/CWASA'},
+    {i:'📱',n:'Mobile Top-up',s:'GP/Robi/Banglalink'},{i:'🌐',n:'Internet',s:'Fiber@Home/ISP'},
+    {i:'🎓',n:'Education',s:'Schools/Universities'},{i:'🏥',n:'Hospital',s:'Healthcare Bills'},
+    {i:'🚍',n:'Transport',s:'BRTA/Bus/Rail'},{i:'🕌',n:'Sadaqah',s:'Charity/Waqf/Zakat'},
+  ];
+  document.getElementById('pay-services').innerHTML=services.map(s=>`
+    <button class="card" style="text-align:center;cursor:pointer;border:none;padding:18px 8px" onclick="openModal('pay')">
+      <div style="font-size:26px;margin-bottom:7px">${s.i}</div>
+      <div style="font-size:12px;font-weight:700">${s.n}</div>
+      <div class="text-muted text-xs mt-1">${s.s}</div>
+    </button>`).join('');
+  document.getElementById('pay-scheduled').innerHTML=`
+    <div class="card-h"><span class="card-t">Scheduled & Recurring Payments</span><button class="btn btn-gold btn-sm" onclick="openModal('pay')">+ Schedule New</button></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Payee</th><th>Account</th><th>Amount</th><th>Due</th><th>Frequency</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>DESCO Electricity</td><td>Consumer: 28821</td><td>~৳3,200</td><td>30 Apr 2026</td><td>Monthly</td><td><span class="badge bg-amber">Upcoming</span></td><td><button class="btn btn-gold btn-xs" onclick="openModal('pay')">Pay Now</button></td></tr>
+      <tr><td>School Fee — Arif</td><td>BRAC Univ #4421</td><td>৳12,000</td><td>5 May 2026</td><td>Monthly</td><td><span class="badge bg-blue">Scheduled</span></td><td><button class="btn btn-outline btn-xs">Edit</button></td></tr>
+      <tr><td>Sadaqah — Al-Arafah</td><td>Islamic Relief BD</td><td>৳2,000</td><td>Monthly</td><td>Auto</td><td><span class="badge bg-teal">Auto ●</span></td><td><button class="btn btn-outline btn-xs">Manage</button></td></tr>
+      <tr><td>Internet — Fiber@Home</td><td>Acct: 88112</td><td>৳1,200</td><td>15 May 2026</td><td>Monthly</td><td><span class="badge bg-teal">Auto ●</span></td><td><button class="btn btn-outline btn-xs">Manage</button></td></tr>
+    </tbody></table></div>`;
+}
+
+let hS='',hT='',hC='';
+function initHistory(){
+  document.getElementById('history-card').innerHTML=`
+    <div class="flex gap-2 items-center mb-3" style="flex-wrap:wrap">
+      <input class="fi" style="max-width:200px" placeholder="🔍 Search transactions..." oninput="filterHistory(this.value,'')">
+      <select class="fi" style="max-width:130px" onchange="filterHistory('',this.value)"><option value="">All</option><option value="in">Credits</option><option value="out">Debits</option></select>
+      <select class="fi" style="max-width:130px" onchange="filterHistoryCat(this.value)"><option value="">All Categories</option><option>Income</option><option>Utilities</option><option>Family</option><option>Charity</option><option>Food</option><option>Education</option><option>Health</option><option>Investment</option></select>
+      <input type="month" class="fi" style="max-width:150px" value="2026-04">
+      <button class="btn btn-outline btn-sm" onclick="toast('CSV downloaded!','success')">↓ CSV</button>
+      <button class="btn btn-outline btn-sm" onclick="toast('PDF statement sent to email.','info')">📧 PDF</button>
+    </div>
+    <div class="flex gap-3 mb-3">
+      <div class="metric" style="flex:1"><div class="metric-lbl">Total Credits</div><div class="metric-val text-green">৳${fmt(TXN_DATA.filter(t=>t.dir==='in').reduce((a,t)=>a+t.amt,0))}</div></div>
+      <div class="metric" style="flex:1"><div class="metric-lbl">Total Debits</div><div class="metric-val text-red">৳${fmt(TXN_DATA.filter(t=>t.dir==='out').reduce((a,t)=>a+t.amt,0))}</div></div>
+      <div class="metric" style="flex:1"><div class="metric-lbl">Transactions</div><div class="metric-val">${TXN_DATA.length}</div></div>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Category</th><th>Ref.</th><th>Amount</th><th>Status</th></tr></thead>
+    <tbody id="history-tbody"></tbody></table></div>`;
+  renderHistoryTable('','','');
+}
+
+function renderHistoryTable(s,t,cat){
+  const tb=document.getElementById('history-tbody');
+  if(!tb)return;
+  const filtered=TXN_DATA.filter(tx=>
+    (!s||tx.desc.toLowerCase().includes(s.toLowerCase()))&&
+    (!t||tx.dir===t)&&
+    (!cat||tx.cat===cat)
+  );
+  tb.innerHTML=filtered.map(tx=>`
+    <tr>
+      <td class="text-muted mono" style="font-size:10px;white-space:nowrap">${tx.date}</td>
+      <td><div class="flex items-center gap-2"><div style="width:26px;height:26px;border-radius:7px;background:${tx.bg};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">${tx.icon}</div>${tx.desc}</div></td>
+      <td><span class="badge bg-blue" style="font-size:9px">${tx.type}</span></td>
+      <td><span class="badge bg-teal" style="font-size:9px">${tx.cat}</span></td>
+      <td class="mono text-muted" style="font-size:10px">${tx.ref}</td>
+      <td class="${tx.dir==='in'?'amt-in':'amt-out'} fw-bold">${tx.dir==='in'?'+':'-'}৳${fmt(tx.amt)}</td>
+      <td><span class="badge bg-green" style="font-size:9px">✓</span></td>
+    </tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">No transactions found</td></tr>';
+}
+function filterHistory(s,t){hS=s||hS;hT=t||hT;renderHistoryTable(hS,hT,hC);}
+function filterHistoryCat(c){hC=c;renderHistoryTable(hS,hT,hC);}
+
+function initLoans(){
+  document.getElementById('loan-products').innerHTML=[
+    {i:'🏠',n:'Home Finance',s:'Diminishing Musharakah',r:'8.5%',d:'Up to ৳1 Crore · Max 25 yrs',c:'var(--blue-bg)',hepi:'-0.5% for HEPI 80+'},
+    {i:'🚗',n:'Auto Finance',s:'Ijarah (Lease-to-Own)',r:'8.0%',d:'Up to ৳30L · Max 7 yrs',c:'var(--green-bg)',hepi:'Standard rate'},
+    {i:'💼',n:'SME Finance',s:'Murabaha (Cost-plus)',r:'9.5%',d:'Up to ৳50L · Max 5 yrs',c:'var(--amber-bg)',hepi:'-0.3% for HEPI 75+'},
+    {i:'🤝',n:'Personal (Qard Hasan)',s:'Interest-free Benevolent Loan',r:'0%',d:'Up to ৳5L · HEPI 85+ only',c:'var(--purple-bg)',hepi:'HEPI 85+ eligible ✓'},
+  ].map(p=>`<div class="card"><div style="width:40px;height:40px;border-radius:11px;background:${p.c};display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px">${p.i}</div><div class="fw-bold mb-1">${p.n}</div><div class="text-xs text-muted mb-1">${p.s}</div><div class="text-xs mb-1">${p.d}</div><div class="fw-bold mb-2" style="color:var(--teal)">Profit: ${p.r}</div><div class="text-xs text-teal mb-3">${p.hepi}</div><button class="btn btn-gold btn-sm btn-w100" onclick="openModal('loan')">Apply Now →</button></div>`).join('');
+  document.getElementById('emi-calc-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Live Installment Calculator</span></div>
+    <div class="g3" style="align-items:end;gap:10px">
+      <div class="fg" style="margin:0"><label class="fl">Finance Amount (৳)</label><input class="fi" type="number" value="500000" id="loan-amt" oninput="calcEMI()"></div>
+      <div class="fg" style="margin:0"><label class="fl">Profit Rate (% p.a.)</label><input class="fi" type="number" value="8.5" step="0.1" id="loan-rate" oninput="calcEMI()"></div>
+      <div class="fg" style="margin:0"><label class="fl">Tenure (Months)</label><input class="fi" type="number" value="60" id="loan-tenure" oninput="calcEMI()"></div>
+    </div>
+    <div class="g4 mt-3">
+      <div class="metric"><div class="metric-lbl">Monthly Installment</div><div class="metric-val" id="emi-result">—</div></div>
+      <div class="metric"><div class="metric-lbl">Total Payable</div><div class="metric-val" id="emi-total">—</div></div>
+      <div class="metric"><div class="metric-lbl">Total Profit</div><div class="metric-val text-amber" id="emi-profit">—</div></div>
+      <div class="metric"><div class="metric-lbl">Monthly Rate</div><div class="metric-val" id="emi-monthly-rate">—</div></div>
+    </div>`;
+  setTimeout(calcEMI,50);
+}
+
+function initSavings(){
+  const u=S.user;
+  const totalDeposit=S.deposits.reduce((a,d)=>a+d.amt,0);
+  const totalProfit=S.deposits.reduce((a,d)=>a+(d.amt*d.rate/100*d.tenure/12),0);
+  document.getElementById('savings-top').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Mudarabah Savings</span><span class="badge bg-teal">Active ●</span></div>
+      <div style="font-size:26px;font-weight:800;color:var(--teal)">৳${fmt(u.savings)}</div>
+      <div class="text-xs text-muted mt-1">Account •••• 9034 · Mudarabah (Profit-Sharing)</div>
+      <div class="divider"></div>
+      <div class="g2" style="gap:8px">
+        <div class="metric"><div class="metric-lbl">Profit Rate</div><div class="metric-val">5.2%</div></div>
+        <div class="metric"><div class="metric-lbl">Earned YTD 2026</div><div class="metric-val text-green">৳12,361</div></div>
+        <div class="metric"><div class="metric-lbl">Next Profit</div><div class="metric-val">30 May</div></div>
+        <div class="metric"><div class="metric-lbl">Monthly Expected</div><div class="metric-val text-teal">৳${fmt(Math.round(u.savings*0.052/12))}</div></div>
+      </div>
+      <button class="btn btn-outline btn-sm mt-3" onclick="openModal('deposit')">+ New Term Deposit</button>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Term Deposits (${S.deposits.length})</span><button class="btn btn-gold btn-sm" onclick="openModal('deposit')">+ New</button></div>
+      <div class="flex gap-3 mb-3">
+        <div class="metric" style="flex:1"><div class="metric-lbl">Total Principal</div><div class="metric-val">৳${fmt(totalDeposit)}</div></div>
+        <div class="metric" style="flex:1"><div class="metric-lbl">Expected Profit</div><div class="metric-val text-green">৳${fmt(Math.round(totalProfit))}</div></div>
+      </div>
+      ${S.deposits.map(d=>`
+        <div class="goal-card">
+          <div class="flex justify-between mb-2"><div><div class="fw-bold text-sm">${d.name}</div><div class="text-xs text-muted">${d.startDate} → ${d.maturity}</div></div><span class="badge ${d.status==='Maturing Soon'?'bg-amber':'bg-teal'}">${d.status}</span></div>
+          <div class="flex justify-between text-sm"><span class="text-muted">Principal</span><span class="fw-bold">৳${fmt(d.amt)}</span></div>
+          <div class="flex justify-between text-sm"><span class="text-muted">Rate</span><span class="fw-bold text-teal">${d.rate}% p.a.</span></div>
+          <div class="flex justify-between text-sm"><span class="text-muted">Profit</span><span class="fw-bold text-green">৳${fmt(Math.round(d.amt*d.rate/100*d.tenure/12))}</span></div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('savings-goals-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Goal-Based Savings</span><button class="btn btn-outline btn-sm" onclick="toast('Add a new savings goal','info')">+ Add Goal</button></div>
+    ${[{n:'Hajj Fund 2027',t:400000,s:82000,c:'var(--teal)',i:'🕋',d:'Pay for Hajj from personal savings'},
+       {n:'New Car (Ijarah)',t:600000,s:142000,c:'var(--blue)',i:'🚗',d:'Toyota Corolla — Ijarah deposit'},
+       {n:'Emergency Fund',t:150000,s:94000,c:'var(--green)',i:'🛡️',d:'3-month salary buffer'},
+       {n:'Education Fund',t:500000,s:220000,c:'var(--purple)',i:'📚',d:"Children's higher education"}
+      ].map(g=>`
+      <div class="goal-card">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2"><span style="font-size:17px">${g.i}</span><div><div class="fw-bold text-sm">${g.n}</div><div class="text-xs text-muted">${g.d}</div></div></div>
+          <div class="text-right"><div class="fw-bold text-sm">৳${fmt(g.s)}</div><div class="text-xs text-muted">of ৳${fmt(g.t)}</div></div>
+        </div>
+        <div class="prog mb-1"><div class="prog-fill" style="width:${Math.min(100,Math.round(g.s/g.t*100))}%;background:${g.c}"></div></div>
+        <div class="flex justify-between text-xs text-muted"><span>${Math.round(g.s/g.t*100)}% complete</span><span>৳${fmt(g.t-g.s)} remaining</span></div>
+      </div>`).join('')}`;
+}
+
+function initInvest(){
+  document.getElementById('invest-portfolio').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Portfolio Overview</span><span class="badge bg-green">+8.1% YTD</span></div>
+      <div style="font-size:26px;font-weight:800">৳${fmt(S.user.invest)}</div>
+      <div class="text-sm text-green">↑ ৳9,024 profit since inception</div>
+      <div class="divider"></div>
+      ${[{n:'Govt. Ijarah Sukuk',a:50000,p:42,c:'var(--blue)',y:6.5},{n:'NurBank Green Sukuk',a:40000,p:33,c:'var(--teal)',y:7.2},{n:'Halal Equity Fund',a:30000,p:25,c:'var(--purple)',y:9.1}].map(i=>`
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:9px;height:9px;border-radius:50%;background:${i.c};flex-shrink:0"></div>
+          <div style="flex:1">
+            <div class="flex justify-between mb-1 text-sm"><span>${i.n}</span><span class="fw-bold">৳${fmt(i.a)}</span></div>
+            <div class="prog"><div class="prog-fill" style="width:${i.p}%;background:${i.c}"></div></div>
+            <div class="flex justify-between text-xs text-muted mt-1"><span>${i.p}% of portfolio</span><span class="text-green">${i.y}% p.a.</span></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Available Sukuk & Funds</span></div>
+      <table class="tbl"><thead><tr><th>Instrument</th><th>Yield</th><th>Term</th><th>Rating</th><th>Min.</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Govt. Ijarah Sukuk</td><td class="text-green fw-bold">6.5%</td><td>5 yr</td><td><span class="badge bg-teal">AAA</span></td><td>৳50,000</td><td><button class="btn btn-gold btn-xs" onclick="toast('Sukuk purchase initiated','info')">Buy</button></td></tr>
+        <tr><td>NurBank Green Sukuk</td><td class="text-green fw-bold">7.2%</td><td>3 yr</td><td><span class="badge bg-blue">AA+</span></td><td>৳25,000</td><td><button class="btn btn-gold btn-xs" onclick="toast('Green Sukuk purchase initiated','info')">Buy</button></td></tr>
+        <tr><td>Infrastructure Sukuk</td><td class="text-green fw-bold">8.0%</td><td>10 yr</td><td><span class="badge bg-amber">AA</span></td><td>৳1,00,000</td><td><button class="btn btn-gold btn-xs" onclick="toast('Infrastructure Sukuk purchase initiated','info')">Buy</button></td></tr>
+        <tr><td>Halal Equity Fund</td><td class="text-green fw-bold">~9-12%</td><td>Open-ended</td><td><span class="badge bg-purple">Shariah ✓</span></td><td>৳10,000</td><td><button class="btn btn-gold btn-xs" onclick="toast('Fund investment initiated','info')">Invest</button></td></tr>
+      </tbody></table>
+      <div class="info-teal info-box mt-3">✦ HEPI Score 87 gives you priority access to Green Sukuk IPO allocation.</div>
+    </div>`;
+}
+
+function hepiTab(idx,btn){
+  const c=document.getElementById('hepi-content');
+  if(!c) return;
+  if(btn) document.querySelectorAll('#hepi-tabs .tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  const u=S.user;
+  if(idx===0){
+    c.innerHTML=`<div class="g2 mb-3">
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">✦</div><div class="fw-bold" style="font-size:14px;margin-bottom:7px">What is HEPI?</div><div class="text-sm" style="color:var(--text2);line-height:1.8">HEPI (Halal Ethics & Progress Indicator) is NurBank's comprehensive ethical performance framework, rooted in Maqasid al-Islam. It measures whether your banking genuinely benefits you, your community, and the planet — going far beyond mere legal compliance.</div><div class="info-teal info-box mt-3">HEPI asks: not just "Is this halal?" but "Is this doing good in the world?"</div></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">📖</div><div class="fw-bold" style="font-size:14px;margin-bottom:7px">Maqasid al-Islam Foundation</div><div class="text-sm" style="color:var(--text2);line-height:1.8">Based on Maqasid al-Shariah scholarship, HEPI protects: <strong style="color:var(--text)">Deen (Faith) · Nafs (Life) · Aql (Intellect) · Nasl (Lineage) · Mal (Wealth)</strong> — and extends to Ummah welfare and environmental Khalifa responsibility.</div></div>
+    </div>
+    <div class="card"><div class="card-h"><span class="card-t">The 5 HEPI Dimensions</span></div>
+    <div class="g3" style="gap:10px">
+      ${[{i:'👥',n:'Human Value Creation',d:'blue',desc:'Living wages, skills development, worker dignity, consumer rights protection, fair dealing.'},
+         {i:'📈',n:'Economic Viability',d:'teal',desc:'Shariah-compliant financing structures, equitable value distribution, fair supplier payment.'},
+         {i:'⚖️',n:'Ethical Alignment',d:'purple',desc:'Transparency, Zakat compliance, truthful marketing, Shariah board governance, honesty.'},
+         {i:'🌱',n:'Environmental Stewardship',d:'green',desc:'Green Sukuk allocation, carbon footprint reduction, sustainable sourcing, climate action.'},
+         {i:'🤝',n:'Social Justice & Inclusion',d:'amber',desc:'Workforce diversity, vulnerable group financial access, community investment, microfinance.'},
+        ].map(d=>`<div class="info-box info-${d.d}" style="border-radius:var(--r)"><div style="font-size:19px;margin-bottom:6px">${d.i}</div><div class="fw-bold text-sm mb-1">${d.n}</div><div class="text-xs" style="line-height:1.65">${d.desc}</div></div>`).join('')}
+      <div class="info-box" style="background:var(--surface2);border:.5px solid var(--border);border-radius:var(--r)"><div style="font-size:19px;margin-bottom:6px">🎯</div><div class="fw-bold text-sm mb-1">What You Gain</div><div class="text-xs" style="line-height:1.65">Higher HEPI = lower financing costs, better profit rates, Sukuk priority, waived fees, Qard Hasan eligibility.</div></div>
+    </div></div>`;
+  } else if(idx===1){
+    c.innerHTML=`<div class="g2"><div class="card">
+      <div class="card-h"><span class="card-t">Your HEPI Breakdown</span><span class="badge bg-teal">Excellent</span></div>
+      <div class="flex items-center gap-4 mb-4">
+        <div class="hepi-ring" style="flex-shrink:0">${hepiRing(u.hepi,96)}<div class="hepi-ring-label"><span style="font-size:22px;font-weight:800;color:var(--teal)">${u.hepi}</span><span style="font-size:9px;color:var(--text3)">/100</span></div></div>
+        <div><div style="font-size:19px;font-weight:800;color:var(--teal)">Excellent Tier</div><div class="text-sm text-muted mt-1">Top 8% of NurBank customers</div><div class="badge bg-green mt-2">+4 points this month ↑</div></div>
+      </div>
+      ${[['Human Value Creation','88',.88,'var(--teal)'],['Economic Viability','84',.84,'var(--blue)'],['Ethical Alignment','92',.92,'var(--purple)'],['Environmental','78',.78,'var(--green)'],['Social Justice','85',.85,'var(--amber)']].map(([l,v,p,c])=>hepiDim(l,v,p,c)).join('')}
+    </div>
+    <div><div class="card mb-3"><div class="card-h"><span class="card-t">Benefits Unlocked ✓</span></div>
+      ${['-0.5% on home finance (8.5% vs 9.0%)','Priority Green Sukuk IPO access','Zero service charges on all transfers','Qard Hasan eligibility (0% personal loan)','Dedicated HEPI relationship manager','Waived FX fees on SWIFT','Monthly HEPI impact report'].map(b=>`<div class="flex items-center gap-2 text-sm" style="padding:6px 0;border-bottom:.5px solid var(--border)"><span class="text-green">✓</span>${b}</div>`).join('')}
+    </div>
+    <div class="card"><div class="card-h"><span class="card-t">Score History</span></div>
+      ${[['Mar 2026','83'],['Feb 2026','80'],['Jan 2026','79'],['Dec 2025','76'],['Nov 2025','74']].map(([m,s])=>`
+        <div class="flex justify-between items-center" style="padding:6px 0;border-bottom:.5px solid var(--border)">
+          <span class="text-sm text-muted">${m}</span><div class="prog" style="flex:1;margin:0 10px"><div class="prog-fill" style="width:${s}%;background:var(--teal)"></div></div><span class="fw-bold text-sm">${s}</span>
+        </div>`).join('')}
+    </div></div></div>`;
+  } else if(idx===2){
+    c.innerHTML=`<div class="card mb-3"><div class="card-h"><span class="card-t">HEPI vs Conventional Banking</span></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Criterion</th><th>Conventional Bank</th><th>NurBank (HEPI)</th><th>Winner</th></tr></thead>
+    <tbody>
+      ${[['Interest/Riba','✗ Charged on all loans','✓ Zero — profit-sharing only','NurBank ✓'],
+         ['Moral Screening','None','Shariah + ESG + HEPI 5-dimensional','NurBank ✓'],
+         ['Zakat Integration','None','Built-in calculator & auto-payment','NurBank ✓'],
+         ['Transparency','Black-box pricing','Full cost disclosure upfront','NurBank ✓'],
+         ['Account Purpose','Profit maximization','Societal benefit + sustainable growth','NurBank ✓'],
+         ['Hidden Fees','Common','Zero for HEPI 75+ users','NurBank ✓'],
+         ['Environmental','Often funds fossil fuels','Green Sukuk mandate','NurBank ✓'],
+        ].map(([c,cv,nv,w])=>`<tr><td class="fw-bold">${c}</td><td class="text-red">${cv}</td><td class="text-green">${nv}</td><td><span class="badge bg-teal">${w}</span></td></tr>`).join('')}
+    </tbody></table></div></div>`;
+  } else if(idx===3){
+    c.innerHTML=`<div class="g4 mb-3">
+      <div class="metric"><div class="metric-lbl">Jobs Supported</div><div class="metric-val">12</div><div class="metric-chg up">via SME loans</div></div>
+      <div class="metric"><div class="metric-lbl">CO2 Saved</div><div class="metric-val">2,100 kg</div><div class="metric-chg up">Green Sukuk</div></div>
+      <div class="metric"><div class="metric-lbl">Zakat Paid</div><div class="metric-val">৳${fmt(u.zakatPaid)}</div><div class="metric-chg up">Total lifetime</div></div>
+      <div class="metric"><div class="metric-lbl">Community Impact</div><div class="metric-val">৳3.2L</div><div class="metric-chg up">Estimated value</div></div>
+    </div>
+    <div class="card"><div class="card-h"><span class="card-t">Your HEPI Impact — Annual Report 2025</span></div>
+      ${[{i:'🕋',n:'Charity/Zakat',v:'৳8,450 distributed',d:'BRAC Education Fund, Islamic Relief'},
+         {i:'🌱',n:'Green Finance',v:'৳40,000 in Green Sukuk',d:'Renewable energy projects in BD'},
+         {i:'👥',n:'Employment',v:'12 jobs indirectly supported',d:'SME financing chain'},
+         {i:'📚',n:'Education',v:'৳12,000 school fees paid',d:'Supporting next generation'},
+         {i:'🏥',n:'Healthcare',v:'৳8,200 medical payments',d:'Quality healthcare access'},
+        ].map(r=>`<div class="flex items-center gap-3" style="padding:10px 0;border-bottom:.5px solid var(--border)"><div style="font-size:20px">${r.i}</div><div><div class="fw-bold text-sm">${r.n} — ${r.v}</div><div class="text-xs text-muted">${r.d}</div></div></div>`).join('')}
+    </div>`;
+  } else {
+    c.innerHTML=`<div class="g2"><div class="card">
+      <div class="card-h"><span class="card-t">Improve Your HEPI Score</span></div>
+      ${[{i:'⊕',t:'Pay Zakat on time',pts:'+2',desc:'Set auto-deduction for annual Zakat',action:"openModal('zakatpay')",clr:'gold'},
+         {i:'🌱',t:'Invest in Green Sukuk',pts:'+3',desc:'Allocate to NurBank Green Sukuk fund',action:"showPage('invest')",clr:'teal'},
+         {i:'🤝',t:'Activate Micro-Sadaqah',pts:'+1',desc:'Round up each transaction to nearest 100',action:"toast('Micro-Sadaqah activated!','success')",clr:'green'},
+         {i:'📋',t:'Complete KYC biometric',pts:'+2',desc:'Upload face biometric for full verification',action:"toast('Biometric verification initiated','info')",clr:'blue'},
+         {i:'📱',t:'Enable auto bill pay',pts:'+1',desc:'Set recurring payments for utilities',action:"showPage('payments')",clr:'purple'},
+        ].map(a=>`
+          <div class="info-${a.clr} info-box mb-2 flex justify-between items-center">
+            <div><div class="fw-bold text-sm">${a.i} ${a.t}</div><div class="text-xs mt-1 opacity-80">${a.desc}</div></div>
+            <div class="text-right"><div class="fw-bold">${a.pts}</div><button class="btn btn-outline btn-xs mt-1" style="border-color:currentColor" onclick="${a.action}">Do it</button></div>
+          </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">HEPI Score Tiers</span></div>
+      ${[{range:'90-100',label:'Platinum',c:'var(--gold)',desc:'Elite Islamic banker — maximum benefits'},
+         {range:'80-89',label:'Excellent',c:'var(--teal)',desc:'Premium tier — HEPI benefits unlocked'},
+         {range:'70-79',label:'Good',c:'var(--green)',desc:'Solid ethical performance'},
+         {range:'60-69',label:'Fair',c:'var(--amber)',desc:'Improving — some benefits available'},
+         {range:'<60',label:'Developing',c:'var(--red)',desc:'Focus on improving ethical practices'},
+        ].map(t=>`
+        <div class="flex items-center gap-3" style="padding:8px 0;border-bottom:.5px solid var(--border)">
+          <div style="width:6px;height:32px;border-radius:3px;background:${t.c};flex-shrink:0"></div>
+          <div><div class="fw-bold text-sm" style="color:${t.c}">${t.label} (${t.range})</div><div class="text-xs text-muted">${t.desc}</div></div>
+          ${(S.user.hepi>=80&&t.range==='80-89')?'<span class="badge bg-teal" style="margin-left:auto;font-size:9px">Your tier</span>':''}
+        </div>`).join('')}
+    </div></div>`;
+  }
+}
+
+function calcZakatDue(){
+  const u=S.user;
+  const totalAssets=u.balance+u.savings+u.invest;
+  const due=totalAssets>NISAB_BDT?Math.round(totalAssets*ZAKAT_RATE):0;
+  S.zakatDue=due;
+  return due;
+}
+
+function initZakat(){
+  const u=S.user;
+  document.getElementById('zakat-content').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Zakat Calculator</span><span class="badge bg-gold">Live Calculation</span></div>
+      <div class="info-gold info-box mb-3">
+        <div class="flex justify-between mb-1"><span>Current Gold Price (per gram)</span><span class="fw-bold">৳${fmt(GOLD_PRICE_PER_GRAM)}</span></div>
+        <div class="flex justify-between mb-1"><span>Nisab (85g gold equivalent)</span><span class="fw-bold">৳${fmt(NISAB_BDT)}</span></div>
+        <div class="flex justify-between"><span>Zakat Rate</span><span class="fw-bold">2.5% on zakatable wealth</span></div>
+      </div>
+      <div class="fg"><label class="fl">Cash & Bank Balance (৳)</label><input class="fi" type="number" id="z-cash" value="${u.balance+u.savings}" oninput="liveCalcZakat()"></div>
+      <div class="fg"><label class="fl">Gold Value (৳ equiv.)</label><input class="fi" type="number" id="z-gold" value="0" oninput="liveCalcZakat()"></div>
+      <div class="fg"><label class="fl">Silver Value (৳ equiv.)</label><input class="fi" type="number" id="z-silver" value="0" oninput="liveCalcZakat()"></div>
+      <div class="fg"><label class="fl">Business / Investment Assets (৳)</label><input class="fi" type="number" id="z-invest" value="${u.invest}" oninput="liveCalcZakat()"></div>
+      <div class="fg"><label class="fl">Receivables</label><input class="fi" type="number" id="z-recv" value="0" oninput="liveCalcZakat()"></div>
+      <div class="fg"><label class="fl">Liabilities / Debts Payable (৳)</label><input class="fi" type="number" id="z-liab" value="0" oninput="liveCalcZakat()"></div>
+      <div class="zakat-live-box" id="zakat-result">Calculating...</div>
+      <button class="btn btn-teal btn-w100 mt-3" onclick="openZakatPay()">Pay Zakat Now ⊕</button>
+      <div class="text-xs text-muted mt-2 text-center">Zakat must be paid when wealth exceeds Nisab for 1 full Hijri year (Hawl)</div>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Zakat Distribution History</span></div>
+      <div class="metric mb-3"><div class="metric-lbl">Total Zakat Paid (Lifetime)</div><div class="metric-val text-gold">৳${fmt(u.zakatPaid)}</div></div>
+      <table class="tbl"><thead><tr><th>Date</th><th>Amount</th><th>Recipient</th><th>Category</th></tr></thead>
+      <tbody>
+        <tr><td>Apr 2025</td><td class="fw-bold">৳8,450</td><td>BRAC Education Fund</td><td><span class="badge bg-teal">Al-Fuqara</span></td></tr>
+        <tr><td>Apr 2024</td><td class="fw-bold">৳7,200</td><td>Islamic Relief BD</td><td><span class="badge bg-teal">Al-Masakin</span></td></tr>
+        <tr><td>Apr 2023</td><td class="fw-bold">৳5,850</td><td>NurBank Microfinance</td><td><span class="badge bg-teal">Al-Fuqara</span></td></tr>
+      </tbody></table>
+      <div class="divider"></div>
+      <div class="fw-bold text-sm mb-2">Verified Charity Partners</div>
+      ${[{n:'BRAC Education Fund',s:'94/100',d:'Education for underprivileged children'},
+         {n:'Islamic Relief Bangladesh',s:'88/100',d:'Disaster relief & healthcare'},
+         {n:'NurBank Microfinance Pool',s:'91/100',d:'Qard Hasan SME loans'},
+         {n:'Muslim Aid Bangladesh',s:'86/100',d:'Orphan care & poverty alleviation'},
+        ].map(p=>`
+        <div class="flex justify-between items-start" style="padding:9px 0;border-bottom:.5px solid var(--border)">
+          <div><div class="fw-bold text-sm">${p.n}</div><div class="text-xs text-muted mt-1">${p.d}</div></div>
+          <span class="badge bg-teal">${p.s} Impact</span>
+        </div>`).join('')}
+    </div>`;
+  setTimeout(liveCalcZakat,50);
+}
+
+function liveCalcZakat(){
+  const cash=parseFloat(document.getElementById('z-cash')?.value)||0;
+  const gold=parseFloat(document.getElementById('z-gold')?.value)||0;
+  const silver=parseFloat(document.getElementById('z-silver')?.value)||0;
+  const inv=parseFloat(document.getElementById('z-invest')?.value)||0;
+  const recv=parseFloat(document.getElementById('z-recv')?.value)||0;
+  const liab=parseFloat(document.getElementById('z-liab')?.value)||0;
+  const totalAssets=cash+gold+silver+inv+recv;
+  const zakatable=Math.max(0,totalAssets-liab);
+  const exceedsNisab=zakatable>=NISAB_BDT;
+  const due=exceedsNisab?Math.round(zakatable*ZAKAT_RATE):0;
+  S.zakatDue=due;
+  const el=document.getElementById('zakat-result');
+  if(!el) return;
+  el.innerHTML=`
+    <div class="flex justify-between mb-2 text-sm"><span>Total Assets</span><span class="fw-bold">৳${fmt(Math.round(totalAssets))}</span></div>
+    <div class="flex justify-between mb-2 text-sm"><span>Liabilities</span><span class="fw-bold text-red">-৳${fmt(liab)}</span></div>
+    <div class="flex justify-between mb-2 text-sm"><span>Zakatable Wealth</span><span class="fw-bold">৳${fmt(Math.round(zakatable))}</span></div>
+    <div class="flex justify-between mb-2 text-sm"><span>Nisab Threshold</span><span class="fw-bold">৳${fmt(NISAB_BDT)}</span></div>
+    <div class="divider" style="margin:8px 0"></div>
+    <div class="flex justify-between items-center">
+      <div><div class="fw-bold" style="font-size:15px">Zakat Due (2.5%)</div><div class="text-xs mt-1">${exceedsNisab?'Wealth exceeds Nisab — Zakat is obligatory (Fard)':'Wealth below Nisab — Zakat not yet obligatory'}</div></div>
+      <div class="fw-bold" style="font-size:20px;color:${exceedsNisab?'var(--teal)':'var(--text3)'}">৳${fmt(due)}</div>
+    </div>`;
+  const mzv=document.getElementById('modal-zakat-val');
+  if(mzv) mzv.textContent='৳'+fmt(due);
+  const mza=document.getElementById('zakatpay-amt');
+  if(mza&&!mza.value) mza.value=due;
+}
+
+function openZakatPay(){liveCalcZakat();openModal('zakatpay');}
+
+function payZakat(){
+  const amt=parseFloat(document.getElementById('zakatpay-amt')?.value)||0;
+  const org=document.getElementById('zakatpay-org')?.value||'';
+  if(amt<=0){toast('Enter a valid Zakat amount','error');return;}
+  closeModal('zakatpay');
+  S.user.zakatPaid+=amt;
+  S.user.hepi=Math.min(100,S.user.hepi+2);
+  TXN_DATA.unshift({id:'Z'+Date.now(),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),desc:'Zakat — '+org.split(' (')[0],cat:'Charity',amt:amt,dir:'out',icon:'⊕',bg:'rgba(14,196,160,0.12)',type:'NEFT',ref:'ZKT'+Date.now()});
+  toast('JazakAllah Khairan! ৳'+fmt(amt)+' Zakat paid. HEPI +2 🌟','gold');
+  setTimeout(()=>showPage('zakat'),500);
+}
+
+function initSpending(){
+  const totalSpend=Object.values(S.spending).reduce((a,b)=>a+b,0);
+  const colors=['var(--teal)','var(--blue)','var(--amber)','var(--red)','var(--green)','var(--purple)','var(--text3)'];
+  document.getElementById('spending-content').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Spending Breakdown — April 2026</span></div>
+      <div class="metric mb-3"><div class="metric-lbl">Total Expenses</div><div class="metric-val">৳${fmt(totalSpend)}</div></div>
+      ${Object.entries(S.spending).map(([cat,amt],i)=>`
+        <div class="spend-category">
+          <div style="width:12px;height:12px;border-radius:50%;background:${colors[i]};flex-shrink:0"></div>
+          <div class="fw-bold text-sm" style="width:90px">${cat}</div>
+          <div class="prog" style="flex:1;margin:0 10px"><div class="prog-fill" style="width:${Math.round(amt/totalSpend*100)}%;background:${colors[i]}"></div></div>
+          <div class="text-right"><div class="fw-bold text-sm">৳${fmt(amt)}</div><div class="text-xs text-muted">${Math.round(amt/totalSpend*100)}%</div></div>
+        </div>`).join('')}
+      <div class="divider"></div>
+      <div class="info-teal info-box"><strong>Halal Spending: 100%</strong> · No haram transactions detected.</div>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Monthly Trend</span></div>
+        <div class="chart-area" id="spend-chart"></div>
+        <div style="display:flex;gap:4px;margin-top:4px" id="spend-chart-labels"></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">AI Spending Insights</span></div>
+        <div class="info-purple info-box mb-2">🤖 Education spending (৳12,000 = 30.7%) is your largest category. <strong>HEPI Impact: +2</strong></div>
+        <div class="info-teal info-box mb-2">🌱 Charity/Sadaqah = ৳7,000 (17.9%). Above national average. <strong>HEPI Impact: +3</strong></div>
+        <div class="info-gold info-box">💡 Zero haram spending detected. Micro-Sadaqah round-up could reach Hajj goal 6 months faster.</div>
+      </div>
+    </div>`;
+  const months=['Nov','Dec','Jan','Feb','Mar','Apr'];
+  const vals=[28000,31000,38000,35000,42000,totalSpend];
+  const max=Math.max(...vals);
+  const chart=document.getElementById('spend-chart');
+  const labels=document.getElementById('spend-chart-labels');
+  if(chart) chart.innerHTML=vals.map((v,i)=>`<div class="chart-bar" style="height:${Math.round(v/max*100)}%;background:${i===5?'var(--gold)':'var(--surface3)'};border:.5px solid ${i===5?'var(--gold)':'var(--border2)'}"><div class="chart-bar-tip">৳${fmt(v)}</div></div>`).join('');
+  if(labels) labels.innerHTML=months.map(m=>`<div style="flex:1;text-align:center;font-size:9px;color:var(--text3)">${m}</div>`).join('');
+}
+
+const SYSTEM_PROMPTS = {
+  client: `You are the NurBank Universal AI Advisor, powered by Anthropic Claude. You are the world's most knowledgeable Islamic digital banking AI assistant, but you can answer questions about absolutely ANY topic — science, history, mathematics, technology, current events, religion, Islamic finance, banking, investments, cooking, health, travel, language, culture, and everything else.
+
+ABOUT THE USER:
+- Name: Ahmad Raza | Account: C001 | Branch: Gulshan-2, Dhaka
+- Current Account Balance: BDT 2,45,000 (Wadiah — halal)
+- Mudarabah Savings: BDT 2,37,800 (5.2% profit share)
+- Investment Portfolio: BDT 1,20,000 (Green Sukuk + Halal Equity Fund)
+- HEPI Score: 87/100 (Excellent tier — top 8%)
+- Zakat Due: BDT 15,070 (in 12 days)
+- Location: Gulshan-2, Dhaka, Bangladesh
+
+BANKING CONTEXT:
+- NurBank products: BEFTN, RTGS, SWIFT, bKash/Nagad integration
+- Islamic finance: Murabaha, Ijarah, Diminishing Musharakah, Qard Hasan
+- Bangladesh Bank, BFIU, Shariah Board compliance
+- BDT Forex: USD=110.42, EUR=119.80, SAR=29.44, AED=30.07
+
+Be concise, warm, and helpful for ANY question. Use BDT for amounts. Reference Islamic principles naturally when relevant. Use markdown for clarity.`,
+
+  admin: `You are the NurBank Banking Operations AI, powered by Anthropic Claude. You assist bank staff with operations, compliance, customer management, and regulatory requirements.
+
+CONTEXT:
+- Branch: NurBank Gulshan-2, Dhaka | Staff: Branch Manager
+- Deposits ৳48.2Cr | Financing ৳29.7Cr | Customers 2,847 | NPF 2.1%
+- Pending: 3 transactions (1 AML High Risk, 1 Medium, 1 Low)
+
+REGULATORY FRAMEWORK: Bangladesh Bank BRPD Circulars, BFIU AML/CFT Guidelines, Islamic Banking Guideline BB-2009.
+
+Answer any banking, regulatory, compliance, customer risk, HEPI, or general question fully and precisely.`
+};
+
+async function callClaudeAPI(messages, role) {
+  const system = SYSTEM_PROMPTS[role]||SYSTEM_PROMPTS.client;
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system,
+      messages
+    })
+  });
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error '+res.status);}
+  const d=await res.json();
+  return d.content[0].text;
+}
+
+function initAIAdvisor(){
+  const msgs=document.getElementById('ai-advisor-msgs');
+  if(!msgs) return;
+  if(S.aiCtx.client.length===0){
+    msgs.innerHTML=`
+      <div class="ai-bubble ai-bot"><div class="ai-bot-badge">Claude AI</div><br>
+      As-salamu alaykum, <strong>Ahmad</strong>! I'm your NurBank AI Advisor, powered by Anthropic Claude.<br><br>
+      I'm a <strong>universal assistant</strong> — ask me about anything: Islamic finance, Zakat, BEFTN transfers, investment advice, Bangladesh Bank regulations, history, science, technology, cooking, health, or any topic at all.<br><br>
+      <strong>Your account snapshot:</strong><br>
+      • Balance: ৳2,45,000 | Savings: ৳2,37,800 | Investments: ৳1,20,000<br>
+      • HEPI Score: 87/100 (Excellent ✦) | Zakat due: ৳15,070 in 12 days</div>`;
+  } else {
+    msgs.innerHTML=S.aiCtx.client.map(m=>
+      m.role==='user'?`<div class="ai-bubble ai-user">${m.content}</div>`:
+      `<div class="ai-bubble ai-bot"><div class="ai-bot-badge">Claude AI</div><br>${formatAI(m.content)}</div>`
+    ).join('');
+  }
+  document.getElementById('ai-suggestions-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Quick Questions ↗</span></div>
+    ${['How do I send money to UK via SWIFT?','Calculate my Zakat — is it correct?','Difference between Murabaha and Ijarah?','Should I invest more in Green Sukuk?','What is the current gold price and Nisab?','How can I improve my HEPI score to 90?','Explain inflation and how it affects savings','What is Bangladesh Bank policy rate?','Tell me about Maqasid al-Shariah','How does profit-sharing work in Mudarabah?'].map(q=>`<button class="btn btn-outline btn-w100 mb-1" style="text-align:left;justify-content:flex-start;font-size:10px;padding:7px 10px" onclick="quickAsk('${q.replace(/'/g,"\\'")}')">↗ ${q}</button>`).join('')}`;
+  document.getElementById('ai-info-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Claude AI Capabilities</span></div>
+    ${[{i:'🏦',t:'Islamic Banking Expert',d:'Murabaha, Ijarah, Sukuk, Zakat, HEPI'},
+       {i:'📊',t:'Financial Analysis',d:'Live account data, investments, forex'},
+       {i:'⚖️',t:'Regulatory Knowledge',d:'Bangladesh Bank, Shariah Board, AML'},
+       {i:'🌍',t:'Universal Knowledge',d:'Any topic — science, history, culture, tech'},
+       {i:'🔢',t:'Calculations',d:'Zakat, EMI, profit, forex conversions'},
+       {i:'💬',t:'Multiple Languages',d:'English, Bangla, Arabic'},
+      ].map(f=>`<div class="flex gap-2 items-center" style="padding:7px 0;border-bottom:.5px solid var(--border)"><span style="font-size:16px">${f.i}</span><div><div class="fw-bold text-sm">${f.t}</div><div class="text-xs text-muted">${f.d}</div></div></div>`).join('')}`;
+}
+
+function quickAsk(q){
+  const inp=document.getElementById('ai-input-client');
+  if(inp){inp.value=q;sendAI('client');}
+}
+
+function initAdminAI(){
+  const msgs=document.getElementById('ai-admin-msgs');
+  if(!msgs) return;
+  if(S.aiCtx.admin.length===0){
+    msgs.innerHTML=`
+      <div class="ai-bubble ai-bot"><div class="ai-bot-badge">Claude AI · Admin</div><br>
+      Assalamu Alaikum, <strong>${S.user.name}</strong>. I'm your NurBank Banking Operations AI.<br><br>
+      <strong>⚠️ Priority Alert:</strong> Transaction PT001 — Rana Islam, BDT 95,000 RTGS, flagged AML HIGH RISK (8x 90-day average). Requires review before 4:00 PM RTGS cutoff.<br><br>
+      I can assist with AML screening, Bangladesh Bank compliance, HEPI reporting, customer risk, Shariah rulings, or any topic.
+      </div>`;
+  }
+  document.getElementById('admin-ai-panel').innerHTML=`
+    <div class="card-h"><span class="card-t">Quick Operations</span></div>
+    ${['BB BRPD Circular No. 18/2022?','STR filing requirements Bangladesh','AML red flags checklist for banking','How to calculate CRR and SLR?','HEPI Q1 2026 audit checklist','KYC requirements Bangladesh Bank 2026'].map(q=>`<button class="btn btn-outline btn-w100 mb-1" style="text-align:left;font-size:10px;padding:7px 10px" onclick="adminQuickAsk('${q.replace(/'/g,"\\'")}')">↗ ${q}</button>`).join('')}
+    <div class="divider"></div>
+    <div class="card-h"><span class="card-t">Live System Status</span></div>
+    ${[['BEFTN','Online ●','text-green'],['RTGS','Online ●','text-green'],['SWIFT','Online ●','text-green'],['Core Banking','Online ●','text-green'],['AML Engine','Active ●','text-teal'],['Claude AI API','Connected ●','text-purple']].map(([s,v,c])=>`<div class="flex justify-between text-sm" style="padding:3px 0"><span class="text-muted">${s}</span><span class="fw-bold ${c}">${v}</span></div>`).join('')}`;
+}
+
+function adminQuickAsk(q){
+  const inp=document.getElementById('ai-input-admin');
+  if(inp){inp.value=q;sendAI('admin');}
+}
+
+async function sendAI(role){
+  const inputId=role==='client'?'ai-input-client':'ai-input-admin';
+  const msgsId=role==='client'?'ai-advisor-msgs':'ai-admin-msgs';
+  const inp=document.getElementById(inputId);
+  const msgs=document.getElementById(msgsId);
+  if(!inp||!msgs||!inp.value.trim()) return;
+  const q=inp.value.trim();
+  inp.value='';
+  msgs.innerHTML+=`<div class="ai-bubble ai-user">${escHTML(q)}</div>`;
+  const typingId='ty'+Date.now();
+  msgs.innerHTML+=`<div class="ai-typing" id="${typingId}"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  S.aiCtx[role].push({role:'user',content:q});
+  if(S.aiCtx[role].length>20) S.aiCtx[role]=S.aiCtx[role].slice(-20);
+  try {
+    const resp=await callClaudeAPI(S.aiCtx[role],role);
+    document.getElementById(typingId)?.remove();
+    msgs.innerHTML+=`<div class="ai-bubble ai-bot"><div class="ai-bot-badge">Claude AI</div><br>${formatAI(resp)}</div>`;
+    S.aiCtx[role].push({role:'assistant',content:resp});
+    msgs.scrollTop=msgs.scrollHeight;
+  } catch(e){
+    document.getElementById(typingId)?.remove();
+    msgs.innerHTML+=`<div class="ai-bubble ai-bot"><div class="ai-bot-badge">Claude AI</div><br>⚠️ <strong>API Key Required</strong><br><br>To enable live Claude AI responses, add your Anthropic API key. The full UI, banking logic, Zakat calculator, HEPI scoring, transfer system, and all features are fully functional — only the AI chat requires a key.<br><br>Get a free API key at <strong>console.anthropic.com</strong></div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+}
+
+function escHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function formatAI(text){
+  return escHTML(text)
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`(.*?)`/g,'<code style="background:var(--surface3);padding:1px 4px;border-radius:4px;font-family:JetBrains Mono,monospace;font-size:11px">$1</code>')
+    .replace(/^### (.*)/gm,'<div class="fw-bold mt-2">$1</div>')
+    .replace(/^## (.*)/gm,'<div class="fw-bold" style="font-size:13px;margin-top:8px">$1</div>')
+    .replace(/^- (.*)/gm,'<div style="padding:2px 0">• $1</div>')
+    .replace(/\n\n/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+
+function initGPSSecurity(){
+  document.getElementById('gps-content').innerHTML=`
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">📍 Real-Time Location</span><span class="badge bg-green">GPS Active ●</span></div>
+        <div class="gps-bar"><div class="gps-dot"></div><span id="current-gps-detail">Requesting GPS access...</span></div>
+        <div style="background:var(--surface2);border-radius:var(--r);border:.5px solid var(--border3);height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+          <div style="font-size:36px;animation:float 3s ease-in-out infinite">📍</div>
+          <div class="fw-bold" id="gps-map-addr">Gulshan-2, Dhaka</div>
+          <div class="mono text-xs text-muted" id="gps-map-coords">23.7808° N, 90.4142° E</div>
+          <div class="text-xs text-teal">NurBank GPS Verified ✓</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-gold" onclick="refreshGPS()">🔄 Refresh GPS</button>
+          <button class="btn btn-outline" onclick="openGoogleMaps()">Open in Google Maps ↗</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Location History</span></div>
+        ${[{loc:'Gulshan-2, Dhaka',time:'Now · Active session',risk:'Trusted'},
+           {loc:'Banani, Dhaka',time:'Yesterday 3:14 PM',risk:'Trusted'},
+           {loc:'Dhanmondi, Dhaka',time:'2 days ago 11:30 AM',risk:'Trusted'},
+           {loc:'Motijheel, Dhaka',time:'4 days ago 9:15 AM',risk:'Trusted'},
+           {loc:'Unknown VPN IP',time:'Last week',risk:'Flagged'},
+          ].map(l=>`<div class="flex justify-between items-center" style="padding:8px 0;border-bottom:.5px solid var(--border)">
+          <div><div class="fw-bold text-sm">📍 ${l.loc}</div><div class="text-xs text-muted">${l.time}</div></div>
+          <span class="badge ${l.risk==='Trusted'?'bg-green':'bg-red'}">${l.risk}</span></div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Fraud Protection Rules</span></div>
+        ${togWrap('Block from Untrusted Locations','Require OTP from new locations',true)}
+        ${togWrap('GPS Velocity Check','Flag impossible travel >500km/hr',true)}
+        ${togWrap('Country Whitelist','Allow: BD, UAE, UK, USA, KSA, MY only',true)}
+        ${togWrap('ATM Location Match','ATM must be within 5km of phone',true)}
+        ${togWrap('SWIFT GPS Lock','Home GPS required for international wire',false)}
+        ${togWrap('Night Transaction Alert','Alert for transactions 11PM-5AM',true)}
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">GPS Security Alerts</span></div>
+        <div class="alert-row alert-lo mb-2"><div><div class="fw-bold text-sm">✓ Session from Gulshan-2</div><div class="text-xs text-muted">Today · Trusted location · Verified</div></div></div>
+        <div class="alert-row alert-hi mb-2"><div><div class="fw-bold text-sm">⚠ VPN detected (blocked)</div><div class="text-xs text-muted">Last week · Transaction blocked automatically</div></div></div>
+        <div class="alert-row alert-lo"><div><div class="fw-bold text-sm">● GPS monitoring active</div><div class="text-xs text-muted">Real-time fraud protection running</div></div></div>
+      </div>
+    </div>`;
+  refreshGPS();
+}
+
+function refreshGPS(){
+  const detail=document.getElementById('current-gps-detail');
+  const coords=document.getElementById('gps-map-coords');
+  const addr=document.getElementById('gps-map-addr');
+  if(detail) detail.textContent='Requesting location...';
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const {latitude:lat,longitude:lng}=pos.coords;
+      S.gpsCoords={lat,lng};
+      if(detail) detail.textContent=`${lat.toFixed(6)}° N, ${lng.toFixed(6)}° E · ±${Math.round(pos.coords.accuracy)}m`;
+      if(coords) coords.textContent=`${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`;
+      if(addr) addr.textContent='GPS Located · Live Coordinates';
+      document.getElementById('gps-location-text').textContent='GPS Active ●';
+      toast('GPS updated! Accuracy: ±'+Math.round(pos.coords.accuracy)+'m','success');
+    },()=>{
+      if(detail) detail.textContent='GPS unavailable — using Dhaka, BD (demo mode)';
+      if(coords) coords.textContent='23.780800° N, 90.414200° E (demo)';
+      if(addr) addr.textContent='Gulshan-2, Dhaka (Demo)';
+    });
+  } else {
+    if(detail) detail.textContent='GPS not supported in this browser';
+  }
+}
+
+function openGoogleMaps(){
+  window.open(`https://www.google.com/maps?q=${S.gpsCoords.lat},${S.gpsCoords.lng}`,'_blank');
+}
+
+function initForex(){
+  const pairs=[
+    {from:'USD',to:'BDT',rate:110.42,chg:+0.12,flag:'🇺🇸'},
+    {from:'EUR',to:'BDT',rate:119.80,chg:-0.20,flag:'🇪🇺'},
+    {from:'GBP',to:'BDT',rate:140.20,chg:+0.08,flag:'🇬🇧'},
+    {from:'SAR',to:'BDT',rate:29.44,chg:+0.04,flag:'🇸🇦'},
+    {from:'AED',to:'BDT',rate:30.07,chg:+0.02,flag:'🇦🇪'},
+    {from:'MYR',to:'BDT',rate:24.80,chg:-0.05,flag:'🇲🇾'},
+    {from:'KWD',to:'BDT',rate:358.40,chg:+0.15,flag:'🇰🇼'},
+    {from:'CAD',to:'BDT',rate:81.20,chg:-0.10,flag:'🇨🇦'},
+  ];
+  document.getElementById('forex-content').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Live Exchange Rates — BDT</span><span class="badge bg-green">Live ●</span></div>
+      <div class="g2" style="gap:8px;margin-bottom:14px">
+        ${pairs.map(p=>`<div class="rate-card"><div class="flex items-center justify-between mb-1"><span style="font-size:14px">${p.flag}</span><span class="text-xs text-muted">${p.from}/BDT</span></div><div class="rate-val">৳${p.rate.toFixed(2)}</div><div class="rate-chg ${p.chg>0?'text-green':'text-red'}">${p.chg>0?'+':''}${p.chg.toFixed(2)}% today</div></div>`).join('')}
+      </div>
+      <div class="card-h"><span class="card-t">Remittance Calculator</span></div>
+      <div class="fi-row">
+        <div class="fg"><label class="fl">Amount</label><input class="fi" type="number" id="fx-amount" value="1000" oninput="calcForex()"></div>
+        <div class="fg"><label class="fl">From Currency</label><select class="fi" id="fx-from" onchange="calcForex()">
+          ${pairs.map(p=>`<option value="${p.rate}">${p.flag} ${p.from}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="review-box" id="fx-result">
+        <div class="review-row"><span class="review-key">You send</span><span class="review-val" id="fx-send">—</span></div>
+        <div class="review-row"><span class="review-key">Exchange Rate</span><span class="review-val" id="fx-rate">—</span></div>
+        <div class="review-row"><span class="review-key">Transfer Fee (HEPI waived)</span><span class="review-val text-green">৳0.00</span></div>
+        <div class="review-row"><span class="review-key fw-bold">Recipient Gets</span><span class="review-val fw-bold text-teal" id="fx-recv">—</span></div>
+      </div>
+      <button class="btn btn-gold mt-3" onclick="showPage('transfer')">Send International Transfer ↗</button>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Gold Price</span></div>
+        <div class="metric mb-2"><div class="metric-lbl">Gold per Gram (BDT)</div><div class="metric-val text-gold">৳${fmt(GOLD_PRICE_PER_GRAM)}</div></div>
+        <div class="metric mb-2"><div class="metric-lbl">Nisab (85g gold)</div><div class="metric-val">৳${fmt(NISAB_BDT)}</div></div>
+        <div class="metric"><div class="metric-lbl">Gold per Troy Oz (USD)</div><div class="metric-val">$2,312</div></div>
+        <div class="info-gold info-box mt-3">✦ Gold prices update Nisab threshold in real time.</div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">SWIFT Transfer Guide</span></div>
+        ${[['NurBank SWIFT Code','NURBDHDH'],['Correspondent (USD)','BOFAUS3N'],['Correspondent (EUR)','DEUTDEDB'],['Transfer Time','2-3 business days'],['HEPI 80+ Fee','Free (normally ৳500)'],['Daily Limit','৳20,00,000']].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:6px 0;border-bottom:.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-bold mono" style="font-size:11px">${v}</span></div>`).join('')}
+      </div>
+    </div>`;
+  setTimeout(calcForex,50);
+}
+
+function calcForex(){
+  const amt=parseFloat(document.getElementById('fx-amount')?.value)||0;
+  const rate=parseFloat(document.getElementById('fx-from')?.value)||110;
+  const result=Math.round(amt*rate);
+  if(document.getElementById('fx-send')) document.getElementById('fx-send').textContent=amt.toLocaleString();
+  if(document.getElementById('fx-rate')) document.getElementById('fx-rate').textContent='1 = ৳'+rate.toFixed(2);
+  if(document.getElementById('fx-recv')) document.getElementById('fx-recv').textContent='৳'+fmt(result);
+}
+
+// ═══════════════════════════════════════════
+// SECURITY
+// ═══════════════════════════════════════════
+function initSecurity(){
+  document.getElementById('security-content').innerHTML=`
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Authentication</span></div>
+        ${togWrap('Two-Factor Authentication (OTP)','SMS OTP on every transaction',true)}
+        ${togWrap('Biometric Login','Fingerprint/Face ID (App)',true)}
+        ${togWrap('GPS Fraud Protection','Block suspicious locations',true)}
+        ${togWrap('Auto-Lock (5 min idle)','Session auto-expires',true)}
+        ${togWrap('Login Notifications','Email alert on new login',true)}
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Recent Login Activity</span></div>
+        <table class="tbl"><thead><tr><th>Device</th><th>Location</th><th>Time</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Chrome/Windows 11</td><td>Gulshan-2, Dhaka</td><td>Now</td><td><span class="badge bg-teal">Current ●</span></td></tr>
+          <tr><td>NurBank iOS App v3.2</td><td>Gulshan-2, Dhaka</td><td>2 hrs ago</td><td><span class="badge bg-blue">Safe ✓</span></td></tr>
+          <tr><td>Chrome/Android</td><td>Banani, Dhaka</td><td>Yesterday</td><td><span class="badge bg-green">Safe ✓</span></td></tr>
+        </tbody></table>
+        <button class="btn btn-red btn-sm mt-3" onclick="toast('All other sessions terminated.','success')">Terminate All Other Sessions</button>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Transaction Controls</span></div>
+        ${togWrap('International Transfer GPS Lock','Require home GPS for SWIFT',true)}
+        ${togWrap('Large Transaction Alert','Notify for ৳10,000+',true)}
+        ${togWrap('Shariah Block','Block haram merchant categories',true)}
+        ${togWrap('Freeze Card','Instantly block debit card',false)}
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Change Password</span></div>
+        <div class="fg"><label class="fl">Current Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+        <div class="fg"><label class="fl">New Password</label><input class="fi" type="password" placeholder="Min 8 chars"></div>
+        <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" type="password" placeholder="Repeat"></div>
+        <button class="btn btn-gold" onclick="toast('Password updated successfully!','success')">Update Password ✓</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════
+function initSettings(){
+  const u=S.user;
+  document.getElementById('settings-content').innerHTML=`
+    <div class="card">
+      <div class="card-h"><span class="card-t">Personal Information</span></div>
+      <div class="fg"><label class="fl">Full Name</label><input class="fi" value="${u.name}"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" value="${u.email}" type="email"></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" value="${u.phone}"></div>
+      <div class="fg"><label class="fl">Address</label><input class="fi" value="${u.address}"></div>
+      <div class="fg"><label class="fl">NID Number</label><input class="fi" value="${u.nid}"></div>
+      <div class="fg"><label class="fl">Occupation</label><input class="fi" value="${u.occupation}"></div>
+      <div class="fg"><label class="fl">Employer</label><input class="fi" value="${u.employer}"></div>
+      <button class="btn btn-gold" onclick="toast('Profile saved!','success')">Save Changes ✓</button>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">App Preferences</span></div>
+        <div class="fg"><label class="fl">Language</label><select class="fi"><option>English</option><option>বাংলা (Bangla)</option><option>العربية (Arabic)</option></select></div>
+        <div class="fg"><label class="fl">Currency Display</label><select class="fi"><option>BDT (৳)</option><option>USD ($)</option><option>EUR (€)</option></select></div>
+        <div class="fg"><label class="fl">Statement Format</label><select class="fi"><option>PDF (Email)</option><option>Excel Download</option></select></div>
+        <button class="btn btn-gold" onclick="toast('Preferences saved!','success')">Save Preferences ✓</button>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Claude AI Settings</span></div>
+        ${togWrap('AI Context Access','Allow AI to read account data for advice',true)}
+        ${togWrap('AI Transaction Insights','Weekly AI spending analysis',true)}
+        ${togWrap('Smart Notifications','AI-powered notification filtering',true)}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// ADMIN PAGES
+// ═══════════════════════════════════════════
+function initAdminDashboard(){
+  document.getElementById('admin-metrics').innerHTML=`
+    <div class="metric"><div class="metric-lbl">Total Deposits</div><div class="metric-val text-gold">৳48.2 Cr</div><div class="metric-chg up">↑ 4.8% QoQ</div></div>
+    <div class="metric"><div class="metric-lbl">Active Financing</div><div class="metric-val text-teal">৳29.7 Cr</div><div class="metric-chg neu">NPF: 2.1%</div></div>
+    <div class="metric"><div class="metric-lbl">Total Customers</div><div class="metric-val">2,847</div><div class="metric-chg up">+18 this week</div></div>
+    <div class="metric"><div class="metric-lbl">Pending Reviews</div><div class="metric-val text-red">3</div><div class="metric-chg dn">⚠ Action needed</div></div>`;
+  document.getElementById('admin-pending-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Pending Transactions</span><span class="badge bg-red">${PENDING_TXNS.length} review</span></div>
+    ${PENDING_TXNS.map(pt=>`
+      <div class="alert-row ${pt.risk==='High'?'alert-hi':pt.risk==='Medium'?'alert-med':'alert-lo'}">
+        <div style="flex:1"><div class="fw-bold text-sm">${pt.from} → ${pt.to}</div><div class="text-xs text-muted mt-1">৳${fmt(pt.amt)} · ${pt.type} · ${pt.time}</div><div class="text-xs mt-1" style="color:${pt.risk==='High'?'var(--red)':pt.risk==='Medium'?'var(--amber)':'var(--teal)'}">${pt.flag}</div></div>
+        <div class="flex gap-1"><button class="btn btn-gold btn-xs" onclick="adminApprove('${pt.id}','approve')">✓ Approve</button><button class="btn btn-red btn-xs" onclick="adminApprove('${pt.id}','reject')">✗ Flag</button></div>
+      </div>`).join('')}`;
+  document.getElementById('admin-alerts-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Compliance Alerts</span></div>
+    <div class="alert-row alert-hi"><div><div class="fw-bold text-sm">⚠ AML Alert — Rana Islam</div><div class="text-xs text-muted">BDT 95,000 outward RTGS · 8x avg · File STR?</div></div><button class="btn btn-xs btn-gold" style="flex-shrink:0" onclick="toast('STR draft opened','info')">STR</button></div>
+    <div class="alert-row alert-med"><div><div class="fw-bold text-sm">KYC Incomplete — Bashir Uddin</div><div class="text-xs text-muted">Biometric verification pending — 14 day deadline</div></div></div>
+    <div class="alert-row alert-lo"><div><div class="fw-bold text-sm">Shariah Audit Due</div><div class="text-xs text-muted">Q1 2026 — Submit to Shariah Board by May 15</div></div></div>
+    <div class="alert-row alert-lo"><div><div class="fw-bold text-sm">HEPI Report Ready</div><div class="text-xs text-muted">Q1 2026 HEPI impact report generated</div></div></div>`;
+  document.getElementById('admin-customers-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Customer Overview</span><button class="btn btn-outline btn-sm" onclick="showPage('admin-customers')">View all</button></div>
+    ${ADMIN_CUSTOMERS.slice(0,5).map(c=>`
+      <div class="cust-row">
+        <div class="c-av" style="background:var(--blue-bg);color:var(--blue)">${c.name.split(' ').map(n=>n[0]).join('')}</div>
+        <div style="flex:1"><div class="fw-bold text-sm">${c.name}</div><div class="text-xs text-muted">•••• ${c.acct} · ${c.city} · HEPI ${c.hepi}</div></div>
+        <span class="badge ${c.status==='Active'?'bg-teal':c.status==='Flagged'?'bg-red':'bg-amber'}">${c.status}</span>
+      </div>`).join('')}`;
+  const months=['Nov','Dec','Jan','Feb','Mar','Apr'];
+  const vals=[38,42,45,39,48,51.2];
+  const max=Math.max(...vals);
+  document.getElementById('admin-chart-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Monthly Deposits (Cr ৳)</span></div>
+    <div class="chart-area">${vals.map((v,i)=>`<div class="chart-bar" style="height:${Math.round(v/max*100)}%;background:${i===5?'var(--gold)':'var(--surface3)'};border:.5px solid ${i===5?'var(--gold)':'var(--border2)'}"><div class="chart-bar-tip">${v}Cr</div></div>`).join('')}</div>
+    <div style="display:flex;gap:5px;margin-top:4px">${months.map(m=>`<div style="flex:1;text-align:center;font-size:9px;color:var(--text3)">${m}</div>`).join('')}</div>
+    <div class="divider"></div>
+    <div class="flex justify-between text-sm"><span class="text-muted">Apr 2026</span><span class="fw-bold text-gold">৳51.2 Cr (Record)</span></div>`;
+}
+
+function initAdminCustomersFull(){
+  document.getElementById('admin-cust-full').innerHTML=`
+    <div class="flex gap-2 items-center mb-3" style="flex-wrap:wrap">
+      <input class="fi" style="max-width:220px" placeholder="🔍 Search by name, ID, account..." oninput="filterAdminCust(this.value)">
+      <select class="fi" style="max-width:120px" onchange="filterAdminCustRisk(this.value)"><option value="">All Risk</option><option>Low</option><option>Medium</option><option>High</option></select>
+      <select class="fi" style="max-width:120px" onchange="filterAdminCustStatus(this.value)"><option value="">All Status</option><option>Active</option><option>Flagged</option></select>
+      <button class="btn btn-gold btn-sm" onclick="toast('New customer onboarding form','info')">+ New Customer</button>
+      <button class="btn btn-outline btn-sm" onclick="toast('Export CSV initiated','success')">↓ Export</button>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl">
+      <thead><tr><th>ID</th><th>Customer</th><th>Account</th><th>Balance</th><th>HEPI</th><th>KYC</th><th>Risk</th><th>Status</th><th>Since</th><th>Action</th></tr></thead>
+      <tbody id="admin-cust-tbody"></tbody>
+    </table></div>`;
+  renderAdminCust(ADMIN_CUSTOMERS);
+}
+
+let acFilter='',acRisk='',acStatus='';
+function renderAdminCust(data){
+  const tb=document.getElementById('admin-cust-tbody');
+  if(!tb) return;
+  tb.innerHTML=data.map(c=>`<tr>
+    <td class="mono text-muted text-xs">${c.id}</td>
+    <td><div class="flex items-center gap-2"><div class="c-av" style="background:var(--blue-bg);color:var(--blue);width:26px;height:26px;font-size:9px;border-radius:7px">${c.name.split(' ').map(n=>n[0]).join('')}</div>${c.name}</div></td>
+    <td class="mono text-xs">•••• ${c.acct}</td>
+    <td class="fw-bold">৳${fmt(c.balance)}</td>
+    <td><span class="fw-black" style="color:${c.hepi>=80?'var(--teal)':c.hepi>=60?'var(--amber)':'var(--red)'}">${c.hepi}</span></td>
+    <td><span class="badge ${c.kyc==='Verified'?'bg-green':c.kyc==='Partial'?'bg-amber':'bg-red'}">${c.kyc}</span></td>
+    <td><span class="badge ${c.risk==='Low'?'bg-green':c.risk==='Medium'?'bg-amber':'bg-red'}">${c.risk}</span></td>
+    <td><span class="badge ${c.status==='Active'?'bg-teal':'bg-red'}">${c.status}</span></td>
+    <td class="text-muted text-xs">${c.since}</td>
+    <td><button class="btn btn-outline btn-xs" onclick="openCustomer('${c.id}')">View</button></td>
+  </tr>`).join('')||'<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--text3)">No customers found</td></tr>';
+}
+
+function filterAdminCust(v){acFilter=v;applyAdminCustFilter();}
+function filterAdminCustRisk(v){acRisk=v;applyAdminCustFilter();}
+function filterAdminCustStatus(v){acStatus=v;applyAdminCustFilter();}
+function applyAdminCustFilter(){
+  renderAdminCust(ADMIN_CUSTOMERS.filter(c=>
+    (!acFilter||(c.name.toLowerCase().includes(acFilter.toLowerCase())||c.id.includes(acFilter)||c.acct.includes(acFilter)))&&
+    (!acRisk||c.risk===acRisk)&&
+    (!acStatus||c.status===acStatus)
+  ));
+}
+
+function openCustomer(id){
+  const c=ADMIN_CUSTOMERS.find(x=>x.id===id);
+  if(!c) return;
+  const el=document.getElementById('customer-modal-content');
+  if(!el) return;
+  el.innerHTML=`
+    <div class="flex items-center gap-3 mb-4">
+      <div class="c-av" style="background:var(--blue-bg);color:var(--blue);width:52px;height:52px;font-size:16px;border-radius:13px">${c.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div>
+        <div class="fw-black" style="font-size:15px">${c.name}</div>
+        <div class="text-muted text-sm">Account •••• ${c.acct} · ${c.city}</div>
+        <div class="flex gap-2 mt-1">
+          <span class="badge ${c.status==='Active'?'bg-teal':'bg-red'}">${c.status}</span>
+          <span class="badge ${c.risk==='Low'?'bg-green':c.risk==='Medium'?'bg-amber':'bg-red'}">${c.risk} Risk</span>
+          <span class="badge ${c.kyc==='Verified'?'bg-green':'bg-amber'}">KYC: ${c.kyc}</span>
+        </div>
+      </div>
+    </div>
+    ${[['Customer ID',c.id],['Account No','•••• '+c.acct],['Balance','৳'+fmt(c.balance)],['HEPI Score',c.hepi+'/100'],['Risk Level',c.risk],['KYC Status',c.kyc],['Member Since',c.since],['City',c.city]].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-bold">${v}</span></div>`).join('')}
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-gold" style="flex:1" onclick="toast('Viewing transactions for ${c.name}','info');closeModal('customer')">View Transactions</button>
+      <button class="btn btn-outline" style="flex:1" onclick="toast('KYC review initiated for ${c.name}','info')">KYC Review</button>
+    </div>
+    ${c.status==='Flagged'?`<button class="btn btn-red btn-w100 mt-2" onclick="toast('AML report filed for ${c.name}','error');closeModal('customer')">🚨 File AML Report</button>`:''}`;
+  openModal('customer');
+}
+
+function initAdminTransactions(){
+  document.getElementById('admin-pending-txns-card').innerHTML=`
+    <div class="card-h"><span class="card-t">⚠ Requires Approval</span><span class="badge bg-red">${PENDING_TXNS.length} pending</span></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>ID</th><th>From</th><th>Account</th><th>To</th><th>Amount</th><th>Type</th><th>Flag</th><th>Risk</th><th>Time</th><th>Action</th></tr></thead>
+    <tbody>${PENDING_TXNS.map(pt=>`<tr>
+      <td class="mono text-xs text-muted">${pt.id}</td><td class="fw-bold">${pt.from}</td><td class="mono text-xs">•••• ${pt.fromAcct}</td><td>${pt.to}</td>
+      <td class="fw-bold">৳${fmt(pt.amt)}</td><td><span class="badge bg-blue">${pt.type}</span></td>
+      <td class="text-xs" style="color:${pt.risk==='High'?'var(--red)':pt.risk==='Medium'?'var(--amber)':'var(--teal)'}">⚠ ${pt.flag}</td>
+      <td><span class="badge ${pt.risk==='High'?'bg-red':pt.risk==='Medium'?'bg-amber':'bg-teal'}">${pt.risk}</span></td>
+      <td class="text-muted text-xs">${pt.time}</td>
+      <td><div class="flex gap-1"><button class="btn btn-gold btn-xs" onclick="adminApprove('${pt.id}','approve')">✓</button><button class="btn btn-red btn-xs" onclick="adminApprove('${pt.id}','reject')">✗</button></div></td>
+    </tr>`).join('')}</tbody></table></div>`;
+  document.getElementById('admin-all-txns-card').innerHTML=`
+    <div class="card-h"><span class="card-t">Recent Transactions — All Accounts</span></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Date</th><th>Customer</th><th>Description</th><th>Type</th><th>Amount</th><th>Ref.</th><th>Status</th></tr></thead>
+    <tbody>${TXN_DATA.slice(0,10).map(t=>`<tr>
+      <td class="mono text-xs text-muted">${t.date}</td><td>Ahmad Raza</td><td>${t.desc}</td>
+      <td><span class="badge bg-blue text-xs">${t.type}</span></td>
+      <td class="${t.dir==='in'?'amt-in':'amt-out'} fw-bold">${t.dir==='in'?'+':'-'}৳${fmt(t.amt)}</td>
+      <td class="mono text-xs text-muted">${t.ref}</td>
+      <td><span class="badge bg-green" style="font-size:9px">✓</span></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function initAdminFinancing(){
+  const apps=[
+    {id:'F-041',cust:'Ahmad Raza',hepi:87,type:'Home — Musharakah',amt:4000000,tenure:240,status:'Under Review',risk:'Low'},
+    {id:'F-038',cust:'Karim Ahmed',hepi:91,type:'SME — Murabaha',amt:2000000,tenure:60,status:'Approved',risk:'Low'},
+    {id:'F-035',cust:'Rana Islam',hepi:55,type:'Personal — Qard Hasan',amt:200000,tenure:24,status:'On Hold',risk:'High'},
+    {id:'F-032',cust:'Nasrin Khatun',hepi:83,type:'Auto — Ijarah',amt:1500000,tenure:84,status:'Approved',risk:'Low'},
+    {id:'F-029',cust:'Bashir Uddin',hepi:47,type:'SME — Murabaha',amt:500000,tenure:36,status:'Rejected',risk:'Medium'},
+  ];
+  document.getElementById('admin-financing-card').innerHTML=`
+    <div class="flex gap-2 mb-3"><button class="btn btn-gold btn-sm">+ New Application</button><button class="btn btn-outline btn-sm" onclick="toast('Export CSV','success')">↓ Export</button></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Tenure</th><th>HEPI</th><th>Risk</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>${apps.map(a=>`<tr>
+      <td class="mono text-xs">${a.id}</td><td>${a.cust}</td><td>${a.type}</td>
+      <td class="fw-bold">৳${fmt(a.amt)}</td><td>${a.tenure} mo</td>
+      <td class="fw-black" style="color:${a.hepi>=80?'var(--teal)':a.hepi>=60?'var(--amber)':'var(--red)'}">${a.hepi}</td>
+      <td><span class="badge ${a.risk==='Low'?'bg-green':a.risk==='Medium'?'bg-amber':'bg-red'}">${a.risk}</span></td>
+      <td><span class="badge ${a.status==='Approved'?'bg-green':a.status==='Under Review'?'bg-amber':a.status==='On Hold'?'bg-blue':'bg-red'}">${a.status}</span></td>
+      <td><div class="flex gap-1">
+        ${a.status==='Under Review'?`<button class="btn btn-gold btn-xs" onclick="toast('${a.id} approved!','success')">Approve</button><button class="btn btn-red btn-xs" onclick="toast('${a.id} rejected','error')">Reject</button>`:''}
+        <button class="btn btn-outline btn-xs">View</button>
+      </div></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function initAdminCompliance(){
+  document.getElementById('admin-compliance-card').innerHTML=`
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Bangladesh Bank Requirements</span></div>
+        ${[['CRR (Cash Reserve)','Required: 4%','Actual: 4.8%','green'],['SLR (Statutory Liquidity)','Required: 13%','Actual: 15.2%','green'],['NPF Ratio','Required: <5%','Actual: 2.1%','green'],['Capital Adequacy (CAR)','Required: >10%','Actual: 12.4%','green'],['STR Filing','Must file within 7 days','2 pending','amber'],['KYC Compliance','100% required','94.2% complete','amber']].map(([n,r,c,s])=>`
+          <div class="flex justify-between items-center" style="padding:9px 0;border-bottom:.5px solid var(--border)">
+            <div><div class="text-sm fw-bold">${n}</div><div class="text-xs text-muted">${r}</div></div>
+            <div class="text-right"><div class="fw-bold" style="color:${s==='green'?'var(--green)':'var(--amber)'}">${c}</div><span class="badge ${s==='green'?'bg-green':'bg-amber'}" style="font-size:9px">${s==='green'?'✓ Compliant':'⚠ Review'}</span></div>
+          </div>`).join('')}
+        <button class="btn btn-gold mt-3 btn-sm" onclick="toast('BB compliance report generated','success')">Generate BB Report</button>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Shariah Board Status</span></div>
+        <div class="info-teal info-box mb-3">Next Shariah Board Meeting: 5 Jun 2026 · Q1 Audit due: 15 May 2026</div>
+        ${[['Financing Products','Approved','All 7 structures certified'],['Investment Portfolio','Approved','94% Shariah-screened'],['Deposit Structures','Approved','Mudarabah verified'],['Marketing Materials','Pending Review','Q2 campaign pending'],['HEPI Framework','Approved','Annual review passed']].map(([n,s,d])=>`
+          <div class="flex justify-between items-center" style="padding:8px 0;border-bottom:.5px solid var(--border)">
+            <div><div class="text-sm fw-bold">${n}</div><div class="text-xs text-muted">${d}</div></div>
+            <span class="badge ${s==='Approved'?'bg-teal':'bg-amber'}">${s}</span>
+          </div>`).join('')}
+        <button class="btn btn-gold mt-3 btn-sm btn-w100" onclick="toast('Shariah audit report sent to board','success')">Submit to Shariah Board</button>
+      </div>
+    </div>`;
+}
+
+function initAdminHEPI(){
+  document.getElementById('admin-hepi-card').innerHTML=`
+    <div class="g4 mb-3">
+      <div class="metric"><div class="metric-lbl">Branch HEPI Avg</div><div class="metric-val text-teal">74.2</div><div class="metric-chg up">↑ 2.1 this quarter</div></div>
+      <div class="metric"><div class="metric-lbl">HEPI 80+ Clients</div><div class="metric-val">1,204</div><div class="metric-chg up">42.3% of base</div></div>
+      <div class="metric"><div class="metric-lbl">Jobs Created</div><div class="metric-val">847</div></div>
+      <div class="metric"><div class="metric-lbl">CO2 Saved</div><div class="metric-val">142t</div></div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">HEPI Score Distribution</span></div>
+        ${[{l:'90-100 Platinum',n:8,c:'var(--gold)'},{l:'80-89 Excellent',n:34,c:'var(--teal)'},{l:'70-79 Good',n:36,c:'var(--blue)'},{l:'60-69 Fair',n:14,c:'var(--amber)'},{l:'Below 60',n:8,c:'var(--red)'}].map(s=>`
+          <div class="mb-3"><div class="flex justify-between text-sm mb-1"><span>${s.l}</span><span class="fw-bold">${s.n}%</span></div><div class="prog"><div class="prog-fill" style="width:${s.n*3}%;background:${s.c}"></div></div></div>`).join('')}
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Customer HEPI Rankings</span></div>
+        ${[...ADMIN_CUSTOMERS].sort((a,b)=>b.hepi-a.hepi).map((c,i)=>`
+          <div class="flex items-center gap-2" style="padding:7px 0;border-bottom:.5px solid var(--border)">
+            <div style="font-size:11px;font-weight:800;width:18px;color:${i<3?'var(--gold)':'var(--text3)'}">#${i+1}</div>
+            <div class="c-av" style="background:var(--blue-bg);color:var(--blue);width:26px;height:26px;font-size:9px;border-radius:7px">${c.name.split(' ').map(n=>n[0]).join('')}</div>
+            <div style="flex:1"><div class="fw-bold text-sm">${c.name}</div><div class="text-xs text-muted">${c.city}</div></div>
+            <div class="fw-black" style="color:${c.hepi>=80?'var(--teal)':'var(--amber)'}">${c.hepi}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function initAdminReports(){
+  document.getElementById('admin-reports-card').innerHTML=`
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Generate Report</span></div>
+        <div class="fg"><label class="fl">Report Type</label><select class="fi"><option>Monthly Financial Summary</option><option>Quarterly HEPI Impact Report</option><option>AML/Compliance Report (BFIU)</option><option>Zakat Distribution Report</option><option>Shariah Audit Report</option><option>Bangladesh Bank Submission</option></select></div>
+        <div class="fi-row"><div class="fg"><label class="fl">From Date</label><input class="fi" type="date" value="2026-04-01"></div><div class="fg"><label class="fl">To Date</label><input class="fi" type="date" value="2026-04-30"></div></div>
+        <div class="fg"><label class="fl">Format</label><select class="fi"><option>PDF (Signed)</option><option>Excel (XLSX)</option><option>CSV</option></select></div>
+        <div class="fg"><label class="fl">Recipients</label><input class="fi" value="hasan.ali@nurbank.com.bd"></div>
+        <button class="btn btn-gold btn-w100" onclick="toast('Report generated and emailed!','success')">Generate Report ↓</button>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Recent Reports</span></div>
+        ${['March 2026 Financial Summary · PDF','Q1 2026 HEPI Impact Report · PDF','AML Compliance March 2026 · PDF','Zakat Distribution Q1 2026 · Excel','Shariah Audit Report 2025 · PDF'].map((r,i)=>`
+          <div class="flex justify-between items-center" style="padding:9px 0;border-bottom:.5px solid var(--border)">
+            <div><div class="text-sm fw-bold">${r.split(' · ')[0]}</div><div class="text-xs text-muted">${r.split(' · ')[1]}</div></div>
+            <button class="btn btn-outline btn-xs" onclick="toast('Downloading...','info')">↓</button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function initAdminSettings(){
+  document.getElementById('admin-settings-card').innerHTML=`
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Branch Configuration</span></div>
+        <div class="fg"><label class="fl">Branch Name</label><input class="fi" value="NurBank Gulshan-2 Branch"></div>
+        <div class="fg"><label class="fl">Branch Code</label><input class="fi" value="NB-DH-GUL2" class="mono"></div>
+        <div class="fg"><label class="fl">Address</label><input class="fi" value="House 5, Road 90, Gulshan-2, Dhaka-1212"></div>
+        <div class="fg"><label class="fl">BEFTN Cutoff</label><select class="fi"><option>3:30 PM</option></select></div>
+        <div class="fg"><label class="fl">RTGS Cutoff</label><select class="fi"><option>4:00 PM</option></select></div>
+        <button class="btn btn-gold" onclick="toast('Branch settings saved.','success')">Save Settings ✓</button>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">System Features</span></div>
+        ${togWrap('AML Auto-Screening Engine','Real-time transaction risk scoring',true)}
+        ${togWrap('HEPI Live Scoring','Calculate HEPI scores continuously',true)}
+        ${togWrap('Dual Authorization','RTGS >৳1L requires 2 approvals',true)}
+        ${togWrap('Shariah Merchant Blocking','Block haram category merchants',true)}
+        ${togWrap('Claude AI Integration','Real-time AI banking assistant',true)}
+        ${togWrap('GPS Fraud Detection','Location-based fraud prevention',true)}
+        ${togWrap('Maintenance Mode','Temporarily disable online banking',false)}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// MODALS & HELPERS
+// ═══════════════════════════════════════════
+function buildNotifList(){
+  const el=document.getElementById('notif-list');
+  if(!el) return;
+  el.innerHTML=S.notifications.map(n=>`
+    <div class="flex gap-3 items-start" style="padding:10px 0;border-bottom:.5px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:9px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">${n.icon}</div>
+      <div style="flex:1"><div class="fw-bold text-sm">${n.title}</div><div class="text-xs text-muted mt-1">${n.body}</div><div class="text-xs text-muted mt-1">${n.time}</div></div>
+      ${n.unread?`<div style="width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px"></div>`:''}
+    </div>`).join('')+`<button class="btn btn-outline btn-w100 mt-3" onclick="closeModal('notif');document.getElementById('notif-count').textContent='0'">Mark All Read</button>`;
+}
+
+function buildProfileModal(){
+  const el=document.getElementById('profile-content');
+  if(!el) return;
+  const u=S.user;
+  el.innerHTML=`
+    <div class="flex items-center gap-3 mb-4">
+      <div style="width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#060f22">${u.initials}</div>
+      <div><div class="fw-black" style="font-size:15px">${u.name}</div><div class="text-muted text-sm">${S.role==='client'?'NurBank HEPI Certified Client':'Admin — '+cap(u.roleLabel||u.role||'')}</div>${S.role==='client'?`<span class="badge bg-teal mt-1">HEPI ${S.user.hepi} · Excellent ✦</span>`:''}</div>
+    </div>
+    ${S.role==='client'?[['ID',u.id],['Email',u.email||'—'],['Phone',u.phone],['Since',u.since],['Branch',u.branch],['KYC','Verified ✓'],['Status','Active ●']].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-bold">${v}</span></div>`).join(''):
+      [['Staff ID',u.id],['Branch',u.branch],['Role',cap(u.roleLabel||u.role||'')]].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-bold">${v}</span></div>`).join('')}
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-outline" style="flex:1" onclick="showPage(S.role==='client'?'settings':'admin-settings');closeModal('profile')">⚙ Settings</button>
+      <button class="btn btn-red" style="flex:1" onclick="doLogout()">↩ Sign Out</button>
+    </div>`;
+}
+
+function openModal(id){
+  const m=document.getElementById('modal-'+id);
+  if(m) m.classList.add('open');
+  if(id==='zakatpay') liveCalcZakat();
+  if(id==='profile') buildProfileModal();
+  if(id==='notif') buildNotifList();
+  if(id==='otp') startOTPTimer();
+}
+
+function closeModal(id){
+  const m=document.getElementById('modal-'+id);
+  if(m) m.classList.remove('open');
+  if(id==='otp'&&S.otpTimer) clearInterval(S.otpTimer);
+}
+
+function startOTPTimer(){
+  let sec=120;
+  const el=document.getElementById('otp-timer');
+  if(S.otpTimer) clearInterval(S.otpTimer);
+  S.otpTimer=setInterval(()=>{
+    sec--;
+    if(el) el.textContent=(Math.floor(sec/60)).toString().padStart(2,'0')+':'+(sec%60).toString().padStart(2,'0');
+    if(sec<=0){clearInterval(S.otpTimer);if(el) el.textContent='Expired';}
+  },1000);
+}
+
+function toast(msg,type='info'){
+  const c=document.getElementById('toast');
+  const item=document.createElement('div');
+  item.className=`toast-item toast-${type}`;
+  const icons={success:'✓',error:'✗',info:'ℹ',gold:'★',purple:'🤖'};
+  item.innerHTML=`<span>${icons[type]||'ℹ'}</span><span>${msg}</span>`;
+  c.appendChild(item);
+  setTimeout(()=>item.classList.add('show'),10);
+  setTimeout(()=>{item.classList.remove('show');setTimeout(()=>item.remove(),400);},4500);
+}
+
+// Transfer helpers
+function renderTransferSteps(active){
+  const el=document.getElementById('transfer-steps');
+  if(!el) return;
+  const steps=['Enter Details','Review','OTP Verify','Complete'];
+  el.innerHTML=steps.map((s,i)=>`<div class="step"><div class="step-dot ${i+1<active?'done-dot':i+1===active?'active-dot':''}">${i+1<active?'✓':i+1}</div><div class="step-lbl">${s}</div></div>${i<steps.length-1?`<div class="step-line ${i+1<active?'done-line':''}"></div>`:''}`).join('');
+}
+
+function selectRecipient(name,acct,bank){
+  if(document.getElementById('rcpt-name')) document.getElementById('rcpt-name').value=name;
+  if(document.getElementById('rcpt-acct')) document.getElementById('rcpt-acct').value=acct;
+  if(document.getElementById('rcpt-bank')) document.getElementById('rcpt-bank').value=bank;
+  calcTransfer();
+  toast('Recipient selected: '+name,'info');
+}
+
+function lookupRecipient(){
+  const acct=document.getElementById('rcpt-acct')?.value||'';
+  const rn=document.getElementById('rcpt-name');
+  const rb=document.getElementById('rcpt-bank');
+  if(!rn||acct.length<4) return;
+  const match=SAVED_RECIPIENTS.find(r=>r.acct.replace(/\s/g,'').endsWith(acct.slice(-4)));
+  if(match){
+    rn.value=match.name;
+    if(rb) rb.value=match.bank;
+  }
+}
+
+function calcTransfer(){
+  const amt=parseFloat(document.getElementById('tx-amount')?.value)||0;
+  const prev=document.getElementById('transfer-preview');
+  if(!prev) return;
+  if(amt>0){
+    prev.style.display='block';
+    if(document.getElementById('prev-amount')) document.getElementById('prev-amount').textContent='৳'+fmt(amt);
+    if(document.getElementById('prev-type')) document.getElementById('prev-type').textContent=currentTxType;
+    if(document.getElementById('prev-total')) document.getElementById('prev-total').textContent='৳'+fmt(amt);
+  } else prev.style.display='none';
+}
+
+function initTransferOTP(){
+  const amt=parseFloat(document.getElementById('tx-amount')?.value)||0;
+  const rcpt=document.getElementById('rcpt-name')?.value||'';
+  if(amt<=0){toast('Enter a valid amount','error');return;}
+  if(!rcpt){toast('Please select or enter a recipient','error');return;}
+  const fromBal=parseFloat(document.getElementById('tx-from')?.value)||S.user.balance;
+  if(amt>fromBal){toast('Insufficient balance for this transfer','error');return;}
+  S.transferAmt=amt; S.transferRecip=rcpt;
+  renderTransferSteps(3); openModal('otp');
+}
+
+function otpNext(inp,idx){
+  if(inp.value.length===1&&idx<5) document.querySelectorAll('.otp-digit')[idx+1]?.focus();
+}
+
+function confirmTransfer(){
+  const digits=[...document.querySelectorAll('.otp-digit')].map(d=>d.value);
+  if(digits.some(d=>!d)){toast('Enter all 6 OTP digits','error');return;}
+  closeModal('otp');
+  renderTransferSteps(4);
+  S.user.balance-=S.transferAmt;
+  TXN_DATA.unshift({id:'T'+Date.now(),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),desc:'Transfer → '+S.transferRecip,cat:'Transfer',amt:S.transferAmt,dir:'out',icon:'⇄',bg:'rgba(59,130,246,0.12)',type:currentTxType,ref:'NB'+Date.now()});
+  toast('৳'+fmt(S.transferAmt)+' transferred to '+S.transferRecip+' via '+currentTxType+' ✓','success');
+  setTimeout(()=>{
+    ['tx-amount','rcpt-name','rcpt-acct','rcpt-bank'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const p=document.getElementById('transfer-preview');if(p)p.style.display='none';
+    renderTransferSteps(1);
+  },600);
+}
+
+function updatePayPreview(){
+  const amt=parseFloat(document.getElementById('pay-amount')?.value)||0;
+  const cat=document.getElementById('pay-cat')?.value||'';
+  const prev=document.getElementById('pay-preview');
+  if(!prev) return;
+  if(amt>0){
+    prev.style.display='block';
+    if(document.getElementById('pay-service-name')) document.getElementById('pay-service-name').textContent=cat;
+    if(document.getElementById('pay-total')) document.getElementById('pay-total').textContent='৳'+fmt(amt);
+  } else prev.style.display='none';
+}
+
+function loadPayAccounts(){}
+
+function submitPayment(){
+  const acct=document.getElementById('pay-acct')?.value;
+  const amt=parseFloat(document.getElementById('pay-amount')?.value)||0;
+  const cat=document.getElementById('pay-cat')?.value||'Utility';
+  if(!acct){toast('Enter account/consumer number','error');return;}
+  if(amt<=0){toast('Enter a valid amount','error');return;}
+  closeModal('pay');
+  S.user.balance-=amt;
+  TXN_DATA.unshift({id:'P'+Date.now(),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),desc:cat+' — '+acct,cat:'Utilities',amt:amt,dir:'out',icon:'⚡',bg:'rgba(245,158,11,0.12)',type:'Bill Pay',ref:'BLL'+Date.now()});
+  toast('৳'+fmt(amt)+' paid for '+cat+' ✓','success');
+}
+
+function calcEMI(){
+  const P=parseFloat(document.getElementById('loan-amt')?.value)||0;
+  const annualRate=parseFloat(document.getElementById('loan-rate')?.value)||0;
+  const n=parseInt(document.getElementById('loan-tenure')?.value)||1;
+  const r=annualRate/100/12;
+  const emi=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+  const total=emi*n;
+  if(document.getElementById('emi-result')) document.getElementById('emi-result').textContent='৳'+fmt(Math.round(emi));
+  if(document.getElementById('emi-total')) document.getElementById('emi-total').textContent='৳'+fmt(Math.round(total));
+  if(document.getElementById('emi-profit')) document.getElementById('emi-profit').textContent='৳'+fmt(Math.round(total-P));
+  if(document.getElementById('emi-monthly-rate')) document.getElementById('emi-monthly-rate').textContent=(annualRate/12).toFixed(3)+'%';
+}
+
+function previewLoanApp(){
+  const amt=parseFloat(document.getElementById('loan-app-amt')?.value)||0;
+  const tenure=parseInt(document.getElementById('loan-app-tenure')?.value)||60;
+  const prev=document.getElementById('loan-app-preview');
+  if(!prev) return;
+  if(amt>0){
+    prev.style.display='block';
+    const rate=8.5; const r=rate/100/12; const n=tenure;
+    const emi=r>0?amt*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):amt/n;
+    if(document.getElementById('loan-app-rate')) document.getElementById('loan-app-rate').textContent=rate+'% p.a. (HEPI -0.5%)';
+    if(document.getElementById('loan-app-emi')) document.getElementById('loan-app-emi').textContent='৳'+fmt(Math.round(emi))+'/month';
+  } else prev.style.display='none';
+}
+
+function submitLoanApp(){
+  const amt=document.getElementById('loan-app-amt')?.value;
+  if(!amt){toast('Enter financing amount','error');return;}
+  closeModal('loan');
+  toast('Financing application submitted! Decision within 24-48 hours.','success');
+}
+
+function previewDeposit(){
+  const amt=parseFloat(document.getElementById('dep-amt')?.value)||0;
+  const tenure=parseInt(document.getElementById('dep-tenure')?.value)||12;
+  const rates={3:6.5,6:7.2,12:8.0,24:8.5};
+  const rate=rates[tenure]||8.0;
+  const prev=document.getElementById('dep-preview');
+  if(!prev) return;
+  if(amt>=10000){
+    prev.style.display='block';
+    const profit=Math.round(amt*rate/100*tenure/12);
+    if(document.getElementById('dep-principal')) document.getElementById('dep-principal').textContent='৳'+fmt(amt);
+    if(document.getElementById('dep-rate')) document.getElementById('dep-rate').textContent=rate+'% p.a.';
+    if(document.getElementById('dep-profit')) document.getElementById('dep-profit').textContent='৳'+fmt(profit);
+    if(document.getElementById('dep-maturity')) document.getElementById('dep-maturity').textContent='৳'+fmt(Math.round(amt+profit));
+  } else prev.style.display='none';
+}
+
+function createDeposit(){
+  const amt=parseFloat(document.getElementById('dep-amt')?.value)||0;
+  if(amt<10000){toast('Minimum deposit is ৳10,000','error');return;}
+  const tenure=parseInt(document.getElementById('dep-tenure')?.value)||12;
+  const rates={3:6.5,6:7.2,12:8.0,24:8.5};
+  const rate=rates[tenure];
+  const now=new Date();
+  const matDate=new Date(now.getFullYear(),now.getMonth()+tenure,now.getDate());
+  S.deposits.push({
+    id:'D'+S.deposits.length+1,
+    name:'Term Deposit #'+(S.deposits.length+1),
+    amt,tenure,rate,
+    startDate:now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    maturity:matDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    status:'Active'
+  });
+  S.user.balance-=amt;
+  S.user.savings+=amt;
+  closeModal('deposit');
+  toast('Mudarabah term deposit of ৳'+fmt(amt)+' created at '+rate+'% p.a. ✓','success');
+}
+
+function adminApprove(id,action){
+  const pt=PENDING_TXNS.find(t=>t.id===id);
+  if(!pt) return;
+  if(action==='approve') toast('✓ Transaction '+id+' approved. ৳'+fmt(pt.amt)+' released.','success');
+  else toast('✗ Transaction '+id+' REJECTED. STR filed with BFIU.','error');
+}
+</script>
+</body>
+</html>
