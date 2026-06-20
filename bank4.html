@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaBank — Digital Banking Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy2: #112240;
+  --navy3: #1C3461;
+  --teal: #00B4AA;
+  --teal2: #00D4C8;
+  --teal-dim: rgba(0,180,170,0.15);
+  --gold: #F0A500;
+  --gold-dim: rgba(240,165,0,0.15);
+  --white: #FFFFFF;
+  --off: #F4F7FB;
+  --muted: #8A9BB8;
+  --border: rgba(255,255,255,0.08);
+  --border-light: rgba(0,0,0,0.08);
+  --green: #22C55E;
+  --red: #EF4444;
+  --amber: #F59E0B;
+  --card-bg: rgba(255,255,255,0.04);
+  --sidebar-w: 230px;
+  --font: 'Sora', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+/* ─── RESET ─── */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden;font-size:14px}
+button{cursor:pointer;font-family:var(--font)}
+input,select,textarea{font-family:var(--font)}
+a{color:inherit;text-decoration:none}
+
+/* ─── LOGIN SCREEN ─── */
+#loginScreen{
+  position:fixed;inset:0;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;z-index:9000;
+  background:radial-gradient(ellipse at 20% 50%, rgba(0,180,170,0.12) 0%, transparent 60%),
+             radial-gradient(ellipse at 80% 20%, rgba(240,165,0,0.08) 0%, transparent 50%),
+             var(--navy);
+}
+.login-box{
+  width:420px;padding:48px 40px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:20px;
+  backdrop-filter:blur(20px);
+  animation:slideUp .5s ease forwards;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.login-logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--navy)}
+.login-logo-text{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.login-logo-text span{color:var(--teal)}
+.login-title{font-size:26px;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.role-tabs{display:flex;gap:8px;margin-bottom:24px;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px}
+.role-tab{flex:1;padding:9px;border:none;border-radius:7px;font-size:12.5px;font-weight:500;background:transparent;color:var(--muted);transition:all .2s}
+.role-tab.active{background:var(--teal);color:var(--navy);font-weight:600}
+.inp-group{margin-bottom:16px}
+.inp-label{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:block}
+.inp{width:100%;padding:11px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-size:14px;outline:none;transition:border .2s}
+.inp:focus{border-color:var(--teal)}
+.inp::placeholder{color:rgba(255,255,255,0.25)}
+select.inp option{background:var(--navy2);color:var(--white)}
+.btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--teal),var(--teal2));border:none;border-radius:10px;color:var(--navy);font-size:14px;font-weight:700;transition:all .2s;margin-top:8px}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.login-demo{margin-top:20px;text-align:center;font-size:12px;color:var(--muted)}
+.login-demo span{color:var(--teal);cursor:pointer}
+
+/* ─── APP SHELL ─── */
+#app{display:none;height:100vh;overflow:hidden}
+#app.visible{display:flex}
+
+/* ─── SIDEBAR ─── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--navy2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+}
+.sb-brand{padding:22px 20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--navy);font-size:15px;flex-shrink:0}
+.sb-name{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.sb-name span{color:var(--teal)}
+.sb-user{padding:16px 20px;border-bottom:1px solid var(--border)}
+.sb-user-name{font-size:13.5px;font-weight:600}
+.sb-user-role{font-size:11.5px;color:var(--muted);margin-top:2px}
+.sb-user-badge{display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;letter-spacing:.04em}
+.badge-banker{background:rgba(240,165,0,0.15);color:var(--gold)}
+.badge-client{background:rgba(0,180,170,0.15);color:var(--teal)}
+.sb-nav{flex:1;overflow-y:auto;padding:12px 0}
+.nav-section{padding:6px 20px 4px;font-size:10px;font-weight:700;color:rgba(138,155,184,0.5);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;border-left:3px solid transparent;transition:all .18s;color:var(--muted);font-size:13px;font-weight:400}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:var(--white)}
+.nav-item.active{background:rgba(0,180,170,0.1);color:var(--teal);border-left-color:var(--teal);font-weight:500}
+.nav-item svg{width:15px;height:15px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:var(--white);font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
+.sb-bottom{padding:16px 20px;border-top:1px solid var(--border)}
+.logout-btn{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;background:none;border:none;cursor:pointer;transition:color .2s;width:100%}
+.logout-btn:hover{color:var(--red)}
+
+/* ─── MAIN AREA ─── */
+.main-area{flex:1;overflow-y:auto;background:var(--navy);background-image:radial-gradient(ellipse at top right, rgba(0,180,170,0.04) 0%, transparent 60%)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid var(--border);background:rgba(10,22,40,0.8);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.page-title{font-size:18px;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.notif-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .2s}
+.notif-btn:hover{border-color:var(--teal)}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--navy2)}
+.page-content{padding:24px 28px}
+
+/* ─── PAGES ─── */
+.page{display:none}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── CARDS ─── */
+.card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:22px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:2px}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+/* ─── STAT CARDS ─── */
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:18px}
+.stat-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:700;line-height:1;font-family:var(--mono)}
+.stat-trend{font-size:11.5px;margin-top:6px;display:flex;align-items:center;gap:4px}
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--muted)}
+
+/* ─── BALANCE CARD ─── */
+.balance-hero{
+  background:linear-gradient(135deg,var(--navy3) 0%,rgba(0,180,170,0.25) 100%);
+  border:1px solid rgba(0,180,170,0.3);
+  border-radius:18px;padding:28px 28px 24px;
+  position:relative;overflow:hidden;
+}
+.balance-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,180,170,0.2),transparent 70%)}
+.balance-label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.balance-amount{font-size:38px;font-weight:700;font-family:var(--mono);letter-spacing:-1px}
+.balance-currency{font-size:16px;color:var(--teal);margin-right:4px}
+.balance-type-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-top:10px}
+.bt-conventional{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+.bt-halal{background:rgba(0,180,170,0.2);color:var(--teal)}
+.balance-actions{display:flex;gap:10px;margin-top:20px}
+.bal-btn{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:var(--white);font-size:12.5px;font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.bal-btn:hover{background:rgba(255,255,255,0.12);border-color:var(--teal)}
+
+/* ─── TABLES ─── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;border-bottom:1px solid var(--border)}
+tbody td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;vertical-align:middle}
+tbody tr:hover td{background:rgba(255,255,255,0.02)}
+tbody tr:last-child td{border-bottom:none}
+
+/* ─── BADGES ─── */
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.b-green{background:rgba(34,197,94,0.12);color:var(--green)}
+.b-red{background:rgba(239,68,68,0.12);color:var(--red)}
+.b-amber{background:rgba(245,158,11,0.12);color:var(--amber)}
+.b-teal{background:rgba(0,180,170,0.12);color:var(--teal)}
+.b-blue{background:rgba(59,130,246,0.12);color:#60A5FA}
+.b-gray{background:rgba(255,255,255,0.07);color:var(--muted)}
+
+/* ─── FORMS ─── */
+.form-row{margin-bottom:16px}
+.form-label{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;display:block}
+.form-inp{width:100%;padding:11px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-size:13.5px;outline:none;transition:border .2s}
+.form-inp:focus{border-color:var(--teal)}
+.form-inp::placeholder{color:rgba(255,255,255,0.2)}
+select.form-inp option{background:var(--navy2);color:var(--white)}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-sm{padding:8px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;transition:all .2s}
+.btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal2));color:var(--navy)}
+.btn-teal:hover{opacity:.85}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#FFB800);color:var(--navy)}
+.btn-gold:hover{opacity:.85}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--white)}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-danger{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--red)}
+.btn-danger:hover{background:rgba(239,68,68,0.25)}
+.btn-full{width:100%;padding:12px;border-radius:10px;border:none;font-size:14px;font-weight:600;transition:all .2s}
+
+/* ─── PRODUCT TOGGLE CARDS ─── */
+.product-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.product-card{background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px;cursor:pointer;transition:all .25s}
+.product-card:hover{border-color:rgba(0,180,170,0.3);background:rgba(0,180,170,0.04)}
+.product-card.selected{border-color:var(--teal);background:rgba(0,180,170,0.07)}
+.product-card.halal-product.selected{border-color:var(--gold);background:rgba(240,165,0,0.07)}
+.product-icon{font-size:24px;margin-bottom:10px}
+.product-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.product-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.product-rate{margin-top:10px;font-family:var(--mono);font-size:13px}
+.product-rate .rate-num{color:var(--green);font-weight:600}
+.product-rate .rate-label{color:var(--muted);font-size:11px}
+.halal-tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--gold);background:rgba(240,165,0,0.1);padding:2px 8px;border-radius:10px;margin-top:6px}
+
+/* ─── TRANSACTION LIST ─── */
+.txn-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.txn-row:last-child{border-bottom:none}
+.txn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.txn-icon.credit{background:rgba(34,197,94,0.12)}
+.txn-icon.debit{background:rgba(239,68,68,0.12)}
+.txn-info{flex:1}
+.txn-desc{font-size:13.5px;font-weight:500}
+.txn-date{font-size:11.5px;color:var(--muted);margin-top:2px}
+.txn-amount{font-family:var(--mono);font-size:14px;font-weight:600}
+.txn-amount.credit{color:var(--green)}
+.txn-amount.debit{color:var(--red)}
+
+/* ─── MODAL ─── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,22,40,0.85);backdrop-filter:blur(6px);z-index:5000;display:none;align-items:center;justify-content:center}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:18px;padding:32px;width:480px;max-width:92vw;max-height:88vh;overflow-y:auto;position:relative;animation:slideUp .25s ease}
+.modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;line-height:1;transition:all .2s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal h3{font-size:20px;font-weight:700;margin-bottom:6px}
+.modal .modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* ─── SUCCESS STATE ─── */
+.success-check{width:64px;height:64px;border-radius:50%;background:rgba(34,197,94,0.15);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+
+/* ─── ALERT / TOAST ─── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-size:13.5px;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all .35s;max-width:320px;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(34,197,94,0.4);color:var(--green)}
+.toast.error{border-color:rgba(239,68,68,0.4);color:var(--red)}
+.toast.info{border-color:rgba(0,180,170,0.4);color:var(--teal)}
+
+/* ─── INFO BOX ─── */
+.info-box{padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.6;margin-bottom:16px}
+.info-teal{background:rgba(0,180,170,0.08);border:1px solid rgba(0,180,170,0.2);color:rgba(255,255,255,0.8)}
+.info-gold{background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);color:rgba(255,255,255,0.8)}
+.info-red{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:rgba(255,255,255,0.8)}
+
+/* ─── DIVIDER ─── */
+.divider{height:1px;background:var(--border);margin:20px 0}
+
+/* ─── STEP PROGRESS ─── */
+.step-bar{display:flex;gap:8px;margin-bottom:28px}
+.step{display:flex;align-items:center;gap:6px;flex:1}
+.step-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .3s}
+.step.done .step-num{background:var(--green);border-color:var(--green);color:var(--white)}
+.step.active .step-num{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.step-line{flex:1;height:2px;background:var(--border);border-radius:1px}
+.step.done .step-line{background:var(--green)}
+
+/* ─── ACCOUNT TYPE SELECTOR ─── */
+.type-selector{display:flex;gap:10px;margin-bottom:20px}
+.type-opt{flex:1;padding:14px;border-radius:12px;border:2px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);cursor:pointer;text-align:center;transition:all .2s}
+.type-opt:hover{border-color:rgba(255,255,255,0.15)}
+.type-opt.sel{border-color:var(--teal);background:rgba(0,180,170,0.08)}
+.type-opt.sel.halal-sel{border-color:var(--gold);background:rgba(240,165,0,0.08)}
+.type-opt-icon{font-size:22px;margin-bottom:6px}
+.type-opt-name{font-size:13px;font-weight:600}
+.type-opt-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ─── QUICK TRANSFER ─── */
+.quick-contacts{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;margin-bottom:4px}
+.quick-contact{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;transition:opacity .2s}
+.quick-contact:hover{opacity:.8}
+.qc-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border:2px solid var(--border)}
+.qc-name{font-size:11px;color:var(--muted);max-width:50px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ─── RATE DISPLAY ─── */
+.rate-box{display:flex;align-items:flex-end;gap:6px}
+.rate-big{font-family:var(--mono);font-size:32px;font-weight:700;color:var(--green)}
+.rate-pct{font-size:20px;color:var(--green)}
+.rate-pa{font-size:13px;color:var(--muted);margin-bottom:6px}
+
+/* ─── EMI CALCULATOR ─── */
+.calc-result{background:rgba(0,180,170,0.06);border:1px solid rgba(0,180,170,0.2);border-radius:12px;padding:18px;margin-top:16px}
+.calc-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.calc-row:last-child{border-bottom:none;font-weight:600;font-size:14px}
+
+/* ─── APPROVAL FLOW ─── */
+.approval-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px}
+.approval-info{flex:1}
+.approval-name{font-size:14px;font-weight:600}
+.approval-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.approval-actions{display:flex;gap:8px}
+
+/* ─── PROGRESS RING ─── */
+.progress-ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.progress-ring-val{position:absolute;font-family:var(--mono);font-size:14px;font-weight:600;text-align:center}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .form-2col{grid-template-columns:1fr}
+}
+
+/* ─── HEPI BADGE ─── */
+.hepi-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(240,165,0,0.12);color:var(--gold);border:1px solid rgba(240,165,0,0.2)}
+
+/* ─── SECTION HEADER ─── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{font-size:15px;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-mark">N</div>
+      <div class="login-logo-text">Nexa<span>Bank</span></div>
+    </div>
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Sign in to your account to continue</div>
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="setRole('client',this)">Customer</button>
+      <button class="role-tab" onclick="setRole('banker',this)">Banker / Staff</button>
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">Account / Staff ID</label>
+      <input class="inp" id="loginId" placeholder="Enter your ID" value="NX-240001">
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">Password</label>
+      <input class="inp" type="password" id="loginPw" placeholder="••••••••" value="demo1234">
+    </div>
+    <div id="bankerSelect" style="display:none">
+      <div class="inp-group">
+        <label class="inp-label">Branch</label>
+        <select class="inp">
+          <option>Dhaka Main Branch</option>
+          <option>Chittagong Branch</option>
+          <option>Sylhet Branch</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Sign In →</button>
+    <div class="login-demo">
+      Demo: <span onclick="quickLogin('client')">Customer login</span> · <span onclick="quickLogin('banker')">Banker login</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">N</div>
+      <div class="sb-name">Nexa<span>Bank</span></div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-user-name" id="sbUserName">—</div>
+      <div class="sb-user-role" id="sbUserRole">—</div>
+      <div class="sb-user-badge" id="sbUserBadge"></div>
+    </div>
+    <nav class="sb-nav" id="sideNav"></nav>
+    <div class="sb-bottom">
+      <button class="logout-btn" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <div class="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-right">
+        <div class="notif-btn" onclick="showToast('No new notifications','info')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="notif-dot" id="notifDot"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;font-size:12.5px;cursor:pointer" onclick="navigate('profile')">
+          <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy)" id="topbarAvatar">?</div>
+          <span id="topbarName" style="font-weight:500">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="page-content" id="pageContent">
+      <!-- Pages rendered here -->
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODALS ════════ -->
+
+<!-- Transfer Modal -->
+<div class="modal-backdrop" id="transferModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('transferModal')">×</button>
+    <h3>Send Money</h3>
+    <div class="modal-sub">Transfer funds to any account</div>
+    <div class="step-bar" id="transferSteps">
+      <div class="step active"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step"><div class="step-num">3</div></div>
+    </div>
+    <div id="transferForm1">
+      <div class="form-row"><label class="form-label">To Account Number</label><input class="form-inp" id="tTo" placeholder="NX-XXXXXX"></div>
+      <div class="form-row"><label class="form-label">Account Name</label><input class="form-inp" id="tName" placeholder="Recipient name" readonly id="tNameResolved" style="color:var(--teal)"></div>
+      <div class="form-row"><label class="form-label">Amount (BDT)</label><input class="form-inp" id="tAmount" type="number" placeholder="0.00" oninput="updateTransferPreview()"></div>
+      <div class="form-row"><label class="form-label">Transfer Type</label>
+        <select class="form-inp" id="tType" onchange="updateTransferPreview()">
+          <option value="instant">Instant Transfer (Free)</option>
+          <option value="neft">NEFT — Next Business Day</option>
+          <option value="rtgs">RTGS — Same Day (BDT 50 fee)</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Note (optional)</label><input class="form-inp" id="tNote" placeholder="e.g. Rent payment"></div>
+      <div class="calc-result" id="transferPreview" style="display:none">
+        <div class="calc-row"><span>Amount</span><span id="tp-amount">—</span></div>
+        <div class="calc-row"><span>Fee</span><span id="tp-fee">Free</span></div>
+        <div class="calc-row"><span>Total Debit</span><span id="tp-total">—</span></div>
+      </div>
+      <button class="btn-full btn-teal" style="margin-top:16px" onclick="proceedTransfer()">Continue →</button>
+    </div>
+    <div id="transferForm2" style="display:none">
+      <div class="info-box info-teal" id="transferSummaryBox"></div>
+      <div class="form-row"><label class="form-label">Enter OTP (use: 123456)</label><input class="form-inp" id="tOtp" placeholder="6-digit OTP" maxlength="6"></div>
+      <button class="btn-full btn-teal" onclick="confirmTransfer()">Confirm Transfer</button>
+      <button class="btn-full btn-outline" style="margin-top:8px" onclick="backTransfer()">← Back</button>
+    </div>
+    <div id="transferSuccess" style="display:none;text-align:center;padding:20px 0">
+      <div class="success-check">✓</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:6px">Transfer Successful!</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="transferSuccessMsg"></div>
+      <button class="btn-sm btn-teal" onclick="closeModal('transferModal');renderCurrentPage()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Deposit Modal -->
+<div class="modal-backdrop" id="depositModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('depositModal')">×</button>
+    <h3>Open Fixed Deposit</h3>
+    <div class="modal-sub">Choose between conventional and Shariah-compliant options</div>
+    <div class="type-selector" id="fdTypeSelector">
+      <div class="type-opt sel" onclick="selectFdType('conventional',this)">
+        <div class="type-opt-icon">🏦</div>
+        <div class="type-opt-name">Fixed Deposit</div>
+        <div class="type-opt-sub">Interest-bearing</div>
+      </div>
+      <div class="type-opt" onclick="selectFdType('mudarabah',this)">
+        <div class="type-opt-icon">🌙</div>
+        <div class="type-opt-name">Mudarabah FDR</div>
+        <div class="type-opt-sub">Profit-sharing (Halal)</div>
+      </div>
+    </div>
+    <div id="fdRateInfo" class="info-box info-teal" style="margin-bottom:16px">Interest rate: up to <b>8.5% p.a.</b> depending on tenure</div>
+    <div class="form-row"><label class="form-label">Amount (BDT)</label><input class="form-inp" id="fdAmount" type="number" placeholder="Minimum 50,000" oninput="calcFD()"></div>
+    <div class="form-row"><label class="form-label">Tenure</label>
+      <select class="form-inp" id="fdTenure" onchange="calcFD()">
+        <option value="3">3 months — 6.5%</option>
+        <option value="6">6 months — 7.25%</option>
+        <option value="12">12 months — 8.0%</option>
+        <option value="24">24 months — 8.5%</option>
+        <option value="36">36 months — 9.0%</option>
+      </select>
+    </div>
+    <div class="calc-result" id="fdCalcResult" style="display:none">
+      <div class="calc-row"><span>Principal</span><span id="fd-principal">—</span></div>
+      <div class="calc-row"><span id="fd-earn-label">Interest Earned</span><span id="fd-interest">—</span></div>
+      <div class="calc-row"><span>Maturity Amount</span><span id="fd-maturity">—</span></div>
+      <div class="calc-row"><span>Maturity Date</span><span id="fd-date">—</span></div>
+    </div>
+    <button class="btn-full btn-teal" style="margin-top:16px" id="fdConfirmBtn" onclick="openFD()">Open Deposit</button>
+  </div>
+</div>
+
+<!-- Loan Modal -->
+<div class="modal-backdrop" id="loanModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loanModal')">×</button>
+    <h3>Apply for Loan / Finance</h3>
+    <div class="modal-sub">Conventional loan or Shariah-compliant financing</div>
+    <div class="type-selector" id="loanTypeSelector">
+      <div class="type-opt sel" onclick="selectLoanType('conventional',this)">
+        <div class="type-opt-icon">📋</div>
+        <div class="type-opt-name">Personal Loan</div>
+        <div class="type-opt-sub">Interest-based</div>
+      </div>
+      <div class="type-opt" onclick="selectLoanType('murabahah',this)">
+        <div class="type-opt-icon">🌙</div>
+        <div class="type-opt-name">Murabahah</div>
+        <div class="type-opt-sub">Cost-plus (Halal)</div>
+      </div>
+      <div class="type-opt" onclick="selectLoanType('musharakah',this)">
+        <div class="type-opt-icon">🤝</div>
+        <div class="type-opt-name">Musharakah</div>
+        <div class="type-opt-sub">Profit-sharing</div>
+      </div>
+    </div>
+    <div id="loanTypeInfo" class="info-box info-teal">Standard personal loan at <b>12% p.a.</b></div>
+    <div class="form-2col">
+      <div class="form-row"><label class="form-label">Loan Amount</label><input class="form-inp" id="lnAmount" type="number" placeholder="BDT" oninput="calcLoan()"></div>
+      <div class="form-row"><label class="form-label">Tenure (months)</label>
+        <select class="form-inp" id="lnTenure" onchange="calcLoan()">
+          <option value="12">12 months</option><option value="24">24 months</option>
+          <option value="36">36 months</option><option value="48">48 months</option>
+          <option value="60">60 months</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><label class="form-label">Purpose</label>
+      <select class="form-inp" id="lnPurpose">
+        <option>Home improvement</option><option>Education</option><option>Business</option>
+        <option>Vehicle</option><option>Medical</option><option>Other</option>
+      </select>
+    </div>
+    <div class="calc-result" id="loanCalcResult" style="display:none">
+      <div class="calc-row"><span id="ln-rate-label">Interest Rate</span><span id="ln-rate">—</span></div>
+      <div class="calc-row"><span id="ln-emi-label">Monthly EMI</span><span id="ln-emi">—</span></div>
+      <div class="calc-row"><span id="ln-total-label">Total Payment</span><span id="ln-total">—</span></div>
+      <div class="calc-row"><span id="ln-charge-label">Total Interest</span><span id="ln-charge">—</span></div>
+    </div>
+    <button class="btn-full btn-teal" style="margin-top:16px" onclick="applyLoan()">Submit Application</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// DATA STORE
+// ════════════════════════════════════════════════════════
+const DB = {
+  clients: [
+    {id:'NX-240001',name:'Rafiq Ahmed',email:'rafiq@email.com',phone:'01711-234567',nid:'19881234567890',
+     accounts:[
+       {no:'SA-240001',type:'savings',label:'Savings Account',balance:245800,currency:'BDT',isHalal:false},
+       {no:'CA-240001',type:'current',label:'Current Account',balance:82500,currency:'BDT',isHalal:false},
+       {no:'IS-240001',type:'savings_halal',label:'Islamic Savings',balance:150000,currency:'BDT',isHalal:true}
+     ],
+     transactions:[
+       {id:'T001',date:'2025-04-20',desc:'Salary Credit',amount:85000,type:'credit',category:'income',acc:'SA-240001'},
+       {id:'T002',date:'2025-04-19',desc:'Electricity Bill',amount:-3400,type:'debit',category:'utility',acc:'SA-240001'},
+       {id:'T003',date:'2025-04-18',desc:'Transfer to Karim',amount:-15000,type:'debit',category:'transfer',acc:'SA-240001'},
+       {id:'T004',date:'2025-04-17',desc:'ATM Withdrawal',amount:-10000,type:'debit',category:'cash',acc:'SA-240001'},
+       {id:'T005',date:'2025-04-15',desc:'Mudarabah Profit',amount:3250,type:'credit',category:'profit',acc:'IS-240001'},
+       {id:'T006',date:'2025-04-10',desc:'Online Transfer In',amount:20000,type:'credit',category:'transfer',acc:'CA-240001'},
+       {id:'T007',date:'2025-04-08',desc:'Internet Package',amount:-1200,type:'debit',category:'utility',acc:'SA-240001'},
+       {id:'T008',date:'2025-04-05',desc:'FDR Maturity Credit',amount:54250,type:'credit',category:'income',acc:'SA-240001'},
+     ],
+     deposits:[
+       {id:'FD-001',type:'conventional',label:'Fixed Deposit',principal:500000,rate:8.0,tenure:12,openDate:'2024-04-15',maturityDate:'2025-04-15',maturityAmount:540000,status:'Matured'},
+       {id:'FD-002',type:'mudarabah',label:'Mudarabah FDR',principal:200000,rate:7.5,tenure:6,openDate:'2025-01-10',maturityDate:'2025-07-10',maturityAmount:207500,status:'Active'}
+     ],
+     loans:[
+       {id:'LN-001',type:'conventional',label:'Personal Loan',principal:300000,rate:12,tenure:36,emi:9962,outstanding:198000,status:'Active',dueDate:'2025-05-01'}
+     ]},
+    {id:'NX-240002',name:'Nusrat Jahan',email:'nusrat@email.com',phone:'01812-345678',nid:'19921234567890',
+     accounts:[
+       {no:'IS-240002',type:'savings_halal',label:'Islamic Savings',balance:320000,currency:'BDT',isHalal:true},
+       {no:'IS-CA-240002',type:'current_halal',label:'Islamic Current',balance:95000,currency:'BDT',isHalal:true}
+     ],
+     transactions:[
+       {id:'T009',date:'2025-04-20',desc:'Business Revenue',amount:120000,type:'credit',category:'income',acc:'IS-CA-240002'},
+       {id:'T010',date:'2025-04-18',desc:'Supplier Payment',amount:-45000,type:'debit',category:'business',acc:'IS-CA-240002'},
+       {id:'T011',date:'2025-04-15',desc:'Mudarabah Profit',amount:4800,type:'credit',category:'profit',acc:'IS-240002'},
+     ],
+     deposits:[
+       {id:'FD-003',type:'mudarabah',label:'Mudarabah FDR',principal:300000,rate:8.0,tenure:12,openDate:'2025-01-01',maturityDate:'2026-01-01',maturityAmount:324000,status:'Active'}
+     ],
+     loans:[]
+    }
+  ],
+  bankers:[
+    {id:'BK-001',name:'Arif Hossain',role:'Branch Manager',branch:'Dhaka Main'},
+    {id:'BK-002',name:'Sadia Islam',role:'Relationship Officer',branch:'Dhaka Main'}
+  ],
+  pendingApplications:[
+    {id:'APP-001',clientId:'NX-240001',clientName:'Rafiq Ahmed',type:'Murabahah Loan',amount:500000,date:'2025-04-18',status:'pending',purpose:'Home improvement'},
+    {id:'APP-002',clientId:'NX-240002',clientName:'Nusrat Jahan',type:'Mudarabah FDR',amount:400000,date:'2025-04-19',status:'pending',purpose:'Investment'},
+    {id:'APP-003',clientId:'NX-240003',clientName:'Karim Uddin',type:'Personal Loan',amount:150000,date:'2025-04-20',status:'pending',purpose:'Education'}
+  ],
+  allClients:[]
+};
+DB.allClients = DB.clients;
+
+// Session
+let SESSION = {role:null,user:null,activeAccount:null};
+let selectedFdType = 'conventional';
+let selectedLoanType = 'conventional';
+
+// ════════════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════════════
+function setRole(r,btn){
+  SESSION.pendingRole = r;
+  document.querySelectorAll('.role-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bankerSelect').style.display = r==='banker'?'block':'none';
+  document.getElementById('loginId').value = r==='banker'?'BK-001':'NX-240001';
+}
+function quickLogin(r){
+  SESSION.pendingRole = r;
+  if(r==='client'){document.getElementById('loginId').value='NX-240001';document.querySelector('.role-tab').click();}
+  else{document.getElementById('loginId').value='BK-001';document.querySelectorAll('.role-tab')[1].click();}
+  doLogin();
+}
+function doLogin(){
+  const id = document.getElementById('loginId').value.trim();
+  const role = SESSION.pendingRole||'client';
+  let user = null;
+  if(role==='client') user = DB.clients.find(c=>c.id===id);
+  else user = DB.bankers.find(b=>b.id===id);
+  if(!user){showToast('Invalid credentials. Try demo links.','error');return;}
+  SESSION = {role,user,activeAccount:role==='client'?user.accounts[0]:null};
+  startApp();
+}
+function logout(){document.getElementById('app').classList.remove('visible');document.getElementById('loginScreen').style.display='flex';SESSION={role:null,user:null};}
+function startApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  buildSidebar();
+  updateTopbar();
+  if(SESSION.role==='client') navigate('dashboard');
+  else navigate('banker_dashboard');
+}
+
+// ════════════════════════════════════════════════════════
+// SIDEBAR
+// ════════════════════════════════════════════════════════
+const clientNav = [
+  {section:'Overview',items:[
+    {id:'dashboard',icon:'grid',label:'Dashboard'},
+    {id:'accounts',icon:'wallet',label:'My Accounts'},
+  ]},
+  {section:'Transactions',items:[
+    {id:'transactions',icon:'list',label:'Transaction History'},
+    {id:'transfer',icon:'send',label:'Transfer Money'},
+  ]},
+  {section:'Products',items:[
+    {id:'deposits',icon:'piggy',label:'Fixed Deposits'},
+    {id:'loans',icon:'loan',label:'Loans & Finance'},
+  ]},
+  {section:'Account',items:[
+    {id:'profile',icon:'user',label:'My Profile'},
+  ]}
+];
+const bankerNav = [
+  {section:'Banking',items:[
+    {id:'banker_dashboard',icon:'grid',label:'Dashboard'},
+    {id:'clients',icon:'users',label:'All Clients'},
+    {id:'approvals',icon:'check',label:'Approvals',badge:3},
+  ]},
+  {section:'Operations',items:[
+    {id:'new_account',icon:'plus',label:'Open Account'},
+    {id:'new_deposit',icon:'piggy',label:'Create Deposit'},
+    {id:'new_loan',icon:'loan',label:'Process Loan'},
+  ]},
+  {section:'Reports',items:[
+    {id:'reports',icon:'chart',label:'Reports'},
+  ]}
+];
+
+const icons = {
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5"/><path d="M16 12h2a2 2 0 010 4h-2v-4z"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  piggy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8.5 3.3 1.5 4.5V19h3v-2h4v2h3v-2.5C19.5 15.5 21 13.8 21 12c0-2-1.3-4.7-3-5z"/><circle cx="9" cy="11" r="1"/></svg>',
+  loan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'
+};
+
+function buildSidebar(){
+  const nav = SESSION.role==='client'?clientNav:bankerNav;
+  const u = SESSION.user;
+  document.getElementById('sbUserName').textContent = u.name;
+  document.getElementById('sbUserRole').textContent = SESSION.role==='banker'?u.role+' · '+u.branch:'Account Holder';
+  document.getElementById('sbUserBadge').className = 'sb-user-badge '+(SESSION.role==='banker'?'badge-banker':'badge-client');
+  document.getElementById('sbUserBadge').textContent = SESSION.role==='banker'?'🏦 Staff':'👤 Customer';
+  let html = '';
+  nav.forEach(section=>{
+    html += `<div class="nav-section">${section.section}</div>`;
+    section.items.forEach(item=>{
+      html += `<div class="nav-item" id="nav-${item.id}" onclick="navigate('${item.id}')">${icons[item.icon]||''} ${item.label}${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}`;
+      html += `</div>`;
+    });
+  });
+  document.getElementById('sideNav').innerHTML = html;
+}
+
+function updateTopbar(){
+  const u = SESSION.user;
+  document.getElementById('topbarAvatar').textContent = u.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  document.getElementById('topbarName').textContent = u.name.split(' ')[0];
+}
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+let currentPage = '';
+const pageTitles = {
+  dashboard:'Dashboard',accounts:'My Accounts',transactions:'Transaction History',
+  transfer:'Transfer Money',deposits:'Fixed Deposits',loans:'Loans & Finance',
+  profile:'My Profile',banker_dashboard:'Banker Dashboard',clients:'Client Management',
+  approvals:'Pending Approvals',new_account:'Open New Account',new_deposit:'Create Deposit',
+  new_loan:'Process Loan',reports:'Reports'
+};
+function navigate(page){
+  currentPage = page;
+  document.getElementById('pageTitle').textContent = pageTitles[page]||page;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navEl = document.getElementById('nav-'+page);
+  if(navEl) navEl.classList.add('active');
+  renderPage(page);
+}
+function renderCurrentPage(){navigate(currentPage);}
+function renderPage(page){
+  const c = document.getElementById('pageContent');
+  const pages = {
+    dashboard:renderClientDashboard,
+    accounts:renderAccounts,
+    transactions:renderTransactions,
+    transfer:renderTransferPage,
+    deposits:renderDeposits,
+    loans:renderLoans,
+    profile:renderProfile,
+    banker_dashboard:renderBankerDashboard,
+    clients:renderClients,
+    approvals:renderApprovals,
+    new_account:renderNewAccount,
+    new_deposit:renderNewDeposit,
+    new_loan:renderNewLoan,
+    reports:renderReports
+  };
+  const fn = pages[page];
+  if(fn) c.innerHTML = `<div class="page active">${fn()}</div>`;
+  else c.innerHTML = `<div class="page active"><div class="card"><p>Page coming soon.</p></div></div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// CLIENT DASHBOARD
+// ════════════════════════════════════════════════════════
+function renderClientDashboard(){
+  const u = SESSION.user;
+  const totalBalance = u.accounts.reduce((s,a)=>s+a.balance,0);
+  const hasHalal = u.accounts.some(a=>a.isHalal);
+  const recentTxns = u.transactions.slice(0,5);
+  const mainAcc = u.accounts[0];
+  return `
+    <div style="margin-bottom:22px">
+      <div class="balance-hero">
+        <div class="balance-label">Total Portfolio Balance</div>
+        <div class="balance-amount"><span class="balance-currency">৳</span>${fmt(totalBalance)}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          ${u.accounts.map(a=>`<div class="balance-type-badge ${a.isHalal?'bt-halal':'bt-conventional'}">${a.isHalal?'🌙':'🏦'} ${a.label}: ৳${fmt(a.balance)}</div>`).join('')}
+        </div>
+        <div class="balance-actions">
+          <button class="bal-btn" onclick="openModal('transferModal')">↗ Send Money</button>
+          <button class="bal-btn" onclick="openModal('depositModal')">+ New Deposit</button>
+          <button class="bal-btn" onclick="openModal('loanModal')">📋 Apply Loan</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:22px">
+      ${u.accounts.map(a=>`
+        <div class="stat-card" style="cursor:pointer;border-color:${a.isHalal?'rgba(240,165,0,0.2)':'var(--border)'}" onclick="SESSION.activeAccount=a;navigate('accounts')">
+          <div class="stat-label">${a.label}</div>
+          <div class="stat-value" style="font-size:20px;color:${a.isHalal?'var(--gold)':'var(--teal)'}">৳${fmt(a.balance)}</div>
+          <div style="margin-top:6px"><span class="badge ${a.isHalal?'b-amber':'b-teal'}">${a.isHalal?'🌙 Halal':'🏦 Conventional'}</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">${a.no}</div>
+        </div>`).join('')}
+      <div class="stat-card" style="cursor:pointer" onclick="navigate('deposits')">
+        <div class="stat-label">Active Deposits</div>
+        <div class="stat-value" style="font-size:20px">${u.deposits.filter(d=>d.status==='Active').length}</div>
+        <div class="stat-trend neutral">Total: ৳${fmt(u.deposits.filter(d=>d.status==='Active').reduce((s,d)=>s+d.principal,0))}</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="sec-header">
+          <div class="card-title">Recent Transactions</div>
+          <button class="btn-sm btn-outline" onclick="navigate('transactions')" style="font-size:12px">View All</button>
+        </div>
+        ${recentTxns.map(txn=>`
+          <div class="txn-row">
+            <div class="txn-icon ${txn.type}"><span>${txn.type==='credit'?'↙':'↗'}</span></div>
+            <div class="txn-info">
+              <div class="txn-desc">${txn.desc}</div>
+              <div class="txn-date">${txn.date} · ${txn.category}</div>
+            </div>
+            <div class="txn-amount ${txn.type}">${txn.amount>0?'+':''}৳${fmt(Math.abs(txn.amount))}</div>
+          </div>`).join('')}
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Quick Transfer</div>
+          <div class="card-sub">Recent contacts</div>
+          <div class="quick-contacts">
+            ${[['KU','Karim','rgba(99,102,241,.3)'],['SA','Sara','rgba(236,72,153,.3)'],['RM','Rahim','rgba(245,158,11,.3)'],['TP','Tania','rgba(34,197,94,.3)']].map(c=>`
+              <div class="quick-contact" onclick="document.getElementById('tTo').value='NX-2400XX';openModal('transferModal')">
+                <div class="qc-avatar" style="background:${c[2]}">${c[0]}</div>
+                <div class="qc-name">${c[1]}</div>
+              </div>`).join('')}
+            <div class="quick-contact" onclick="openModal('transferModal')">
+              <div class="qc-avatar" style="background:rgba(255,255,255,.06);color:var(--muted);font-size:20px">+</div>
+              <div class="qc-name">New</div>
+            </div>
+          </div>
+        </div>
+        ${u.loans.length?`<div class="card">
+          <div class="card-title">Active Loan</div>
+          <div class="card-sub">${u.loans[0].label}</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+            <div><div style="font-size:11px;color:var(--muted)">Outstanding</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--amber)">৳${fmt(u.loans[0].outstanding)}</div></div>
+            <div style="text-align:right"><div style="font-size:11px;color:var(--muted)">EMI Due</div><div style="font-family:var(--mono);font-size:18px;font-weight:700">৳${fmt(u.loans[0].emi)}</div></div>
+          </div>
+          <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+            <div style="width:${100-Math.round(u.loans[0].outstanding/u.loans[0].principal*100)}%;height:100%;background:var(--green);border-radius:3px"></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">Next due: ${u.loans[0].dueDate} · Rate: ${u.loans[0].rate}% p.a.</div>
+        </div>`:''}
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// ACCOUNTS
+// ════════════════════════════════════════════════════════
+function renderAccounts(){
+  const u = SESSION.user;
+  return `
+    <div style="margin-bottom:20px">
+      <div class="card-sub">Manage all your bank accounts</div>
+    </div>
+    ${u.accounts.map(a=>`
+      <div class="card" style="margin-bottom:16px;border-color:${a.isHalal?'rgba(240,165,0,0.25)':'var(--border)'}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+              <span style="font-size:22px">${a.isHalal?'🌙':'🏦'}</span>
+              <div>
+                <div style="font-size:16px;font-weight:700">${a.label}</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:1px">${a.no}</div>
+              </div>
+              <span class="badge ${a.isHalal?'b-amber':'b-teal'}">${a.isHalal?'Shariah-Compliant':'Conventional'}</span>
+            </div>
+            ${a.isHalal?`<div class="info-box info-gold" style="margin-top:10px;margin-bottom:0;font-size:12px">This account operates under Mudarabah profit-sharing principles. No interest (riba) involved. Profit distributed quarterly based on bank's performance.</div>`:''}
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Available Balance</div>
+            <div style="font-family:var(--mono);font-size:32px;font-weight:700;color:${a.isHalal?'var(--gold)':'var(--teal)'}">৳${fmt(a.balance)}</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-sm btn-teal" onclick="openModal('transferModal')">Send Money</button>
+          <button class="btn-sm btn-outline" onclick="navigate('transactions')">Transactions</button>
+          ${a.isHalal?'':'<button class="btn-sm btn-outline" onclick="openModal(\'depositModal\')">Open FD</button>'}
+          <button class="btn-sm btn-outline" style="margin-left:auto;color:var(--muted)" onclick="showToast('Statement downloaded','info')">↓ Statement</button>
+        </div>
+      </div>`).join('')}`;
+}
+
+// ════════════════════════════════════════════════════════
+// TRANSACTIONS
+// ════════════════════════════════════════════════════════
+function renderTransactions(){
+  const u = SESSION.user;
+  const cats = ['All',...new Set(u.transactions.map(t=>t.category))];
+  return `
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+      <select class="form-inp" style="width:auto" onchange="filterTxns(this.value)">
+        ${cats.map(c=>`<option value="${c}">${c==='All'?'All Accounts':c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('')}
+      </select>
+      <select class="form-inp" style="width:auto" id="txnPeriod">
+        <option>Last 30 days</option><option>Last 3 months</option><option>Last 6 months</option>
+      </select>
+      <button class="btn-sm btn-outline" onclick="showToast('Statement downloaded','info')">↓ Export</button>
+    </div>
+    <div class="card">
+      <div id="txnList">
+        ${u.transactions.map(txn=>`
+          <div class="txn-row">
+            <div class="txn-icon ${txn.type}"><span>${txn.type==='credit'?'↙':'↗'}</span></div>
+            <div class="txn-info">
+              <div class="txn-desc">${txn.desc}</div>
+              <div class="txn-date">${txn.date} · ${txn.acc} · <span class="badge b-gray" style="font-size:10px">${txn.category}</span></div>
+            </div>
+            <div class="txn-amount ${txn.type}">${txn.amount>0?'+':''}৳${fmt(Math.abs(txn.amount))}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// TRANSFER PAGE
+// ════════════════════════════════════════════════════════
+function renderTransferPage(){
+  return `
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Send Money</div>
+        <div class="card-sub">Transfer to any NexaBank account</div>
+        <div class="form-row"><label class="form-label">From Account</label>
+          <select class="form-inp">
+            ${SESSION.user.accounts.map(a=>`<option value="${a.no}">${a.label} — ৳${fmt(a.balance)}</option>`).join('')}
+          </select>
+        </div>
+        <button class="btn-full btn-teal" onclick="openModal('transferModal')">Open Transfer Form →</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Transfer Methods</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[['Instant Transfer','Free · Immediate','b-green'],['NEFT','Free · Next business day','b-teal'],['RTGS','BDT 50 fee · Same day (large amounts)','b-amber']].map(([n,d,b])=>`
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+              <div style="flex:1"><div style="font-size:13.5px;font-weight:600">${n}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d}</div></div>
+              <span class="badge ${b}">Available</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// DEPOSITS
+// ════════════════════════════════════════════════════════
+function renderDeposits(){
+  const u = SESSION.user;
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div class="card-sub">Manage your fixed deposits and Mudarabah accounts</div>
+      <button class="btn-sm btn-teal" onclick="openModal('depositModal')">+ Open New Deposit</button>
+    </div>
+    <div class="product-cards">
+      ${[
+        {icon:'🏦',name:'Fixed Deposit (FD)',type:'conventional',desc:'Earn guaranteed interest. Lock funds for a period. Interest credited at maturity.',rate:'6.5% – 9.0%',label:'p.a. interest'},
+        {icon:'🌙',name:'Mudarabah FDR',type:'mudarabah',desc:'Shariah-compliant profit-sharing. No interest (riba). Profit based on bank performance.',rate:'5.5% – 8.0%',label:'expected profit rate',halal:true},
+        {icon:'📈',name:'Double Benefit Scheme',type:'conventional',desc:'Double your money in 8 years. Fixed interest compounded quarterly.',rate:'9.0%',label:'p.a. compounded'},
+      ].map(p=>`
+        <div class="product-card ${p.halal?'halal-product':''}">
+          <div class="product-icon">${p.icon}</div>
+          <div class="product-name">${p.name}</div>
+          ${p.halal?`<div class="halal-tag">🌙 Shariah Compliant</div>`:''}
+          <div class="product-desc" style="margin-top:6px">${p.desc}</div>
+          <div class="product-rate"><span class="rate-num">${p.rate}</span> <span class="rate-label">${p.label}</span></div>
+          <button class="btn-sm btn-teal" style="margin-top:12px;width:100%" onclick="selectedFdType='${p.type}';openModal('depositModal')">Open Now</button>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="sec-header">
+        <div class="card-title">My Deposits</div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Type</th><th>Principal</th><th>Rate</th><th>Tenure</th><th>Maturity Date</th><th>Maturity Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            ${u.deposits.map(d=>`
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px">${d.id}</td>
+                <td><span class="badge ${d.type==='mudarabah'?'b-amber':'b-blue'}">${d.type==='mudarabah'?'🌙 Mudarabah':'🏦 FD'}</span></td>
+                <td style="font-family:var(--mono)">৳${fmt(d.principal)}</td>
+                <td style="color:var(--green)">${d.rate}%</td>
+                <td>${d.tenure} months</td>
+                <td>${d.maturityDate}</td>
+                <td style="font-family:var(--mono);font-weight:600">৳${fmt(d.maturityAmount)}</td>
+                <td><span class="badge ${d.status==='Active'?'b-green':'b-gray'}">${d.status}</span></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// LOANS
+// ════════════════════════════════════════════════════════
+function renderLoans(){
+  const u = SESSION.user;
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div class="card-sub">Conventional loans and Shariah-compliant finance</div>
+      <button class="btn-sm btn-teal" onclick="openModal('loanModal')">+ Apply Now</button>
+    </div>
+    <div class="product-cards">
+      ${[
+        {icon:'💰',name:'Personal Loan',type:'conventional',desc:'Quick funds for personal needs. Simple interest at flat or reducing rate.',rate:'12% – 18%',label:'p.a. (reducing balance)'},
+        {icon:'🌙',name:'Murabahah Finance',type:'murabahah',desc:'Bank buys the asset and sells to you at a disclosed profit margin. Fully Shariah-compliant.',rate:'10% – 15%',label:'profit margin (flat)',halal:true},
+        {icon:'🤝',name:'Musharakah',type:'musharakah',desc:'Joint venture / partnership. Both bank and client share profit and loss proportionally.',rate:'Profit/Loss',label:'shared basis',halal:true},
+        {icon:'🏠',name:'Home Finance',type:'conventional',desc:'Long-term mortgage at competitive rates. Option for Ijarah-based Islamic home finance.',rate:'9% – 12%',label:'p.a. reducing'},
+      ].map(p=>`
+        <div class="product-card ${p.halal?'halal-product':''}">
+          <div class="product-icon">${p.icon}</div>
+          <div class="product-name">${p.name}</div>
+          ${p.halal?`<div class="halal-tag">🌙 Shariah Compliant</div>`:''}
+          <div class="product-desc" style="margin-top:6px">${p.desc}</div>
+          <div class="product-rate"><span class="rate-num">${p.rate}</span> <span class="rate-label">${p.label}</span></div>
+          <button class="btn-sm btn-teal" style="margin-top:12px;width:100%" onclick="selectedLoanType='${p.type}';openModal('loanModal')">Apply</button>
+        </div>`).join('')}
+    </div>
+    ${u.loans.length?`<div class="card">
+      <div class="card-title" style="margin-bottom:16px">Active Loans</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Type</th><th>Principal</th><th>Rate</th><th>EMI</th><th>Outstanding</th><th>Next Due</th><th>Status</th></tr></thead>
+          <tbody>
+            ${u.loans.map(l=>`
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px">${l.id}</td>
+                <td><span class="badge b-blue">${l.label}</span></td>
+                <td style="font-family:var(--mono)">৳${fmt(l.principal)}</td>
+                <td style="color:var(--amber)">${l.rate}% p.a.</td>
+                <td style="font-family:var(--mono);font-weight:600">৳${fmt(l.emi)}</td>
+                <td style="font-family:var(--mono);color:var(--red)">৳${fmt(l.outstanding)}</td>
+                <td>${l.dueDate}</td>
+                <td><span class="badge b-green">${l.status}</span></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`:''}`;
+}
+
+// ════════════════════════════════════════════════════════
+// PROFILE
+// ════════════════════════════════════════════════════════
+function renderProfile(){
+  const u = SESSION.user;
+  return `
+    <div class="grid-2">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--navy)">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+          <div><div style="font-size:18px;font-weight:700">${u.name}</div><div style="font-size:13px;color:var(--muted)">${u.id}</div></div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          ${[['Email',u.email],['Phone',u.phone],['NID',u.nid],['Account Type',SESSION.user.accounts.some(a=>a.isHalal)?'Islamic + Conventional':'Conventional']].map(([l,v])=>`
+            <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${l}</div><div style="font-size:13.5px">${v}</div></div>`).join('')}
+        </div>
+        <div class="divider"></div>
+        <button class="btn-sm btn-outline" style="margin-right:8px" onclick="showToast('Feature coming soon','info')">Edit Profile</button>
+        <button class="btn-sm btn-outline" onclick="showToast('Password change email sent','info')">Change Password</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Security & Preferences</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+          ${[['Two-Factor Authentication','Enabled','b-green'],['Email Notifications','On','b-green'],['SMS Alerts','On','b-green'],['Shariah Preference','Islamic products preferred','b-amber']].map(([l,v,b])=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+              <span style="font-size:13.5px">${l}</span>
+              <span class="badge ${b}">${v}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER DASHBOARD
+// ════════════════════════════════════════════════════════
+function renderBankerDashboard(){
+  const totalDeposits = DB.clients.reduce((s,c)=>s+c.deposits.filter(d=>d.status==='Active').reduce((ss,d)=>ss+d.principal,0),0);
+  const totalLoans = DB.clients.reduce((s,c)=>s+c.loans.reduce((ss,l)=>ss+l.outstanding,0),0);
+  const totalBalance = DB.clients.reduce((s,c)=>s+c.accounts.reduce((ss,a)=>ss+a.balance,0),0);
+  const islamicBalance = DB.clients.reduce((s,c)=>s+c.accounts.filter(a=>a.isHalal).reduce((ss,a)=>ss+a.balance,0),0);
+  return `
+    <div class="grid-4" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-label">Total AUM</div>
+        <div class="stat-value" style="font-size:20px;color:var(--teal)">৳${fmtCr(totalBalance)}</div>
+        <div class="stat-trend up">▲ +3.2% this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Deposits</div>
+        <div class="stat-value" style="font-size:20px">৳${fmtCr(totalDeposits)}</div>
+        <div class="stat-trend up">▲ +1.8%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Loan Portfolio</div>
+        <div class="stat-value" style="font-size:20px;color:var(--amber)">৳${fmtCr(totalLoans)}</div>
+        <div class="stat-trend neutral">NPA: 2.1%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Islamic Window</div>
+        <div class="stat-value" style="font-size:20px;color:var(--gold)">৳${fmtCr(islamicBalance)}</div>
+        <div class="stat-trend up">▲ 38% of portfolio</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="sec-header">
+          <div class="card-title">Pending Approvals</div>
+          <button class="btn-sm btn-teal" onclick="navigate('approvals')">View All</button>
+        </div>
+        ${DB.pendingApplications.slice(0,3).map(a=>`
+          <div class="approval-card">
+            <div style="width:38px;height:38px;border-radius:9px;background:rgba(0,180,170,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📋</div>
+            <div class="approval-info">
+              <div class="approval-name">${a.clientName}</div>
+              <div class="approval-meta">${a.type} · ৳${fmt(a.amount)} · ${a.date}</div>
+            </div>
+            <div class="approval-actions">
+              <button class="btn-sm btn-teal" onclick="approveApp('${a.id}')">✓</button>
+              <button class="btn-sm btn-danger" onclick="rejectApp('${a.id}')">✗</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="sec-header"><div class="card-title">Client Accounts</div><button class="btn-sm btn-outline" onclick="navigate('clients')">All Clients</button></div>
+        ${DB.clients.map(c=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+            <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy3),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${c.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+            <div style="flex:1">
+              <div style="font-size:13.5px;font-weight:500">${c.name}</div>
+              <div style="font-size:11.5px;color:var(--muted)">${c.id} · ${c.accounts.length} accounts</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--mono);font-size:13px">৳${fmt(c.accounts.reduce((s,a)=>s+a.balance,0))}</div>
+              ${c.accounts.some(a=>a.isHalal)?`<div class="hepi-badge" style="margin-top:4px">🌙 Islamic</div>`:''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Portfolio Breakdown</div>
+      <div class="grid-4">
+        ${[
+          {label:'Conventional Savings',val:65,color:'var(--teal)'},
+          {label:'Islamic Savings',val:38,color:'var(--gold)'},
+          {label:'Fixed Deposits',val:totalDeposits,color:'var(--blue||#60A5FA)',isMoney:true},
+          {label:'Active Loans',val:totalLoans,color:'var(--amber)',isMoney:true}
+        ].map(b=>`
+          <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">${b.label}</div>
+            <div style="font-family:var(--mono);font-size:${b.isMoney?'16':'22'}px;font-weight:700;color:${b.color}">${b.isMoney?'৳'+fmtCr(b.val):b.val+'%'}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER — CLIENTS
+// ════════════════════════════════════════════════════════
+function renderClients(){
+  return `
+    <div style="display:flex;gap:12px;margin-bottom:18px">
+      <input class="form-inp" placeholder="Search by name, ID, phone..." style="flex:1" oninput="filterClients(this.value)">
+      <button class="btn-sm btn-teal" onclick="navigate('new_account')">+ New Client</button>
+    </div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table id="clientsTable">
+          <thead><tr><th>Client ID</th><th>Name</th><th>Phone</th><th>Accounts</th><th>Total Balance</th><th>Deposits</th><th>Loans</th><th>Type</th><th>Action</th></tr></thead>
+          <tbody id="clientsTbody">
+            ${DB.clients.map(c=>`
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px">${c.id}</td>
+                <td style="font-weight:500">${c.name}</td>
+                <td style="color:var(--muted)">${c.phone}</td>
+                <td>${c.accounts.length}</td>
+                <td style="font-family:var(--mono)">৳${fmt(c.accounts.reduce((s,a)=>s+a.balance,0))}</td>
+                <td>${c.deposits.length}</td>
+                <td>${c.loans.length}</td>
+                <td>${c.accounts.some(a=>a.isHalal)?`<span class="badge b-amber">🌙 Islamic</span>`:`<span class="badge b-teal">Conventional</span>`}</td>
+                <td>
+                  <button class="btn-sm btn-outline" style="font-size:11px" onclick="viewClientDetail('${c.id}')">View</button>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function viewClientDetail(cid){
+  const c = DB.clients.find(x=>x.id===cid);
+  if(!c) return;
+  showToast(`Viewing ${c.name} — ৳${fmt(c.accounts.reduce((s,a)=>s+a.balance,0))} total balance`,'info');
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER — APPROVALS
+// ════════════════════════════════════════════════════════
+function renderApprovals(){
+  const pending = DB.pendingApplications.filter(a=>a.status==='pending');
+  return `
+    <div style="margin-bottom:16px">
+      <span class="badge b-red" style="font-size:13px;padding:6px 14px">${pending.length} pending approval${pending.length!==1?'s':''}</span>
+    </div>
+    ${DB.pendingApplications.map(a=>`
+      <div class="approval-card" id="app-${a.id}">
+        <div style="width:44px;height:44px;border-radius:10px;background:rgba(0,180,170,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${a.type.includes('Loan')||a.type.includes('Murabahah')?'💳':'💰'}</div>
+        <div class="approval-info">
+          <div class="approval-name">${a.clientName} <span style="font-size:12px;color:var(--muted)">· ${a.clientId}</span></div>
+          <div class="approval-meta">${a.type} · Amount: <b style="color:var(--white)">৳${fmt(a.amount)}</b> · Purpose: ${a.purpose}</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:3px">Applied: ${a.date}</div>
+        </div>
+        <div>
+          <span class="badge ${a.status==='pending'?'b-amber':a.status==='approved'?'b-green':'b-red'}" id="app-status-${a.id}">${a.status.charAt(0).toUpperCase()+a.status.slice(1)}</span>
+          ${a.status==='pending'?`<div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn-sm btn-teal" onclick="approveApp('${a.id}')">Approve</button>
+            <button class="btn-sm btn-danger" onclick="rejectApp('${a.id}')">Reject</button>
+          </div>`:''}
+        </div>
+      </div>`).join('')}`;
+}
+
+function approveApp(id){
+  const a = DB.pendingApplications.find(x=>x.id===id);
+  if(a){a.status='approved';document.getElementById('nav-approvals').querySelector('.nav-badge').textContent=DB.pendingApplications.filter(x=>x.status==='pending').length;}
+  navigate('approvals');
+  showToast('Application approved','success');
+}
+function rejectApp(id){
+  const a = DB.pendingApplications.find(x=>x.id===id);
+  if(a) a.status='rejected';
+  navigate('approvals');
+  showToast('Application rejected','error');
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER — NEW ACCOUNT
+// ════════════════════════════════════════════════════════
+function renderNewAccount(){
+  return `
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Open New Account</div>
+        <div class="card-sub">Register a new client or add account to existing client</div>
+        <div class="form-row"><label class="form-label">Client Type</label>
+          <select class="form-inp" id="na-clientType">
+            <option value="new">New Client</option>
+            <option value="existing">Existing Client</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="form-label">Full Name</label><input class="form-inp" id="na-name" placeholder="As per NID"></div>
+        <div class="form-2col">
+          <div class="form-row"><label class="form-label">Phone</label><input class="form-inp" id="na-phone" placeholder="017XX-XXXXXX"></div>
+          <div class="form-row"><label class="form-label">NID Number</label><input class="form-inp" id="na-nid" placeholder="19 digits"></div>
+        </div>
+        <div class="form-row"><label class="form-label">Email</label><input class="form-inp" id="na-email" placeholder="email@example.com"></div>
+        <div class="form-row"><label class="form-label">Account Type</label>
+          <select class="form-inp" id="na-accType">
+            <option value="savings">Savings Account (Conventional)</option>
+            <option value="current">Current Account (Conventional)</option>
+            <option value="savings_halal">Islamic Savings (Mudarabah)</option>
+            <option value="current_halal">Islamic Current (Qard Hasan)</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="form-label">Initial Deposit (BDT)</label><input class="form-inp" id="na-initial" type="number" placeholder="Minimum 1,000"></div>
+        <button class="btn-full btn-teal" style="margin-top:8px" onclick="openNewAccount()">Open Account</button>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Account Types</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+            ${[
+              ['🏦 Savings Account','Interest-bearing. Min ৳1,000. Earns 3-5% interest.','Conventional'],
+              ['🏦 Current Account','No interest. Unlimited transactions. For business use.','Conventional'],
+              ['🌙 Islamic Savings','Mudarabah-based. Profit sharing. No riba. Min ৳1,000.','Halal'],
+              ['🌙 Islamic Current','Qard Hasan basis. No interest. For Islamic finance clients.','Halal']
+            ].map(([n,d,t])=>`
+              <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:600">${n}</span>
+                  <span class="badge ${t==='Halal'?'b-amber':'b-blue'}">${t}</span>
+                </div>
+                <div style="font-size:12px;color:var(--muted)">${d}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function openNewAccount(){
+  const name = document.getElementById('na-name').value.trim();
+  const phone = document.getElementById('na-phone').value.trim();
+  const initial = parseFloat(document.getElementById('na-initial').value)||0;
+  const accType = document.getElementById('na-accType').value;
+  if(!name||!phone){showToast('Please fill all required fields','error');return;}
+  if(initial<1000){showToast('Minimum initial deposit is ৳1,000','error');return;}
+  const newId = 'NX-'+String(Date.now()).slice(-6);
+  const accNo = accType.includes('halal')?'IS-'+String(Date.now()).slice(-6):'SA-'+String(Date.now()).slice(-6);
+  const newClient = {
+    id:newId,name,phone,email:document.getElementById('na-email').value,nid:document.getElementById('na-nid').value,
+    accounts:[{no:accNo,type:accType,label:accType==='savings'?'Savings Account':accType==='current'?'Current Account':accType==='savings_halal'?'Islamic Savings':'Islamic Current',balance:initial,currency:'BDT',isHalal:accType.includes('halal')}],
+    transactions:[{id:'T-INIT',date:new Date().toISOString().slice(0,10),desc:'Account Opening Deposit',amount:initial,type:'credit',category:'deposit',acc:accNo}],
+    deposits:[],loans:[]
+  };
+  DB.clients.push(newClient);
+  showToast(`Account opened for ${name} · ID: ${newId}`,'success');
+  navigate('clients');
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER — NEW DEPOSIT
+// ════════════════════════════════════════════════════════
+function renderNewDeposit(){
+  return `
+    <div class="card" style="max-width:600px">
+      <div class="card-title">Create Fixed Deposit</div>
+      <div class="card-sub">Open FD or Mudarabah FDR for a client</div>
+      <div class="form-row"><label class="form-label">Client ID</label>
+        <select class="form-inp" id="nd-client">
+          ${DB.clients.map(c=>`<option value="${c.id}">${c.name} (${c.id})</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Deposit Type</label>
+        <select class="form-inp" id="nd-type" onchange="updateNDInfo(this.value)">
+          <option value="conventional">Fixed Deposit (Conventional)</option>
+          <option value="mudarabah">Mudarabah FDR (Shariah-Compliant)</option>
+          <option value="double">Double Benefit Scheme</option>
+        </select>
+      </div>
+      <div id="nd-info" class="info-box info-teal" style="font-size:12px">Standard Fixed Deposit. Interest credited at maturity.</div>
+      <div class="form-2col">
+        <div class="form-row"><label class="form-label">Amount (BDT)</label><input class="form-inp" id="nd-amount" type="number" placeholder="Min 50,000" oninput="calcNDResult()"></div>
+        <div class="form-row"><label class="form-label">Tenure</label>
+          <select class="form-inp" id="nd-tenure" onchange="calcNDResult()">
+            <option value="3">3 months</option><option value="6">6 months</option>
+            <option value="12">12 months</option><option value="24">24 months</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-result" id="nd-result" style="display:none">
+        <div class="calc-row"><span>Principal</span><span id="nd-r-principal"></span></div>
+        <div class="calc-row"><span id="nd-r-earn-label">Interest / Profit</span><span id="nd-r-earn"></span></div>
+        <div class="calc-row"><span>Maturity Amount</span><span id="nd-r-maturity"></span></div>
+      </div>
+      <button class="btn-full btn-teal" style="margin-top:16px" onclick="createDeposit()">Create Deposit</button>
+    </div>`;
+}
+
+function updateNDInfo(type){
+  const el = document.getElementById('nd-info');
+  if(type==='mudarabah'){el.textContent='Mudarabah FDR: Profit-sharing basis. No interest (riba). Shariah-compliant.';el.className='info-box info-gold';}
+  else if(type==='double'){el.textContent='Double Benefit: Amount doubles in 8 years. Quarterly compounding at 9% p.a.';el.className='info-box info-teal';}
+  else{el.textContent='Standard Fixed Deposit. Interest credited at maturity.';el.className='info-box info-teal';}
+}
+
+function calcNDResult(){
+  const amount = parseFloat(document.getElementById('nd-amount').value)||0;
+  const tenure = parseInt(document.getElementById('nd-tenure').value)||12;
+  const type = document.getElementById('nd-type').value;
+  if(amount<50000){document.getElementById('nd-result').style.display='none';return;}
+  const rateMap = {3:6.5,6:7.25,12:8.0,24:8.5};
+  const rate = type==='mudarabah'?rateMap[tenure]-0.5:rateMap[tenure];
+  const earn = Math.round(amount*(rate/100)*(tenure/12));
+  document.getElementById('nd-result').style.display='block';
+  document.getElementById('nd-r-principal').textContent='৳'+fmt(amount);
+  document.getElementById('nd-r-earn-label').textContent=type==='mudarabah'?'Expected Profit':'Interest';
+  document.getElementById('nd-r-earn').textContent='৳'+fmt(earn)+` (${rate}%)`;
+  document.getElementById('nd-r-maturity').textContent='৳'+fmt(amount+earn);
+}
+
+function createDeposit(){
+  const cid = document.getElementById('nd-client').value;
+  const amount = parseFloat(document.getElementById('nd-amount').value)||0;
+  if(amount<50000){showToast('Minimum deposit is ৳50,000','error');return;}
+  const client = DB.clients.find(c=>c.id===cid);
+  const type = document.getElementById('nd-type').value;
+  const tenure = parseInt(document.getElementById('nd-tenure').value);
+  const rateMap={3:6.5,6:7.25,12:8.0,24:8.5};
+  const rate=rateMap[tenure];
+  const earn=Math.round(amount*(rate/100)*(tenure/12));
+  const od=new Date();const md=new Date(od);md.setMonth(md.getMonth()+tenure);
+  const newFD={id:'FD-'+String(Date.now()).slice(-4),type,label:type==='mudarabah'?'Mudarabah FDR':'Fixed Deposit',principal:amount,rate,tenure,openDate:od.toISOString().slice(0,10),maturityDate:md.toISOString().slice(0,10),maturityAmount:amount+earn,status:'Active'};
+  client.deposits.push(newFD);
+  showToast(`Deposit created for ${client.name}`,'success');
+  navigate('clients');
+}
+
+// ════════════════════════════════════════════════════════
+// BANKER — NEW LOAN
+// ════════════════════════════════════════════════════════
+function renderNewLoan(){
+  return `
+    <div class="card" style="max-width:620px">
+      <div class="card-title">Process Loan / Finance Application</div>
+      <div class="card-sub">Create and approve loan for verified client</div>
+      <div class="form-row"><label class="form-label">Client</label>
+        <select class="form-inp" id="nl-client">
+          ${DB.clients.map(c=>`<option value="${c.id}">${c.name} (${c.id})</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Finance Type</label>
+        <select class="form-inp" id="nl-type" onchange="updateNLInfo(this.value)">
+          <option value="personal">Personal Loan (Conventional)</option>
+          <option value="home">Home Loan (Conventional)</option>
+          <option value="murabahah">Murabahah Finance (Halal)</option>
+          <option value="musharakah">Musharakah (Halal)</option>
+          <option value="ijarah">Ijarah (Halal)</option>
+        </select>
+      </div>
+      <div id="nl-info" class="info-box info-teal" style="font-size:12px">Personal loan at reducing balance interest rate of 12% p.a.</div>
+      <div class="form-2col">
+        <div class="form-row"><label class="form-label">Amount (BDT)</label><input class="form-inp" id="nl-amount" type="number" placeholder="Amount" oninput="calcNLResult()"></div>
+        <div class="form-row"><label class="form-label">Tenure (months)</label>
+          <select class="form-inp" id="nl-tenure" onchange="calcNLResult()">
+            <option value="12">12</option><option value="24">24</option><option value="36">36</option><option value="48">48</option><option value="60">60</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row"><label class="form-label">Purpose</label><input class="form-inp" id="nl-purpose" placeholder="State purpose of financing"></div>
+      <div class="calc-result" id="nl-result" style="display:none">
+        <div class="calc-row"><span>Rate</span><span id="nl-r-rate"></span></div>
+        <div class="calc-row"><span>Monthly Payment</span><span id="nl-r-emi"></span></div>
+        <div class="calc-row"><span>Total Repayment</span><span id="nl-r-total"></span></div>
+        <div class="calc-row"><span id="nl-r-charge-label">Total Interest/Profit</span><span id="nl-r-charge"></span></div>
+      </div>
+      <button class="btn-full btn-teal" style="margin-top:16px" onclick="createLoan()">Approve & Disburse</button>
+    </div>`;
+}
+
+function updateNLInfo(type){
+  const info=document.getElementById('nl-info');
+  const msgs={personal:'Personal loan at reducing balance interest rate of 12% p.a.',home:'Home loan at 10% p.a. for up to 20 years.',murabahah:'Murabahah: Bank purchases asset and sells to client at disclosed profit margin. No riba.',musharakah:'Musharakah: Joint venture with shared profit and loss. Equity-based financing.',ijarah:'Ijarah: Lease-to-own arrangement. Monthly rental with ownership transfer option.'};
+  const cls={personal:'info-teal',home:'info-teal',murabahah:'info-gold',musharakah:'info-gold',ijarah:'info-gold'};
+  info.textContent=msgs[type]||'';info.className='info-box '+cls[type];
+}
+
+function calcNLResult(){
+  const a=parseFloat(document.getElementById('nl-amount').value)||0;
+  const t=parseInt(document.getElementById('nl-tenure').value)||12;
+  const type=document.getElementById('nl-type').value;
+  if(!a){document.getElementById('nl-result').style.display='none';return;}
+  const rates={personal:12,home:10,murabahah:10,musharakah:0,ijarah:9};
+  const r=rates[type]/100/12;
+  let emi=0,total=0,charge=0;
+  if(type==='musharakah'){const profitRate=0.15;charge=Math.round(a*profitRate);total=a+charge;emi=Math.round(total/t);}
+  else{emi=r>0?Math.round(a*r*Math.pow(1+r,t)/(Math.pow(1+r,t)-1)):Math.round(a/t);total=emi*t;charge=total-a;}
+  document.getElementById('nl-result').style.display='block';
+  document.getElementById('nl-r-rate').textContent=type==='musharakah'?'15% profit share':`${rates[type]}% p.a.`;
+  document.getElementById('nl-r-emi').textContent='৳'+fmt(emi)+' / month';
+  document.getElementById('nl-r-total').textContent='৳'+fmt(total);
+  document.getElementById('nl-r-charge-label').textContent=type==='musharakah'?'Expected Profit Share':'Total Interest';
+  document.getElementById('nl-r-charge').textContent='৳'+fmt(charge);
+}
+
+function createLoan(){
+  const cid=document.getElementById('nl-client').value;
+  const a=parseFloat(document.getElementById('nl-amount').value)||0;
+  if(!a){showToast('Enter loan amount','error');return;}
+  const client=DB.clients.find(c=>c.id===cid);
+  const type=document.getElementById('nl-type').value;
+  const t=parseInt(document.getElementById('nl-tenure').value);
+  const rates={personal:12,home:10,murabahah:10,musharakah:0,ijarah:9};
+  const r=rates[type]/100/12;
+  const emi=r>0?Math.round(a*r*Math.pow(1+r,t)/(Math.pow(1+r,t)-1)):Math.round(a/t);
+  const labels={personal:'Personal Loan',home:'Home Loan',murabahah:'Murabahah Finance',musharakah:'Musharakah Partnership',ijarah:'Ijarah Finance'};
+  const due=new Date();due.setMonth(due.getMonth()+1);
+  client.loans.push({id:'LN-'+String(Date.now()).slice(-4),type,label:labels[type],principal:a,rate:rates[type],tenure:t,emi,outstanding:a,status:'Active',dueDate:due.toISOString().slice(0,10)});
+  showToast(`${labels[type]} disbursed for ${client.name}`,'success');
+  navigate('clients');
+}
+
+// ════════════════════════════════════════════════════════
+// REPORTS
+// ════════════════════════════════════════════════════════
+function renderReports(){
+  const totalClients = DB.clients.length;
+  const totalAUM = DB.clients.reduce((s,c)=>s+c.accounts.reduce((ss,a)=>ss+a.balance,0),0);
+  const islamicAUM = DB.clients.reduce((s,c)=>s+c.accounts.filter(a=>a.isHalal).reduce((ss,a)=>ss+a.balance,0),0);
+  const totalDeposits = DB.clients.reduce((s,c)=>s+c.deposits.filter(d=>d.status==='Active').reduce((ss,d)=>ss+d.principal,0),0);
+  const totalLoans = DB.clients.reduce((s,c)=>s+c.loans.reduce((ss,l)=>ss+l.outstanding,0),0);
+  return `
+    <div class="grid-4" style="margin-bottom:22px">
+      <div class="stat-card"><div class="stat-label">Total Clients</div><div class="stat-value">${totalClients}</div></div>
+      <div class="stat-card"><div class="stat-label">Total AUM</div><div class="stat-value" style="font-size:18px;color:var(--teal)">৳${fmtCr(totalAUM)}</div></div>
+      <div class="stat-card"><div class="stat-label">Islamic Window</div><div class="stat-value" style="font-size:18px;color:var(--gold)">৳${fmtCr(islamicAUM)}</div><div class="stat-trend neutral">${Math.round(islamicAUM/totalAUM*100)}% of portfolio</div></div>
+      <div class="stat-card"><div class="stat-label">Net Loan Book</div><div class="stat-value" style="font-size:18px;color:var(--amber)">৳${fmtCr(totalLoans)}</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Portfolio Mix</div>
+        <div style="margin-top:16px">
+          ${[
+            {label:'Conventional Deposits',val:totalDeposits-islamicAUM*0.3,total:totalDeposits,color:'var(--teal)'},
+            {label:'Islamic Deposits (Mudarabah)',val:islamicAUM*0.3,total:totalDeposits,color:'var(--gold)'},
+            {label:'Conventional Loans',val:totalLoans*0.7,total:totalLoans,color:'var(--amber)'},
+            {label:'Islamic Financing',val:totalLoans*0.3,total:totalLoans,color:'var(--green)'}
+          ].map(b=>`
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span>${b.label}</span><span style="font-family:var(--mono)">৳${fmtCr(Math.abs(b.val))}</span></div>
+              <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.abs(b.val/b.total)*100).toFixed(0)}%;height:100%;background:${b.color};border-radius:3px"></div></div>
+            </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Export Reports</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+          ${[['Branch Performance Report','Daily/Monthly/Annual','info'],['Client Portfolio Summary','All accounts & balances','info'],['Islamic Window Report','Shariah-compliant activities','info'],['NPA Report','Non-performing assets','info'],['Compliance Report','Regulatory submission','info']].map(([n,d,t])=>`
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+              <div style="flex:1"><div style="font-size:13px;font-weight:600">${n}</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px">${d}</div></div>
+              <button class="btn-sm btn-outline" style="font-size:11px;flex-shrink:0" onclick="showToast('${n} downloaded','info')">↓ Export</button>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL FUNCTIONS
+// ════════════════════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id==='transferModal') resetTransferModal();
+}
+
+function resetTransferModal(){
+  document.getElementById('transferForm1').style.display='block';
+  document.getElementById('transferForm2').style.display='none';
+  document.getElementById('transferSuccess').style.display='none';
+  document.getElementById('transferPreview').style.display='none';
+}
+
+function updateTransferPreview(){
+  const amt = parseFloat(document.getElementById('tAmount').value)||0;
+  const type = document.getElementById('tType').value;
+  if(!amt){document.getElementById('transferPreview').style.display='none';return;}
+  const fee = type==='rtgs'?50:0;
+  document.getElementById('transferPreview').style.display='block';
+  document.getElementById('tp-amount').textContent='৳'+fmt(amt);
+  document.getElementById('tp-fee').textContent=fee?'৳'+fee:'Free';
+  document.getElementById('tp-total').textContent='৳'+fmt(amt+fee);
+}
+
+function proceedTransfer(){
+  const to = document.getElementById('tTo').value.trim();
+  const amt = parseFloat(document.getElementById('tAmount').value)||0;
+  const acc = SESSION.user.accounts[0];
+  if(!to){showToast('Enter recipient account','error');return;}
+  if(!amt||amt<=0){showToast('Enter valid amount','error');return;}
+  if(amt>acc.balance){showToast('Insufficient balance','error');return;}
+  const type = document.getElementById('tType').value;
+  const fee = type==='rtgs'?50:0;
+  document.getElementById('transferSummaryBox').innerHTML=`<b>Confirm Transfer</b><br>To: ${to}<br>Amount: ৳${fmt(amt)}<br>Fee: ${fee?'৳'+fee:'Free'}<br>Total: ৳${fmt(amt+fee)}`;
+  document.getElementById('transferForm1').style.display='none';
+  document.getElementById('transferForm2').style.display='block';
+  document.querySelectorAll('#transferSteps .step')[0].className='step done';
+  document.querySelectorAll('#transferSteps .step')[1].className='step active';
+}
+
+function backTransfer(){
+  document.getElementById('transferForm1').style.display='block';
+  document.getElementById('transferForm2').style.display='none';
+  document.querySelectorAll('#transferSteps .step')[0].className='step active';
+  document.querySelectorAll('#transferSteps .step')[1].className='step';
+}
+
+function confirmTransfer(){
+  const otp = document.getElementById('tOtp').value.trim();
+  if(otp!=='123456'){showToast('Invalid OTP. Use 123456 for demo.','error');return;}
+  const amt = parseFloat(document.getElementById('tAmount').value)||0;
+  const to = document.getElementById('tTo').value;
+  const acc = SESSION.user.accounts[0];
+  const type = document.getElementById('tType').value;
+  const fee = type==='rtgs'?50:0;
+  acc.balance -= (amt+fee);
+  SESSION.user.transactions.unshift({id:'T'+Date.now(),date:new Date().toISOString().slice(0,10),desc:`Transfer to ${to}`,amount:-(amt+fee),type:'debit',category:'transfer',acc:acc.no});
+  document.getElementById('transferForm2').style.display='none';
+  document.getElementById('transferSuccess').style.display='block';
+  document.getElementById('transferSuccessMsg').textContent=`৳${fmt(amt)} sent to ${to}. Ref: TXN${Date.now().toString().slice(-8)}`;
+  document.querySelectorAll('#transferSteps .step').forEach(s=>s.className='step done');
+}
+
+// FD Modal
+function selectFdType(type,el){
+  selectedFdType = type;
+  document.querySelectorAll('#fdTypeSelector .type-opt').forEach(o=>o.classList.remove('sel','halal-sel'));
+  el.classList.add('sel');
+  if(type==='mudarabah') el.classList.add('halal-sel');
+  const info = document.getElementById('fdRateInfo');
+  if(type==='mudarabah'){info.textContent='Expected profit rate: 5.5% – 8.0% p.a. (based on bank performance)';info.className='info-box info-gold';}
+  else{info.textContent='Interest rate: up to 9.0% p.a. depending on tenure';info.className='info-box info-teal';}
+  document.getElementById('fdConfirmBtn').className='btn-full '+(type==='mudarabah'?'btn-gold':'btn-teal');
+  calcFD();
+}
+
+function calcFD(){
+  const amt = parseFloat(document.getElementById('fdAmount').value)||0;
+  const tenure = parseInt(document.getElementById('fdTenure').value)||12;
+  if(!amt||amt<50000){document.getElementById('fdCalcResult').style.display='none';return;}
+  const rateMap={3:6.5,6:7.25,12:8.0,24:8.5,36:9.0};
+  const rate = selectedFdType==='mudarabah'?rateMap[tenure]-0.5:rateMap[tenure];
+  const earn = Math.round(amt*(rate/100)*(tenure/12));
+  const md = new Date();md.setMonth(md.getMonth()+tenure);
+  document.getElementById('fdCalcResult').style.display='block';
+  document.getElementById('fd-principal').textContent='৳'+fmt(amt);
+  document.getElementById('fd-earn-label').textContent=selectedFdType==='mudarabah'?'Expected Profit':'Interest';
+  document.getElementById('fd-interest').textContent='৳'+fmt(earn)+` (${rate}% p.a.)`;
+  document.getElementById('fd-maturity').textContent='৳'+fmt(amt+earn);
+  document.getElementById('fd-date').textContent=md.toISOString().slice(0,10);
+}
+
+function openFD(){
+  const amt = parseFloat(document.getElementById('fdAmount').value)||0;
+  if(amt<50000){showToast('Minimum deposit is ৳50,000','error');return;}
+  const tenure = parseInt(document.getElementById('fdTenure').value);
+  const rateMap={3:6.5,6:7.25,12:8.0,24:8.5,36:9.0};
+  const rate = selectedFdType==='mudarabah'?rateMap[tenure]-0.5:rateMap[tenure];
+  const earn = Math.round(amt*(rate/100)*(tenure/12));
+  const md = new Date();md.setMonth(md.getMonth()+tenure);
+  const od = new Date();
+  SESSION.user.deposits.push({id:'FD-'+String(Date.now()).slice(-4),type:selectedFdType,label:selectedFdType==='mudarabah'?'Mudarabah FDR':'Fixed Deposit',principal:amt,rate,tenure,openDate:od.toISOString().slice(0,10),maturityDate:md.toISOString().slice(0,10),maturityAmount:amt+earn,status:'Active'});
+  SESSION.user.accounts[0].balance -= amt;
+  closeModal('depositModal');
+  showToast(`Deposit opened · ৳${fmt(amt)} · Matures ${md.toISOString().slice(0,10)}`,'success');
+  renderCurrentPage();
+}
+
+// Loan Modal
+function selectLoanType(type,el){
+  selectedLoanType = type;
+  document.querySelectorAll('#loanTypeSelector .type-opt').forEach(o=>o.classList.remove('sel','halal-sel'));
+  el.classList.add('sel');
+  if(type!=='conventional') el.classList.add('halal-sel');
+  const info = document.getElementById('loanTypeInfo');
+  const msgs={conventional:'Standard personal loan at <b>12% p.a.</b> reducing balance',murabahah:'Murabahah: Bank buys the asset and resells at <b>disclosed profit margin</b>. No riba.',musharakah:'Musharakah: Joint venture. <b>Profit and loss shared</b> between bank and client.'};
+  info.innerHTML=msgs[type]||'';
+  info.className='info-box '+(type==='conventional'?'info-teal':'info-gold');
+  calcLoan();
+}
+
+function calcLoan(){
+  const a = parseFloat(document.getElementById('lnAmount').value)||0;
+  const t = parseInt(document.getElementById('lnTenure').value)||12;
+  if(!a){document.getElementById('loanCalcResult').style.display='none';return;}
+  const rates={conventional:12,murabahah:10,musharakah:0};
+  const r = (rates[selectedLoanType]||12)/100/12;
+  let emi,total,charge,rateLabel;
+  if(selectedLoanType==='musharakah'){const profitRate=0.15;charge=Math.round(a*profitRate);total=a+charge;emi=Math.round(total/t);rateLabel='15% profit share';}
+  else{emi=r>0?Math.round(a*r*Math.pow(1+r,t)/(Math.pow(1+r,t)-1)):Math.round(a/t);total=emi*t;charge=total-a;rateLabel=`${rates[selectedLoanType]||12}% p.a.`;}
+  document.getElementById('loanCalcResult').style.display='block';
+  document.getElementById('ln-rate-label').textContent=selectedLoanType==='musharakah'?'Profit Sharing':'Interest Rate';
+  document.getElementById('ln-rate').textContent=rateLabel;
+  document.getElementById('ln-emi-label').textContent=selectedLoanType==='musharakah'?'Monthly Share':'Monthly EMI';
+  document.getElementById('ln-emi').textContent='৳'+fmt(emi);
+  document.getElementById('ln-total-label').textContent='Total Repayment';
+  document.getElementById('ln-total').textContent='৳'+fmt(total);
+  document.getElementById('ln-charge-label').textContent=selectedLoanType==='musharakah'?'Total Profit Share':'Total Interest';
+  document.getElementById('ln-charge').textContent='৳'+fmt(charge);
+}
+
+function applyLoan(){
+  const a = parseFloat(document.getElementById('lnAmount').value)||0;
+  if(!a){showToast('Enter loan amount','error');return;}
+  const purpose = document.getElementById('lnPurpose').value;
+  const t = parseInt(document.getElementById('lnTenure').value)||12;
+  const labels={conventional:'Personal Loan',murabahah:'Murabahah Finance',musharakah:'Musharakah Partnership'};
+  DB.pendingApplications.push({id:'APP-'+Date.now(),clientId:SESSION.user.id,clientName:SESSION.user.name,type:labels[selectedLoanType]||'Loan',amount:a,date:new Date().toISOString().slice(0,10),status:'pending',purpose});
+  closeModal('loanModal');
+  showToast('Loan application submitted for review','success');
+}
+
+// ════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════
+function fmt(n){return Math.round(n).toLocaleString('en-BD');}
+function fmtCr(n){if(n>=10000000)return (n/10000000).toFixed(1)+'Cr';if(n>=100000)return (n/100000).toFixed(1)+'L';return fmt(n);}
+function filterTxns(cat){/* simple filter demo */}
+function filterClients(q){
+  const rows = document.querySelectorAll('#clientsTbody tr');
+  rows.forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});
+}
+
+let toastTimer;
+function showToast(msg,type='info'){
+  clearTimeout(toastTimer);
+  const t=document.getElementById('toast');
+  const icons={success:'✓',error:'✗',info:'ℹ'};
+  t.innerHTML=`<span>${icons[type]||'ℹ'}</span>${msg}`;
+  t.className=`toast ${type} show`;
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// Backdrop close
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1146 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f8f7f4;--surface:#ffffff;--surface2:#f1efe8;--border:#e5e2d9;--border2:#ccc9be;
+--text:#1a1a18;--text2:#5a5955;--text3:#8a8880;
+--primary:#185fa5;--primary-bg:#e6f1fb;--primary-text:#0c447c;
+--success:#3b6d11;--success-bg:#eaf3de;--success-text:#27500a;
+--warning:#854f0b;--warning-bg:#faeeda;--warning-text:#633806;
+--danger:#a32d2d;--danger-bg:#fcebeb;--danger-text:#791f1f;
+--teal:#0f6e56;--teal-bg:#e1f5ee;--teal-text:#085041;
+--purple:#534ab7;--purple-bg:#eeedfe;--purple-text:#3c3489;
+--amber:#ba7517;--amber-bg:#faeeda;--amber-text:#854f0b;
+--card-shadow:0 1px 3px rgba(0,0,0,0.06);
+--radius:10px;--radius-lg:14px;
+}
+.dark{
+--bg:#1a1918;--surface:#242320;--surface2:#2e2c2a;--border:#3a3835;--border2:#4a4845;
+--text:#f0ede8;--text2:#a8a5a0;--text3:#6a6865;
+--primary:#378add;--primary-bg:#0c447c;--primary-text:#85b7eb;
+--success:#639922;--success-bg:#173404;--success-text:#c0dd97;
+--warning:#ef9f27;--warning-bg:#412402;--warning-text:#fac775;
+--danger:#e24b4a;--danger-bg:#501313;--danger-text:#f7c1c1;
+--teal:#1d9e75;--teal-bg:#04342c;--teal-text:#5dcaa5;
+--purple:#7f77dd;--purple-bg:#26215c;--purple-text:#afa9ec;
+--amber:#ef9f27;--amber-bg:#412402;--amber-text:#fac775;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;transition:background .2s,color .2s}
+.app{display:flex;flex-direction:column;min-height:100vh;max-width:1100px;margin:0 auto}
+
+/* NAV */
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;background:var(--surface);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:500;color:var(--primary)}
+.logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.nav-btn{background:none;border:0.5px solid var(--border2);color:var(--text2);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:all .15s}
+.nav-btn:hover{background:var(--surface2);color:var(--text)}
+.nav-btn.active{background:var(--primary-bg);color:var(--primary);border-color:var(--primary)}
+.theme-btn{width:32px;height:32px;border:0.5px solid var(--border2);background:var(--surface2);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2)}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:var(--danger);color:#fff;border-radius:50%;font-size:9px;font-weight:700}
+
+/* LAYOUT */
+.main{display:flex;flex:1}
+.sidebar{width:200px;background:var(--surface);border-right:0.5px solid var(--border);padding:16px 8px;flex-shrink:0}
+.content{flex:1;padding:20px;overflow-x:hidden}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;margin-bottom:2px;transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.nav-icon{font-size:15px;width:20px;text-align:center}
+.nav-section{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding:12px 10px 4px;font-weight:500}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:500;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text3)}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* METRIC */
+.metric{background:var(--surface2);border-radius:var(--radius);padding:14px 16px}
+.metric-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.metric-value{font-size:22px;font-weight:500;color:var(--text)}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.metric-up{color:var(--success)}
+.metric-down{color:var(--danger)}
+
+/* ACCOUNT CARDS */
+.acct-card{border-radius:var(--radius-lg);padding:20px;color:#fff;position:relative;overflow:hidden;margin-bottom:12px;cursor:pointer;transition:transform .15s}
+.acct-card:hover{transform:translateY(-1px)}
+.acct-card.primary{background:linear-gradient(135deg,var(--primary) 0%,#0c447c 100%)}
+.acct-card.teal{background:linear-gradient(135deg,#0f6e56 0%,#04342c 100%)}
+.acct-card.purple{background:linear-gradient(135deg,#534ab7 0%,#26215c 100%)}
+.acct-label{font-size:11px;opacity:.75;margin-bottom:4px}
+.acct-num{font-size:13px;opacity:.85;letter-spacing:.1em}
+.acct-balance{font-size:26px;font-weight:500;margin:8px 0 4px}
+.acct-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;opacity:.8}
+.acct-chip{width:28px;height:20px;background:rgba(255,255,255,.25);border-radius:3px;position:absolute;top:20px;right:20px}
+
+/* TRANSACTION LIST */
+.txn-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.txn-item:last-child{border-bottom:none}
+.txn-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.txn-info{flex:1}
+.txn-name{font-size:13px;font-weight:500;color:var(--text)}
+.txn-date{font-size:11px;color:var(--text3)}
+.txn-amount{font-size:14px;font-weight:500}
+.txn-in{color:var(--success)}
+.txn-out{color:var(--danger)}
+
+/* FORM */
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:5px;display:block;font-weight:500}
+.form-input{width:100%;padding:9px 12px;border:0.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(24,95,165,.1)}
+.form-select{width:100%;padding:9px 12px;border:0.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;outline:none}
+.btn{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-outline{background:none;border:0.5px solid var(--border2);color:var(--text2)}
+.btn-outline:hover{background:var(--surface2);color:var(--text)}
+.btn-success{background:var(--success);color:#fff}
+.btn-sm{padding:5px 12px;font-size:12px}
+
+/* STATUS BADGES */
+.badge-pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-success{background:var(--success-bg);color:var(--success-text)}
+.badge-warning{background:var(--warning-bg);color:var(--warning-text)}
+.badge-danger{background:var(--danger-bg);color:var(--danger-text)}
+.badge-info{background:var(--primary-bg);color:var(--primary-text)}
+.badge-purple{background:var(--purple-bg);color:var(--purple-text)}
+
+/* PROGRESS BAR */
+.progress-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s}
+
+/* HEPI SCORE RING */
+.hepi-ring{width:90px;height:90px;position:relative;flex-shrink:0}
+.hepi-ring svg{width:100%;height:100%}
+.hepi-ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hepi-score-num{font-size:18px;font-weight:500;color:var(--text)}
+.hepi-score-sub{font-size:9px;color:var(--text3)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:7px 10px;color:var(--text3);font-weight:500;border-bottom:0.5px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.tbl td{padding:9px 10px;border-bottom:0.5px solid var(--border);color:var(--text)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--surface2)}
+
+/* LOAN */
+.loan-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start}
+.loan-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+
+/* NOTIFICATION DOT */
+.notif-dot{width:8px;height:8px;background:var(--danger);border-radius:50%;flex-shrink:0}
+
+/* HEPI RADAR */
+.hepi-dim{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hepi-dim-label{font-size:12px;color:var(--text2);width:130px;flex-shrink:0}
+.hepi-dim-bar{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.hepi-dim-fill{height:100%;border-radius:4px}
+.hepi-dim-val{font-size:12px;font-weight:500;width:32px;text-align:right;flex-shrink:0}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;padding:4px;background:var(--surface2);border-radius:10px;margin-bottom:18px}
+.tab{padding:6px 14px;border-radius:7px;font-size:12px;cursor:pointer;color:var(--text2);border:none;background:none;transition:all .15s;font-weight:500}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* AI CHAT */
+.ai-bubble{padding:10px 14px;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:8px;max-width:85%}
+.ai-bubble.bot{background:var(--primary-bg);color:var(--primary-text);border-bottom-left-radius:3px}
+.ai-bubble.user{background:var(--surface2);color:var(--text);border-bottom-right-radius:3px;margin-left:auto}
+
+/* SECURITY */
+.sec-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.sec-item:last-child{border-bottom:none}
+.sec-toggle{position:relative;width:36px;height:20px;flex-shrink:0}
+.sec-toggle input{opacity:0;width:0;height:0;position:absolute}
+.sec-slider{position:absolute;inset:0;background:var(--border2);border-radius:10px;cursor:pointer;transition:.2s}
+.sec-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+input:checked+.sec-slider{background:var(--success)}
+input:checked+.sec-slider::before{left:19px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:999;display:none}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-lg);padding:24px;width:420px;max-width:95vw}
+.modal-title{font-size:16px;font-weight:500;margin-bottom:16px}
+
+/* MISC */
+.divider{height:0.5px;background:var(--border);margin:14px 0}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.section-title{font-size:16px;font-weight:500;margin-bottom:14px;color:var(--text)}
+.flex{display:flex}.flex-1{flex:1}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mb-1{margin-bottom:4px}.mb-2{margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="logo">
+    <div class="logo-icon">N</div>
+    NurBank
+    <span style="font-size:10px;color:var(--text3);font-weight:400;padding:2px 6px;background:var(--teal-bg);color:var(--teal-text);border-radius:4px">HEPI Certified</span>
+  </div>
+  <div class="nav-actions">
+    <span class="chip">Thu, 23 Apr 2026</span>
+    <button class="nav-btn" onclick="openModal('notif')">🔔 <span class="badge">3</span></button>
+    <button class="nav-btn" onclick="openModal('profile')">👤 Ahmad Raza</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">◑</button>
+  </div>
+</nav>
+
+<div class="main">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="nav-section">Main</div>
+  <button class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">⊞</span> Dashboard</button>
+  <button class="nav-item" onclick="showPage('accounts',this)"><span class="nav-icon">◉</span> Accounts</button>
+  <button class="nav-item" onclick="showPage('transfer',this)"><span class="nav-icon">⇄</span> Transfer</button>
+  <button class="nav-item" onclick="showPage('payments',this)"><span class="nav-icon">◈</span> Payments</button>
+  <button class="nav-item" onclick="showPage('history',this)"><span class="nav-icon">≡</span> History</button>
+  <div class="nav-section">Finance</div>
+  <button class="nav-item" onclick="showPage('loans',this)"><span class="nav-icon">⬡</span> Financing</button>
+  <button class="nav-item" onclick="showPage('savings',this)"><span class="nav-icon">◑</span> Savings</button>
+  <button class="nav-item" onclick="showPage('invest',this)"><span class="nav-icon">△</span> Invest</button>
+  <div class="nav-section">Halal</div>
+  <button class="nav-item" onclick="showPage('hepi',this)"><span class="nav-icon">✦</span> HEPI Score</button>
+  <button class="nav-item" onclick="showPage('zakat',this)"><span class="nav-icon">⊕</span> Zakat</button>
+  <div class="nav-section">Account</div>
+  <button class="nav-item" onclick="showPage('security',this)"><span class="nav-icon">⊘</span> Security</button>
+  <button class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⊛</span> Settings</button>
+</aside>
+
+<!-- CONTENT -->
+<main class="content">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="flex items-center justify-between mb-2" style="margin-bottom:16px">
+    <div>
+      <div class="section-title" style="margin:0">Good morning, Ahmad 👋</div>
+      <div style="font-size:12px;color:var(--text3)">Your financial wellness at a glance</div>
+    </div>
+    <div class="badge-pill badge-success">HEPI Score: 87/100</div>
+  </div>
+
+  <div class="grid4" style="margin-bottom:18px">
+    <div class="metric">
+      <div class="metric-label">Total Balance</div>
+      <div class="metric-value">BDT 4.82L</div>
+      <div class="metric-sub metric-up">↑ 3.2% this month</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Monthly Income</div>
+      <div class="metric-value">BDT 85,000</div>
+      <div class="metric-sub metric-up">↑ 5.0% vs last</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Monthly Spend</div>
+      <div class="metric-value">BDT 42,300</div>
+      <div class="metric-sub metric-down">↑ 1.8% vs last</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Zakat Due</div>
+      <div class="metric-value">BDT 1,205</div>
+      <div class="metric-sub" style="color:var(--warning)">Due in 12 days</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-header"><span class="card-title">My Accounts</span><button class="btn btn-outline btn-sm" onclick="showPage('accounts',null)">View all</button></div>
+        <div class="acct-card primary" onclick="showPage('accounts',null)">
+          <div class="acct-chip"></div>
+          <div class="acct-label">Current Account (Halal)</div>
+          <div class="acct-num">•••• •••• •••• 4821</div>
+          <div class="acct-balance">BDT 2,45,000</div>
+          <div class="acct-footer"><span>Ahmad Raza</span><span>NurBank Islamic</span></div>
+        </div>
+        <div class="acct-card teal" onclick="showPage('savings',null)">
+          <div class="acct-chip"></div>
+          <div class="acct-label">Mudarabah Savings</div>
+          <div class="acct-num">•••• •••• •••• 9034</div>
+          <div class="acct-balance">BDT 2,37,800</div>
+          <div class="acct-footer"><span>Profit share: 5.2%</span><span>Active</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Quick Actions</span></div>
+        <div class="grid4" style="gap:8px">
+          <button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:10px 8px;font-size:11px" onclick="showPage('transfer',null)"><span style="font-size:18px">⇄</span> Transfer</button>
+          <button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:10px 8px;font-size:11px" onclick="showPage('payments',null)"><span style="font-size:18px">◈</span> Pay Bills</button>
+          <button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:10px 8px;font-size:11px" onclick="showPage('loans',null)"><span style="font-size:18px">⬡</span> Finance</button>
+          <button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:10px 8px;font-size:11px" onclick="showPage('zakat',null)"><span style="font-size:18px">⊕</span> Zakat</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-header"><span class="card-title">Recent Transactions</span><button class="btn btn-outline btn-sm" onclick="showPage('history',null)">See all</button></div>
+        <div id="recent-txn"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">HEPI Impact Summary</span>
+          <button class="btn btn-outline btn-sm" onclick="showPage('hepi',null)">Details ✦</button>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="hepi-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface2)" stroke-width="10"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="var(--teal)" stroke-width="10" stroke-dasharray="213" stroke-dashoffset="27" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+            </svg>
+            <div class="hepi-ring-label"><span class="hepi-score-num">87</span><span class="hepi-score-sub">/ 100</span></div>
+          </div>
+          <div style="flex:1">
+            <div class="hepi-dim"><div class="hepi-dim-label">Human Value</div><div class="hepi-dim-bar"><div class="hepi-dim-fill" style="width:88%;background:var(--teal)"></div></div><div class="hepi-dim-val" style="color:var(--teal)">88</div></div>
+            <div class="hepi-dim"><div class="hepi-dim-label">Ethical Align</div><div class="hepi-dim-bar"><div class="hepi-dim-fill" style="width:92%;background:var(--purple)"></div></div><div class="hepi-dim-val" style="color:var(--purple)">92</div></div>
+            <div class="hepi-dim"><div class="hepi-dim-label">Eco Stewardship</div><div class="hepi-dim-bar"><div class="hepi-dim-fill" style="width:78%;background:var(--success)"></div></div><div class="hepi-dim-val" style="color:var(--success-text)">78</div></div>
+            <div class="hepi-dim"><div class="hepi-dim-label">Social Justice</div><div class="hepi-dim-bar"><div class="hepi-dim-fill" style="width:85%;background:var(--amber)"></div></div><div class="hepi-dim-val" style="color:var(--amber-text)">85</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNTS PAGE -->
+<div class="page" id="page-accounts">
+  <div class="section-title">Account Management</div>
+  <div class="grid3" style="margin-bottom:18px">
+    <div class="acct-card primary"><div class="acct-chip"></div><div class="acct-label">Current Account</div><div class="acct-num">•••• 4821</div><div class="acct-balance">BDT 2,45,000</div><div class="acct-footer"><span>Halal Certified</span><span class="badge-pill badge-success">Active</span></div></div>
+    <div class="acct-card teal"><div class="acct-chip"></div><div class="acct-label">Mudarabah Savings</div><div class="acct-num">•••• 9034</div><div class="acct-balance">BDT 2,37,800</div><div class="acct-footer"><span>5.2% profit share</span><span class="badge-pill badge-success">Active</span></div></div>
+    <div class="acct-card purple"><div class="acct-chip"></div><div class="acct-label">Investment (Sukuk)</div><div class="acct-num">•••• 3312</div><div class="acct-balance">BDT 1,20,000</div><div class="acct-footer"><span>+8.1% YTD</span><span class="badge-pill badge-info">Growing</span></div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Account Details — Current #4821</span></div>
+    <div class="grid2">
+      <div>
+        <div class="form-group"><div class="form-label">Account Holder</div><div style="font-size:14px;font-weight:500">Ahmad Raza</div></div>
+        <div class="form-group"><div class="form-label">Account Type</div><div>Halal Current Account (Wadiah)</div></div>
+        <div class="form-group"><div class="form-label">IBAN</div><div style="font-family:monospace;font-size:12px">BD29 0010 0109 0134 6391 73</div></div>
+        <div class="form-group"><div class="form-label">Branch</div><div>Gulshan-2, Dhaka</div></div>
+      </div>
+      <div>
+        <div class="form-group"><div class="form-label">Available Balance</div><div style="font-size:18px;font-weight:500;color:var(--success-text)">BDT 2,45,000</div></div>
+        <div class="form-group"><div class="form-label">HEPI Compliance</div><div class="badge-pill badge-success">Fully Shariah Compliant</div></div>
+        <div class="form-group"><div class="form-label">Zakat Status</div><div class="badge-pill badge-warning">Due: BDT 1,205</div></div>
+        <div class="form-group"><div class="form-label">Account Opened</div><div>15 March 2019</div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="showPage('transfer',null)">⇄ Transfer Funds</button>
+      <button class="btn btn-outline">↓ Statement</button>
+      <button class="btn btn-outline">◈ Manage Card</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSFER PAGE -->
+<div class="page" id="page-transfer">
+  <div class="section-title">Fund Transfer</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Send Money</span></div>
+      <div class="form-group">
+        <label class="form-label">From Account</label>
+        <select class="form-select">
+          <option>Current Account •••• 4821 — BDT 2,45,000</option>
+          <option>Mudarabah Savings •••• 9034 — BDT 2,37,800</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Transfer Type</label>
+        <div class="tab-bar" style="margin-bottom:0">
+          <button class="tab active" onclick="setTab(this,'transfer')">Within NurBank</button>
+          <button class="tab" onclick="setTab(this,'transfer')">BEFTN/RTGS</button>
+          <button class="tab" onclick="setTab(this,'transfer')">International</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recipient Account / IBAN</label>
+        <input class="form-input" placeholder="Enter account number or IBAN" id="rcpt-account">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recipient Name</label>
+        <input class="form-input" placeholder="Auto-fill after account lookup" id="rcpt-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount (BDT)</label>
+        <input class="form-input" type="number" placeholder="0.00" id="tx-amount" oninput="calcTransfer()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Purpose / Reference</label>
+        <input class="form-input" placeholder="e.g. Family support, Invoice #123">
+      </div>
+      <div id="transfer-preview" style="display:none;background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px">
+        <div class="flex justify-between mb-1"><span style="color:var(--text3)">Amount</span><span id="prev-amount">—</span></div>
+        <div class="flex justify-between mb-1"><span style="color:var(--text3)">Service Fee (halal)</span><span>BDT 0</span></div>
+        <div class="flex justify-between"><span style="color:var(--text3);font-weight:500">Total Debit</span><span id="prev-total" style="font-weight:500">—</span></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="doTransfer()">Confirm Transfer ⇄</button>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Saved Recipients</span></div>
+        <div id="saved-recipients"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Transfer Limits</span></div>
+        <div style="font-size:12px">
+          <div class="flex justify-between" style="padding:6px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--text3)">Daily limit</span><span>BDT 5,00,000</span></div>
+          <div class="flex justify-between" style="padding:6px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--text3)">Used today</span><span style="color:var(--warning)">BDT 0</span></div>
+          <div class="flex justify-between" style="padding:6px 0"><span style="color:var(--text3)">Remaining</span><span style="color:var(--success-text)">BDT 5,00,000</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENTS PAGE -->
+<div class="page" id="page-payments">
+  <div class="section-title">Bill Payments & Services</div>
+  <div class="grid4" style="margin-bottom:18px">
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">⚡</div><div style="font-size:12px;font-weight:500">Electricity</div><div style="font-size:10px;color:var(--text3)">DESCO / DPDC</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">💧</div><div style="font-size:12px;font-weight:500">Water (WASA)</div><div style="font-size:10px;color:var(--text3)">Utility</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">📱</div><div style="font-size:12px;font-weight:500">Mobile Top-up</div><div style="font-size:10px;color:var(--text3)">GP/Robi/Banglalink</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">🌐</div><div style="font-size:12px;font-weight:500">Internet</div><div style="font-size:10px;color:var(--text3)">ISP Bills</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">🎓</div><div style="font-size:12px;font-weight:500">Education</div><div style="font-size:10px;color:var(--text3)">School / University</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">🏥</div><div style="font-size:12px;font-weight:500">Hospital</div><div style="font-size:10px;color:var(--text3)">Healthcare</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">🚍</div><div style="font-size:12px;font-weight:500">Transport</div><div style="font-size:10px;color:var(--text3)">Bus / Rail pass</div></button>
+    <button class="card" style="text-align:center;cursor:pointer;border:none" onclick="openModal('pay')"><div style="font-size:24px;margin-bottom:6px">🕌</div><div style="font-size:12px;font-weight:500">Sadaqah</div><div style="font-size:10px;color:var(--text3)">Charity / Waqf</div></button>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Scheduled Payments</span></div>
+    <table class="tbl">
+      <thead><tr><th>Payee</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>DESCO Electricity</td><td>BDT 3,200</td><td>30 Apr 2026</td><td><span class="badge-pill badge-warning">Upcoming</span></td><td><button class="btn btn-sm btn-primary" onclick="openModal('pay')">Pay</button></td></tr>
+        <tr><td>Grameenphone</td><td>BDT 1,199</td><td>28 Apr 2026</td><td><span class="badge-pill badge-warning">Upcoming</span></td><td><button class="btn btn-sm btn-primary" onclick="openModal('pay')">Pay</button></td></tr>
+        <tr><td>School Fee — Arif</td><td>BDT 12,000</td><td>5 May 2026</td><td><span class="badge-pill badge-info">Scheduled</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+        <tr><td>Sadaqah – Al-Arafah</td><td>BDT 2,000</td><td>Monthly</td><td><span class="badge-pill badge-success">Auto-pay</span></td><td><button class="btn btn-sm btn-outline">Manage</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- HISTORY PAGE -->
+<div class="page" id="page-history">
+  <div class="section-title">Transaction History</div>
+  <div class="card">
+    <div class="flex gap-2 items-center" style="margin-bottom:14px;flex-wrap:wrap">
+      <input class="form-input" style="max-width:200px" placeholder="🔍 Search transactions" oninput="filterTxn(this.value)">
+      <select class="form-select" style="max-width:140px" onchange="filterType(this.value)">
+        <option value="">All Types</option>
+        <option value="in">Credits</option>
+        <option value="out">Debits</option>
+      </select>
+      <input type="month" class="form-input" style="max-width:150px" value="2026-04">
+      <button class="btn btn-outline btn-sm">↓ Export CSV</button>
+    </div>
+    <table class="tbl" id="txn-table">
+      <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody id="txn-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LOANS / FINANCING -->
+<div class="page" id="page-loans">
+  <div class="section-title">Islamic Financing</div>
+  <div style="background:var(--teal-bg);border:0.5px solid var(--teal);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:18px;font-size:12px;color:var(--teal-text)">
+    ✦ All financing products at NurBank are 100% interest-free (riba-free) and comply with Shariah principles. We offer Murabaha, Ijarah, Diminishing Musharakah, and Qard Hasan structures.
+  </div>
+  <div class="grid3" style="margin-bottom:18px">
+    <div class="loan-card">
+      <div class="loan-ico" style="background:var(--primary-bg)">🏠</div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px">Home Finance (Musharakah)</div>
+        <div style="font-size:11px;color:var(--text3);margin:2px 0">Up to BDT 1 Crore · Up to 20 yrs</div>
+        <div style="font-size:12px;color:var(--primary)">Profit rate: 9.5% p.a.</div>
+        <button class="btn btn-primary btn-sm mt-2" onclick="openModal('loan')">Apply</button>
+      </div>
+    </div>
+    <div class="loan-card">
+      <div class="loan-ico" style="background:var(--success-bg)">🚗</div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px">Auto Finance (Ijarah)</div>
+        <div style="font-size:11px;color:var(--text3);margin:2px 0">Up to BDT 30 Lakh · Up to 7 yrs</div>
+        <div style="font-size:12px;color:var(--success-text)">Profit rate: 8.2% p.a.</div>
+        <button class="btn btn-primary btn-sm mt-2" onclick="openModal('loan')">Apply</button>
+      </div>
+    </div>
+    <div class="loan-card">
+      <div class="loan-ico" style="background:var(--warning-bg)">💼</div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px">SME Finance (Murabaha)</div>
+        <div style="font-size:11px;color:var(--text3);margin:2px 0">Up to BDT 50 Lakh · Up to 5 yrs</div>
+        <div style="font-size:12px;color:var(--warning-text)">Profit rate: 10.0% p.a.</div>
+        <button class="btn btn-primary btn-sm mt-2" onclick="openModal('loan')">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">EMI / Installment Calculator</span></div>
+    <div class="grid3" style="align-items:end">
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Finance Amount (BDT)</label>
+        <input class="form-input" type="number" value="500000" id="loan-amt" oninput="calcEMI()">
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Profit Rate (% p.a.)</label>
+        <input class="form-input" type="number" value="9.5" id="loan-rate" oninput="calcEMI()">
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Tenure (Months)</label>
+        <input class="form-input" type="number" value="60" id="loan-tenure" oninput="calcEMI()">
+      </div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:14px;margin-top:12px">
+      <div class="grid3">
+        <div class="metric" style="background:var(--surface)"><div class="metric-label">Monthly Installment</div><div class="metric-value" id="emi-result">—</div></div>
+        <div class="metric" style="background:var(--surface)"><div class="metric-label">Total Payable</div><div class="metric-value" id="emi-total">—</div></div>
+        <div class="metric" style="background:var(--surface)"><div class="metric-label">Total Profit</div><div class="metric-value" id="emi-profit">—</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SAVINGS / MUDARABAH -->
+<div class="page" id="page-savings">
+  <div class="section-title">Savings & Mudarabah Products</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Mudarabah Savings Account</span><span class="badge-pill badge-success">Active</span></div>
+      <div style="font-size:26px;font-weight:500;color:var(--teal)">BDT 2,37,800</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">Account •••• 9034</div>
+      <div class="divider"></div>
+      <div class="grid2" style="gap:8px">
+        <div class="metric"><div class="metric-label">Profit Rate</div><div class="metric-value">5.2%</div><div class="metric-sub">Per annum</div></div>
+        <div class="metric"><div class="metric-label">Profit Earned</div><div class="metric-value">BDT 12,361</div><div class="metric-sub">This year</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text3)">Next profit distribution: <strong style="color:var(--text)">30 Apr 2026</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Mudarabah Term Deposits</span></div>
+      <table class="tbl">
+        <thead><tr><th>Amount</th><th>Term</th><th>Rate</th><th>Maturity</th></tr></thead>
+        <tbody>
+          <tr><td>BDT 50,000</td><td>3 months</td><td>6.5%</td><td>15 Jul 2026</td></tr>
+          <tr><td>BDT 1,00,000</td><td>6 months</td><td>7.2%</td><td>23 Oct 2026</td></tr>
+          <tr><td>BDT 2,00,000</td><td>12 months</td><td>8.0%</td><td>23 Apr 2027</td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary btn-sm mt-2" onclick="openModal('deposit')">+ New Term Deposit</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Goal-Based Savings</span><button class="btn btn-outline btn-sm">+ Add Goal</button></div>
+    <div id="savings-goals"></div>
+  </div>
+</div>
+
+<!-- INVEST -->
+<div class="page" id="page-invest">
+  <div class="section-title">Halal Investment — Sukuk & Funds</div>
+  <div style="background:var(--purple-bg);border:0.5px solid var(--purple);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;font-size:12px;color:var(--purple-text)">
+    ✦ All investment products are Shariah-screened. No investment in alcohol, tobacco, gambling, conventional financial services, or other haram sectors. ESG-aligned.
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Portfolio Overview</span></div>
+      <div style="font-size:28px;font-weight:500;color:var(--text)">BDT 1,20,000</div>
+      <div style="font-size:12px;color:var(--success-text)">↑ BDT 9,720 (+8.1%) since inception</div>
+      <div class="divider"></div>
+      <div id="invest-breakdown"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Available Sukuk</span></div>
+      <table class="tbl">
+        <thead><tr><th>Sukuk</th><th>Yield</th><th>Term</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Govt. Ijarah Sukuk</td><td style="color:var(--success-text)">6.5%</td><td>5 yr</td><td><button class="btn btn-sm btn-primary">Buy</button></td></tr>
+          <tr><td>NurBank Green Sukuk</td><td style="color:var(--success-text)">7.2%</td><td>3 yr</td><td><button class="btn btn-sm btn-primary">Buy</button></td></tr>
+          <tr><td>Infrastructure Sukuk</td><td style="color:var(--success-text)">8.0%</td><td>10 yr</td><td><button class="btn btn-sm btn-primary">Buy</button></td></tr>
+          <tr><td>Halal Equity Fund</td><td style="color:var(--success-text)">9.5%</td><td>Open</td><td><button class="btn btn-sm btn-primary">Invest</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- HEPI PAGE — MAIN FEATURE -->
+<div class="page" id="page-hepi">
+  <div class="section-title">HEPI — Human-centric Economic & Profitable Innovations</div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="hepiTab(0,this)">What is HEPI?</button>
+    <button class="tab" onclick="hepiTab(1,this)">Your Score</button>
+    <button class="tab" onclick="hepiTab(2,this)">AI Benchmark</button>
+    <button class="tab" onclick="hepiTab(3,this)">Impact Report</button>
+  </div>
+
+  <!-- HEPI TAB 0: Explainer -->
+  <div id="hepi-tab-0">
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div style="font-size:24px;margin-bottom:8px">✦</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:8px">What is HEPI?</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">HEPI — Human-centric Economic and Profitable Innovations — is a performance framework rooted in the higher objectives of Islam (Maqasid al-Islam). It measures whether your banking and financial activity is delivering real benefit to you, your community, and the environment — not just compliance with rules.</div>
+      </div>
+      <div class="card">
+        <div style="font-size:24px;margin-bottom:8px">⊛</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:8px">Why does it matter?</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">Traditional halal banking focuses on avoiding haram (prohibited). HEPI goes further: it asks what good is being <em>achieved</em>. A truly mature Islamic economy must reduce poverty, protect the environment, uphold dignity, and distribute wealth fairly — not just avoid interest.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">The 5 HEPI Dimensions</span></div>
+      <div class="grid3" style="gap:10px">
+        <div style="background:var(--teal-bg);border-radius:var(--radius);padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">👥</div>
+          <div style="font-size:13px;font-weight:500;color:var(--teal-text)">1. Human Value Creation</div>
+          <div style="font-size:11px;color:var(--teal-text);margin-top:4px;line-height:1.6">Living wages, skills development, worker dignity, consumer protection, community empowerment</div>
+        </div>
+        <div style="background:var(--primary-bg);border-radius:var(--radius);padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">📈</div>
+          <div style="font-size:13px;font-weight:500;color:var(--primary-text)">2. Economic Viability with Purpose</div>
+          <div style="font-size:11px;color:var(--primary-text);margin-top:4px;line-height:1.6">Shariah-compliant financing, equitable value distribution, fair supplier relations, long-term sustainability</div>
+        </div>
+        <div style="background:var(--purple-bg);border-radius:var(--radius);padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">⚖️</div>
+          <div style="font-size:13px;font-weight:500;color:var(--purple-text)">3. Ethical Alignment</div>
+          <div style="font-size:11px;color:var(--purple-text);margin-top:4px;line-height:1.6">Transparency, anti-corruption, zakat compliance, fair marketing, Shariah governance, contractual fairness</div>
+        </div>
+        <div style="background:var(--success-bg);border-radius:var(--radius);padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">🌱</div>
+          <div style="font-size:13px;font-weight:500;color:var(--success-text)">4. Environmental Stewardship</div>
+          <div style="font-size:11px;color:var(--success-text);margin-top:4px;line-height:1.6">Green sukuk, carbon footprint, sustainable sourcing, waste reduction, eco-halal certification</div>
+        </div>
+        <div style="background:var(--warning-bg);border-radius:var(--radius);padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">🤝</div>
+          <div style="font-size:13px;font-weight:500;color:var(--warning-text)">5. Social Justice & Inclusion</div>
+          <div style="font-size:11px;color:var(--warning-text);margin-top:4px;line-height:1.6">Workforce diversity, vulnerable group access, community investment, grievance mechanisms, accessibility</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--radius);padding:14px;border:0.5px solid var(--border)">
+          <div style="font-size:18px;margin-bottom:6px">🎯</div>
+          <div style="font-size:13px;font-weight:500">How HEPI benefits you</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;line-height:1.6">Your HEPI score guides better financial decisions, unlocks preferential rates on ethical products, and ensures your money creates positive impact aligned with Islamic values</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEPI TAB 1: Score -->
+  <div id="hepi-tab-1" style="display:none">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Your HEPI Score</span><span class="badge-pill badge-success">Excellent</span></div>
+        <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px">
+          <div style="width:100px;height:100px;position:relative;flex-shrink:0">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--surface2)" stroke-width="10"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--teal)" stroke-width="10" stroke-dasharray="251.3" stroke-dashoffset="32.7" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:22px;font-weight:500">87</span><span style="font-size:10px;color:var(--text3)">/ 100</span></div>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:500;color:var(--teal)">Excellent</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px">Top 8% of NurBank users</div>
+            <div style="font-size:12px;color:var(--text3)">Updated: 23 Apr 2026</div>
+            <div class="mt-2 badge-pill badge-success">+4 points this month</div>
+          </div>
+        </div>
+        <div>
+          <div class="hepi-dim" style="margin-bottom:12px"><div class="hepi-dim-label">Human Value Creation</div><div class="hepi-dim-bar" style="height:10px"><div class="hepi-dim-fill" style="width:88%;background:var(--teal)"></div></div><div class="hepi-dim-val" style="color:var(--teal)">88</div></div>
+          <div class="hepi-dim" style="margin-bottom:12px"><div class="hepi-dim-label">Economic Viability</div><div class="hepi-dim-bar" style="height:10px"><div class="hepi-dim-fill" style="width:84%;background:var(--primary)"></div></div><div class="hepi-dim-val" style="color:var(--primary)">84</div></div>
+          <div class="hepi-dim" style="margin-bottom:12px"><div class="hepi-dim-label">Ethical Alignment</div><div class="hepi-dim-bar" style="height:10px"><div class="hepi-dim-fill" style="width:92%;background:var(--purple)"></div></div><div class="hepi-dim-val" style="color:var(--purple)">92</div></div>
+          <div class="hepi-dim" style="margin-bottom:12px"><div class="hepi-dim-label">Environmental</div><div class="hepi-dim-bar" style="height:10px"><div class="hepi-dim-fill" style="width:78%;background:var(--success)"></div></div><div class="hepi-dim-val" style="color:var(--success-text)">78</div></div>
+          <div class="hepi-dim"><div class="hepi-dim-label">Social Justice</div><div class="hepi-dim-bar" style="height:10px"><div class="hepi-dim-fill" style="width:85%;background:var(--amber)"></div></div><div class="hepi-dim-val" style="color:var(--amber-text)">85</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-header"><span class="card-title">Benefits Unlocked by HEPI Score</span></div>
+          <div style="font-size:12px">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--success-text)">✓</span><span>Preferential profit rate: -0.5% on home finance</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--success-text)">✓</span><span>Higher savings profit share: +0.3% on Mudarabah</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--success-text)">✓</span><span>Priority access to Green Sukuk offerings</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--success-text)">✓</span><span>Waived service charges on transfers</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0"><span style="color:var(--success-text)">✓</span><span>Dedicated HEPI Advisor assigned</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Improvement Tips</span></div>
+          <div style="font-size:12px">
+            <div style="background:var(--success-bg);border-radius:8px;padding:10px;margin-bottom:8px;color:var(--success-text)">🌱 Switch to a Green Sukuk allocation → +3 Environmental score</div>
+            <div style="background:var(--warning-bg);border-radius:8px;padding:10px;margin-bottom:8px;color:var(--warning-text)">⊕ Set up automatic Zakat deduction → +2 Ethical score</div>
+            <div style="background:var(--primary-bg);border-radius:8px;padding:10px;color:var(--primary-text)">🤝 Activate Sadaqah micro-donation → +1 Social score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEPI TAB 2: AI Benchmark -->
+  <div id="hepi-tab-2" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><span class="card-title">AI Analysis: HEPI vs Conventional Banking</span><span class="badge-pill badge-purple">AI Powered</span></div>
+      <div id="ai-chat-log" style="max-height:320px;overflow-y:auto;padding:4px 0">
+        <div class="ai-bubble bot">Hello Ahmad! I'm your HEPI Advisor — an AI trained on Islamic economics and the maqasid framework. I've analyzed your financial profile against both conventional banking benchmarks and HEPI standards. Here's my assessment.</div>
+        <div class="ai-bubble bot">📊 <strong>Benchmark Comparison:</strong> Your NurBank HEPI score of 87/100 places you significantly ahead of the conventional banking equivalent score of 41/100. Conventional banks score low because they prioritize profit extraction, charge interest (riba), and have limited community impact obligations.</div>
+        <div class="ai-bubble bot">🌱 <strong>Why HEPI is superior:</strong> Unlike ESG scores (which are voluntary and often greenwashed), HEPI is grounded in divine accountability. Your deposits are not funding weapons, alcohol, or exploitative lending — they're circulating in halal sectors that employ people fairly and preserve the environment.</div>
+        <div class="ai-bubble bot">💡 <strong>Your biggest advantage:</strong> By maintaining HEPI 87, you've saved an estimated BDT 14,200 in waived fees and preferential rates this year. More importantly, your deposits have contributed to financing 3 SMEs, supporting 12 jobs, and reducing 2.1 tonnes of CO2 through Green Sukuk.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input class="form-input" id="ai-input" placeholder="Ask the HEPI Advisor anything..." style="flex:1" onkeypress="if(event.key==='Enter')sendAI()">
+        <button class="btn btn-primary" onclick="sendAI()">Ask ↗</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">HEPI vs Conventional: Side-by-Side</span></div>
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Conventional Bank</th><th>NurBank HEPI</th><th>Your Benefit</th></tr></thead>
+        <tbody>
+          <tr><td>Interest / Riba</td><td style="color:var(--danger)">Yes (charged)</td><td style="color:var(--success-text)">Zero — profit-sharing</td><td class="badge-pill badge-success">Ethical ✓</td></tr>
+          <tr><td>Wealth Distribution</td><td style="color:var(--danger)">Concentrated</td><td style="color:var(--success-text)">Equitable (Zakat-linked)</td><td class="badge-pill badge-success">Fair ✓</td></tr>
+          <tr><td>Investment Screening</td><td style="color:var(--danger)">None</td><td style="color:var(--success-text)">Shariah + ESG screened</td><td class="badge-pill badge-success">Clean ✓</td></tr>
+          <tr><td>Community Impact</td><td style="color:var(--danger)">Low</td><td style="color:var(--success-text)">SME + microfinance priority</td><td class="badge-pill badge-success">High ✓</td></tr>
+          <tr><td>Transparency</td><td style="color:var(--warning)">Partial</td><td style="color:var(--success-text)">Full HEPI reporting</td><td class="badge-pill badge-success">Full ✓</td></tr>
+          <tr><td>Environmental</td><td style="color:var(--danger)">Not required</td><td style="color:var(--success-text)">Green Sukuk, carbon tracking</td><td class="badge-pill badge-success">Green ✓</td></tr>
+          <tr><td>Hidden Fees</td><td style="color:var(--danger)">Common</td><td style="color:var(--success-text)">Zero (HEPI 80+ users)</td><td class="badge-pill badge-success">Free ✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HEPI TAB 3: Impact -->
+  <div id="hepi-tab-3" style="display:none">
+    <div class="grid4" style="margin-bottom:16px">
+      <div class="metric"><div class="metric-label">Jobs Supported</div><div class="metric-value">12</div><div class="metric-sub">Via SME financing</div></div>
+      <div class="metric"><div class="metric-label">CO2 Saved (kg)</div><div class="metric-value">2,100</div><div class="metric-sub metric-up">Green Sukuk</div></div>
+      <div class="metric"><div class="metric-label">Zakat Distributed</div><div class="metric-value">BDT 8,450</div><div class="metric-sub">Last 12 months</div></div>
+      <div class="metric"><div class="metric-label">Community Impact</div><div class="metric-value">BDT 3.2L</div><div class="metric-sub">Indirect benefit</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Impact Breakdown by HEPI Dimension</span></div>
+      <div id="impact-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ZAKAT PAGE -->
+<div class="page" id="page-zakat">
+  <div class="section-title">Zakat Calculator & Distribution</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Calculate Your Zakat</span></div>
+      <div class="form-group"><label class="form-label">Cash & Bank Balance (BDT)</label><input class="form-input" type="number" value="482800" id="z-cash" oninput="calcZakat()"></div>
+      <div class="form-group"><label class="form-label">Gold Value (BDT)</label><input class="form-input" type="number" value="0" id="z-gold" oninput="calcZakat()"></div>
+      <div class="form-group"><label class="form-label">Business / Investment Assets (BDT)</label><input class="form-input" type="number" value="120000" id="z-invest" oninput="calcZakat()"></div>
+      <div class="form-group"><label class="form-label">Receivables / Debts owed to you (BDT)</label><input class="form-input" type="number" value="0" id="z-recv" oninput="calcZakat()"></div>
+      <div class="form-group"><label class="form-label">Liabilities / Loans payable (BDT)</label><input class="form-input" type="number" value="0" id="z-liab" oninput="calcZakat()"></div>
+      <div style="background:var(--teal-bg);border-radius:8px;padding:14px;margin-top:4px">
+        <div class="flex justify-between" style="margin-bottom:6px;font-size:12px"><span style="color:var(--teal-text)">Nisab Threshold</span><span style="color:var(--teal-text);font-weight:500">BDT 85,420</span></div>
+        <div class="flex justify-between" style="margin-bottom:6px;font-size:12px"><span style="color:var(--teal-text)">Zakatable Wealth</span><span id="z-zakatable" style="color:var(--teal-text);font-weight:500">—</span></div>
+        <div class="flex justify-between" style="font-size:15px;font-weight:500"><span style="color:var(--teal)">Zakat Due (2.5%)</span><span id="z-due" style="color:var(--teal)">—</span></div>
+      </div>
+      <button class="btn btn-primary mt-2" style="width:100%" onclick="openModal('zakatpay')">Pay Zakat Now ⊕</button>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Zakat Distribution Partners</span></div>
+      <div style="font-size:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-weight:500">Manabik Shahajya Sangstha</div><div style="color:var(--text3)">Poverty alleviation · Dhaka</div></div>
+          <div style="text-align:right"><div style="color:var(--success-text)">Verified ✓</div><input type="radio" name="zakat-org" style="margin-top:4px"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-weight:500">BRAC Education Fund</div><div style="color:var(--text3)">Education for underprivileged</div></div>
+          <div style="text-align:right"><div style="color:var(--success-text)">Verified ✓</div><input type="radio" name="zakat-org" style="margin-top:4px" checked></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div><div style="font-weight:500">NurBank Microfinance Pool</div><div style="color:var(--text3)">SME support · Qard Hasan</div></div>
+          <div style="text-align:right"><div style="color:var(--success-text)">Verified ✓</div><input type="radio" name="zakat-org" style="margin-top:4px"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+          <div><div style="font-weight:500">Islamic Relief Bangladesh</div><div style="color:var(--text3)">Disaster relief · Healthcare</div></div>
+          <div style="text-align:right"><div style="color:var(--success-text)">Verified ✓</div><input type="radio" name="zakat-org" style="margin-top:4px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECURITY PAGE -->
+<div class="page" id="page-security">
+  <div class="section-title">Security & Privacy</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Authentication</span></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Two-Factor Authentication (OTP)</div><div style="font-size:11px;color:var(--text3)">SMS to +880-17xx-xxx-891</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Biometric Login</div><div style="font-size:11px;color:var(--text3)">Fingerprint / Face ID</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Login Notifications</div><div style="font-size:11px;color:var(--text3)">Alert on new device login</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Auto Lock (5 min idle)</div><div style="font-size:11px;color:var(--text3)">Session timeout</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Transaction Controls</span></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">International Transfers</div><div style="font-size:11px;color:var(--text3)">Require OTP + PIN</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Large Transaction Alert</div><div style="font-size:11px;color:var(--text3)">Notify for BDT 10,000+</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Freeze Card Instantly</div><div style="font-size:11px;color:var(--text3)">Debit / Credit card</div></div><label class="sec-toggle"><input type="checkbox"><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Haram Transaction Block</div><div style="font-size:11px;color:var(--text3)">Block gambling, adult sites</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Recent Login Activity</span></div>
+      <table class="tbl">
+        <thead><tr><th>Device</th><th>Location</th><th>Time</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Chrome / Windows</td><td>Dhaka, BD</td><td>Now</td><td><span class="badge-pill badge-success">Current</span></td></tr>
+          <tr><td>NurBank App / iOS</td><td>Dhaka, BD</td><td>2 hrs ago</td><td><span class="badge-pill badge-info">Safe</span></td></tr>
+          <tr><td>Firefox / Mac</td><td>Dhaka, BD</td><td>Yesterday</td><td><span class="badge-pill badge-info">Safe</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Privacy & Data</span></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">HEPI Data Sharing</div><div style="font-size:11px;color:var(--text3)">Anonymized data to improve HEPI scoring</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Marketing Communications</div><div style="font-size:11px;color:var(--text3)">Halal product recommendations</div></div><label class="sec-toggle"><input type="checkbox"><span class="sec-slider"></span></label></div>
+      <div class="sec-item"><div style="flex:1"><div style="font-weight:500;font-size:13px">Analytics & Improvement</div><div style="font-size:11px;color:var(--text3)">Help improve NurBank services</div></div><label class="sec-toggle"><input type="checkbox" checked><span class="sec-slider"></span></label></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page" id="page-settings">
+  <div class="section-title">Settings & Preferences</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Profile</span></div>
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" value="Ahmad Raza"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="ahmad.raza@email.com" type="email"></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="+880 17xx xxx 891"></div>
+      <div class="form-group"><label class="form-label">Address</label><input class="form-input" value="Gulshan-2, Dhaka 1212"></div>
+      <button class="btn btn-primary">Save Changes</button>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Preferences</span></div>
+      <div class="form-group"><label class="form-label">Language</label><select class="form-select"><option>English</option><option>বাংলা</option><option>العربية</option></select></div>
+      <div class="form-group"><label class="form-label">Currency Display</label><select class="form-select"><option>BDT (৳)</option><option>USD ($)</option><option>EUR (€)</option></select></div>
+      <div class="form-group"><label class="form-label">Hijri Calendar</label><select class="form-select"><option>Show alongside Gregorian</option><option>Gregorian only</option><option>Hijri only</option></select></div>
+      <div class="form-group"><label class="form-label">Theme</label><select class="form-select" onchange="if(this.value==='dark')document.getElementById('app').classList.add('dark');else document.getElementById('app').classList.remove('dark')"><option value="light">Light</option><option value="dark">Dark</option></select></div>
+      <button class="btn btn-primary">Save Preferences</button>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-notif" onclick="if(event.target===this)closeModal('notif')">
+  <div class="modal">
+    <div class="modal-title">🔔 Notifications</div>
+    <div style="font-size:13px">
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--border)"><div class="notif-dot" style="margin-top:4px"></div><div><div style="font-weight:500">Zakat due in 12 days</div><div style="color:var(--text3);font-size:11px">BDT 1,205 calculated · Pay now to boost HEPI score</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--border)"><div class="notif-dot"></div><div><div style="font-weight:500">HEPI Score updated: 87 (+4)</div><div style="color:var(--text3);font-size:11px">You unlocked preferential home finance rate</div></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0"><div class="notif-dot"></div><div><div style="font-weight:500">New Green Sukuk available: 7.2% yield</div><div style="color:var(--text3);font-size:11px">Closes 30 Apr · HEPI Priority access</div></div></div>
+    </div>
+    <button class="btn btn-outline" style="margin-top:14px;width:100%" onclick="closeModal('notif')">Close</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-profile" onclick="if(event.target===this)closeModal('profile')">
+  <div class="modal">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--primary-bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:var(--primary-text)">AR</div>
+      <div><div style="font-size:16px;font-weight:500">Ahmad Raza</div><div style="font-size:12px;color:var(--text3)">NurBank HEPI Certified Member</div><div class="badge-pill badge-success mt-1">Score: 87 — Excellent</div></div>
+    </div>
+    <div style="font-size:12px">
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--text3)">Customer since</span><span>March 2019</span></div>
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:0.5px solid var(--border)"><span style="color:var(--text3)">Branch</span><span>Gulshan-2, Dhaka</span></div>
+      <div class="flex justify-between" style="padding:6px 0"><span style="color:var(--text3)">Account status</span><span class="badge-pill badge-success">Active</span></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-outline" style="flex:1" onclick="showPage('settings',null);closeModal('profile')">Settings</button>
+      <button class="btn btn-danger" style="flex:1;background:var(--danger-bg);color:var(--danger-text);border:none" onclick="closeModal('profile')">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pay" onclick="if(event.target===this)closeModal('pay')">
+  <div class="modal">
+    <div class="modal-title">◈ Make Payment</div>
+    <div class="form-group"><label class="form-label">Bill Account / Consumer Number</label><input class="form-input" placeholder="Enter account number"></div>
+    <div class="form-group"><label class="form-label">Amount (BDT)</label><input class="form-input" type="number" placeholder="0.00"></div>
+    <div class="form-group"><label class="form-label">Pay From</label><select class="form-select"><option>Current Account •••• 4821</option><option>Savings •••• 9034</option></select></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('pay')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeModal('pay');showToast('Payment successful!')">Pay Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-loan" onclick="if(event.target===this)closeModal('loan')">
+  <div class="modal">
+    <div class="modal-title">⬡ Apply for Islamic Finance</div>
+    <div class="form-group"><label class="form-label">Finance Type</label><select class="form-select"><option>Home Finance (Diminishing Musharakah)</option><option>Auto Finance (Ijarah)</option><option>SME Finance (Murabaha)</option><option>Personal (Qard Hasan)</option></select></div>
+    <div class="form-group"><label class="form-label">Required Amount (BDT)</label><input class="form-input" type="number" placeholder="0.00"></div>
+    <div class="form-group"><label class="form-label">Purpose</label><input class="form-input" placeholder="Describe the purpose..."></div>
+    <div style="background:var(--success-bg);border-radius:8px;padding:10px;font-size:11px;color:var(--success-text);margin-bottom:14px">✓ Your HEPI score of 87 qualifies you for preferential profit rates</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('loan')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeModal('loan');showToast('Application submitted! We'll respond in 24 hours.')">Submit Application</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-deposit" onclick="if(event.target===this)closeModal('deposit')">
+  <div class="modal">
+    <div class="modal-title">◑ New Term Deposit</div>
+    <div class="form-group"><label class="form-label">Deposit Amount (BDT)</label><input class="form-input" type="number" placeholder="Minimum BDT 10,000"></div>
+    <div class="form-group"><label class="form-label">Tenure</label><select class="form-select"><option>3 months — 6.5% p.a.</option><option>6 months — 7.2% p.a.</option><option>12 months — 8.0% p.a.</option><option>24 months — 8.5% p.a.</option></select></div>
+    <div class="form-group"><label class="form-label">Profit Distribution</label><select class="form-select"><option>Monthly</option><option>Quarterly</option><option>At Maturity</option></select></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('deposit')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeModal('deposit');showToast('Mudarabah deposit created!')">Create Deposit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-zakatpay" onclick="if(event.target===this)closeModal('zakatpay')">
+  <div class="modal">
+    <div class="modal-title">⊕ Pay Zakat</div>
+    <div style="background:var(--teal-bg);border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px;color:var(--teal-text)">
+      <div class="flex justify-between"><span>Zakat Amount</span><span id="modal-zakat-amt" style="font-weight:500">—</span></div>
+    </div>
+    <div class="form-group"><label class="form-label">Pay To</label><select class="form-select"><option>BRAC Education Fund</option><option>Manabik Shahajya Sangstha</option><option>NurBank Microfinance Pool</option><option>Islamic Relief Bangladesh</option></select></div>
+    <div class="form-group"><label class="form-label">Pay From</label><select class="form-select"><option>Current Account •••• 4821</option></select></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('zakatpay')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeModal('zakatpay');showToast('Zakat paid! JazakAllah Khairan. HEPI +2')">Pay Zakat ⊕</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);box-shadow:0 4px 12px rgba(0,0,0,.12);transform:translateY(80px);opacity:0;transition:all .3s;z-index:1000;max-width:300px"></div>
+
+<script>
+const txns=[
+  {date:'23 Apr',desc:'Salary Credit',cat:'Income',amt:85000,dir:'in',status:'Completed',icon:'💰',bg:'#eaf3de'},
+  {date:'22 Apr',desc:'DESCO Electricity',cat:'Utilities',amt:-3200,dir:'out',status:'Completed',icon:'⚡',bg:'#faeeda'},
+  {date:'20 Apr',desc:'Transfer to Farida',cat:'Family',amt:-15000,dir:'out',status:'Completed',icon:'⇄',bg:'#e6f1fb'},
+  {date:'18 Apr',desc:'Green Sukuk Profit',cat:'Investment',amt:1800,dir:'in',status:'Completed',icon:'📈',bg:'#eeedfe'},
+  {date:'17 Apr',desc:'Sadaqah – Islamic Relief',cat:'Charity',amt:-2000,dir:'out',status:'Completed',icon:'🕌',bg:'#e1f5ee'},
+  {date:'15 Apr',desc:'Mudarabah Profit',cat:'Savings',amt:1030,dir:'in',status:'Completed',icon:'◑',bg:'#e1f5ee'},
+  {date:'14 Apr',desc:'School Fee – Arif',cat:'Education',amt:-12000,dir:'out',status:'Completed',icon:'🎓',bg:'#faeeda'},
+  {date:'12 Apr',desc:'Grocery – Agora',cat:'Food',amt:-4500,dir:'out',status:'Completed',icon:'🛒',bg:'#f1efe8'},
+  {date:'10 Apr',desc:'Freelance Payment',cat:'Income',amt:22000,dir:'in',status:'Completed',icon:'💻',bg:'#eaf3de'},
+  {date:'8 Apr',desc:'Mobile Recharge',cat:'Utilities',amt:-1199,dir:'out',status:'Completed',icon:'📱',bg:'#f1efe8'},
+  {date:'5 Apr',desc:'Medical – Square Hospital',cat:'Health',amt:-8200,dir:'out',status:'Completed',icon:'🏥',bg:'#fcebeb'},
+  {date:'3 Apr',desc:'ATM Cash Withdrawal',cat:'Cash',amt:-5000,dir:'out',status:'Completed',icon:'💵',bg:'#f1efe8'},
+];
+
+const recipients=[
+  {name:'Farida Raza',acct:'•••• 2291',bank:'NurBank'},
+  {name:'Karim Brothers Ltd',acct:'•••• 7723',bank:'Islami Bank'},
+  {name:'Mother — Gulshan',acct:'•••• 4451',bank:'NurBank'},
+];
+
+function renderRecent(){
+  const el=document.getElementById('recent-txn');
+  if(!el)return;
+  el.innerHTML=txns.slice(0,5).map(t=>`<div class="txn-item"><div class="txn-icon" style="background:${t.bg}">${t.icon}</div><div class="txn-info"><div class="txn-name">${t.desc}</div><div class="txn-date">${t.date} · ${t.cat}</div></div><div class="txn-amount ${t.dir==='in'?'txn-in':'txn-out'}">${t.dir==='in'?'+':''}BDT ${Math.abs(t.amt).toLocaleString()}</div></div>`).join('');
+}
+
+function renderTxnTable(filter='',typeFilter=''){
+  const el=document.getElementById('txn-body');
+  if(!el)return;
+  const filtered=txns.filter(t=>{
+    const matchSearch=t.desc.toLowerCase().includes(filter.toLowerCase())||t.cat.toLowerCase().includes(filter.toLowerCase());
+    const matchType=!typeFilter||(typeFilter==='in'&&t.dir==='in')||(typeFilter==='out'&&t.dir==='out');
+    return matchSearch&&matchType;
+  });
+  el.innerHTML=filtered.map(t=>`<tr><td>${t.date}</td><td><div class="flex items-center gap-2"><div style="width:28px;height:28px;border-radius:6px;background:${t.bg};display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">${t.icon}</div>${t.desc}</div></td><td><span class="chip">${t.cat}</span></td><td class="${t.dir==='in'?'txn-in':'txn-out'}">${t.dir==='in'?'+':''}BDT ${Math.abs(t.amt).toLocaleString()}</td><td><span class="badge-pill badge-success">${t.status}</span></td></tr>`).join('');
+}
+let typeF='';
+function filterTxn(v){renderTxnTable(v,typeF)}
+function filterType(v){typeF=v;renderTxnTable('',v)}
+
+function renderRecipients(){
+  const el=document.getElementById('saved-recipients');
+  if(!el)return;
+  el.innerHTML=recipients.map(r=>`<div class="txn-item"><div class="txn-icon" style="background:var(--primary-bg);font-size:14px;font-weight:500;color:var(--primary)">${r.name.charAt(0)}</div><div class="txn-info"><div class="txn-name">${r.name}</div><div class="txn-date">${r.acct} · ${r.bank}</div></div><button class="btn btn-primary btn-sm" onclick="document.getElementById('rcpt-name').value='${r.name}';document.getElementById('rcpt-account').value='${r.acct}'">Select</button></div>`).join('');
+}
+
+function renderSavingsGoals(){
+  const el=document.getElementById('savings-goals');
+  if(!el)return;
+  const goals=[{name:'Hajj Fund',target:250000,saved:82000,color:'var(--teal)'},{name:'New Car',target:600000,saved:142000,color:'var(--primary)'},{name:'Emergency Fund',target:100000,saved:94000,color:'var(--success)'}];
+  el.innerHTML=goals.map(g=>`<div style="margin-bottom:12px"><div class="flex justify-between" style="margin-bottom:4px"><span style="font-size:13px;font-weight:500">${g.name}</span><span style="font-size:12px;color:var(--text3)">BDT ${g.saved.toLocaleString()} / BDT ${g.target.toLocaleString()}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${Math.round(g.saved/g.target*100)}%;background:${g.color}"></div></div><div style="font-size:11px;color:var(--text3);margin-top:2px">${Math.round(g.saved/g.target*100)}% complete</div></div>`).join('');
+}
+
+function renderInvestBreakdown(){
+  const el=document.getElementById('invest-breakdown');
+  if(!el)return;
+  const items=[{name:'Govt. Ijarah Sukuk',amt:50000,pct:42,color:'var(--primary)'},{name:'NurBank Green Sukuk',amt:40000,pct:33,color:'var(--teal)'},{name:'Halal Equity Fund',amt:30000,pct:25,color:'var(--purple)'}];
+  el.innerHTML=items.map(i=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:8px;height:8px;border-radius:50%;background:${i.color};flex-shrink:0"></div><div style="flex:1"><div class="flex justify-between" style="margin-bottom:2px"><span style="font-size:12px">${i.name}</span><span style="font-size:12px;font-weight:500">BDT ${i.amt.toLocaleString()}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${i.pct}%;background:${i.color}"></div></div></div></div>`).join('');
+}
+
+function renderImpact(){
+  const el=document.getElementById('impact-list');
+  if(!el)return;
+  const items=[{icon:'👥',label:'Human Value Creation',val:'12 jobs supported via SME financing; BDT 2.4L in microfinance deployed; 3 women entrepreneurs funded',color:'var(--teal-bg)',tc:'var(--teal-text)'},{icon:'📈',label:'Economic Viability',val:'BDT 8.2L in halal investments; zero riba transactions; 100% Shariah-compliant financing portfolio',color:'var(--primary-bg)',tc:'var(--primary-text)'},{icon:'⚖️',label:'Ethical Alignment',val:'Zakat BDT 8,450 paid on time; full tax compliance; all contracts reviewed by Shariah board',color:'var(--purple-bg)',tc:'var(--purple-text)'},{icon:'🌱',label:'Environmental',val:'2,100 kg CO2 saved via Green Sukuk; paperless banking enabled; sustainable supplier policy active',color:'var(--success-bg)',tc:'var(--success-text)'},{icon:'🤝',label:'Social Justice',val:'Sadaqah BDT 24,000 distributed; accessible banking features active; vulnerable group micro-loans: 5',color:'var(--warning-bg)',tc:'var(--warning-text)'}];
+  el.innerHTML=items.map(i=>`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:${i.color};border-radius:8px;margin-bottom:8px"><span style="font-size:18px;flex-shrink:0">${i.icon}</span><div><div style="font-size:12px;font-weight:500;color:${i.tc}">${i.label}</div><div style="font-size:11px;color:${i.tc};margin-top:2px">${i.val}</div></div></div>`).join('');
+}
+
+function calcEMI(){
+  const P=parseFloat(document.getElementById('loan-amt').value)||0;
+  const r=parseFloat(document.getElementById('loan-rate').value)/100/12;
+  const n=parseInt(document.getElementById('loan-tenure').value)||1;
+  const emi=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+  const total=emi*n;
+  document.getElementById('emi-result').textContent='BDT '+Math.round(emi).toLocaleString();
+  document.getElementById('emi-total').textContent='BDT '+Math.round(total).toLocaleString();
+  document.getElementById('emi-profit').textContent='BDT '+Math.round(total-P).toLocaleString();
+}
+
+function calcTransfer(){
+  const amt=parseFloat(document.getElementById('tx-amount').value)||0;
+  const prev=document.getElementById('transfer-preview');
+  if(amt>0){
+    prev.style.display='block';
+    document.getElementById('prev-amount').textContent='BDT '+amt.toLocaleString();
+    document.getElementById('prev-total').textContent='BDT '+amt.toLocaleString();
+  } else prev.style.display='none';
+}
+
+function doTransfer(){
+  const amt=parseFloat(document.getElementById('tx-amount').value)||0;
+  const rcpt=document.getElementById('rcpt-name').value||'Recipient';
+  if(amt<=0){showToast('Please enter a valid amount');return;}
+  showToast('Transfer of BDT '+amt.toLocaleString()+' to '+rcpt+' completed!');
+  document.getElementById('tx-amount').value='';
+  document.getElementById('rcpt-name').value='';
+  document.getElementById('transfer-preview').style.display='none';
+}
+
+function calcZakat(){
+  const cash=parseFloat(document.getElementById('z-cash').value)||0;
+  const gold=parseFloat(document.getElementById('z-gold').value)||0;
+  const inv=parseFloat(document.getElementById('z-invest').value)||0;
+  const recv=parseFloat(document.getElementById('z-recv').value)||0;
+  const liab=parseFloat(document.getElementById('z-liab').value)||0;
+  const total=cash+gold+inv+recv-liab;
+  const nisab=85420;
+  const due=total>nisab?total*0.025:0;
+  document.getElementById('z-zakatable').textContent='BDT '+Math.round(total).toLocaleString();
+  document.getElementById('z-due').textContent='BDT '+Math.round(due).toLocaleString();
+  const mza=document.getElementById('modal-zakat-amt');
+  if(mza)mza.textContent='BDT '+Math.round(due).toLocaleString();
+}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else{
+    document.querySelectorAll('.nav-item').forEach(n=>{
+      if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('active');
+    });
+  }
+  renderAll();
+}
+
+function renderAll(){
+  renderRecent();renderTxnTable();renderRecipients();renderSavingsGoals();renderInvestBreakdown();renderImpact();calcEMI();calcZakat();
+}
+
+function hepiTab(idx,btn){
+  for(let i=0;i<4;i++){
+    const el=document.getElementById('hepi-tab-'+i);
+    if(el)el.style.display=i===idx?'block':'none';
+  }
+  document.querySelectorAll('#page-hepi .tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===idx);
+  });
+}
+
+function setTab(btn,grp){
+  btn.closest('.tab-bar').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function openModal(id){
+  const m=document.getElementById('modal-'+id);
+  if(m){m.classList.add('open');}
+}
+function closeModal(id){
+  const m=document.getElementById('modal-'+id);
+  if(m)m.classList.remove('open');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateY(0)';t.style.opacity='1';
+  setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0'},3000);
+}
+
+function toggleTheme(){
+  document.getElementById('app').classList.toggle('dark');
+}
+
+const hepiResponses=[
+  "Great question! HEPI is unique because it ties your financial score to real-world outcomes — not just compliance. Every halal purchase, sadaqah payment, and ethical investment contributes positively to your score.",
+  "Compared to conventional credit scores that reward debt capacity, your HEPI score rewards ethical behavior, community support, and environmental care. It's a fundamentally different paradigm.",
+  "Your HEPI score of 87 means your banking activity is aligned with maqasid al-Islam — you're not just avoiding haram, you're actively creating good (maslaha) for yourself and your community.",
+  "One key advantage of HEPI: it makes the halal economy measurable. Institutions can now prove they're creating social value, not just profit. This builds trust and attracts ethical investors globally.",
+  "The five HEPI dimensions — Human Value, Economic Viability, Ethical Alignment, Environmental Stewardship, and Social Justice — are derived from expanded maqasid scholarship including Ibn Ashur, Jasser Auda, and others."
+];
+let hepiMsgIdx=0;
+
+function sendAI(){
+  const inp=document.getElementById('ai-input');
+  const log=document.getElementById('ai-chat-log');
+  if(!inp||!log||!inp.value.trim())return;
+  const userBubble=`<div class="ai-bubble user">${inp.value}</div>`;
+  const botBubble=`<div class="ai-bubble bot">${hepiResponses[hepiMsgIdx%hepiResponses.length]}</div>`;
+  hepiMsgIdx++;
+  log.innerHTML+=userBubble;
+  setTimeout(()=>{log.innerHTML+=botBubble;log.scrollTop=log.scrollHeight;},600);
+  inp.value='';
+  log.scrollTop=log.scrollHeight;
+}
+
+renderAll();
+</script>
+</body>
+</html>

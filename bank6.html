@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NurBank — Full Banking System</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--surface3:#242f45;
+  --border:#1e2d45;--border2:#2a3a55;
+  --text:#e8eef8;--text2:#8fa8c8;--text3:#4a6080;
+  --gold:#d4a843;--gold2:#f0c060;--gold-bg:rgba(212,168,67,0.08);
+  --teal:#0ec4a0;--teal-bg:rgba(14,196,160,0.08);--teal-dark:#0a9a7f;
+  --blue:#3b7dd8;--blue-bg:rgba(59,125,216,0.1);
+  --purple:#7c5cbf;--purple-bg:rgba(124,92,191,0.1);
+  --red:#e54b4b;--red-bg:rgba(229,75,75,0.1);
+  --green:#2ecc71;--green-bg:rgba(46,204,113,0.1);
+  --amber:#f0a500;--amber-bg:rgba(240,165,0,0.1);
+  --card-shadow:0 4px 24px rgba(0,0,0,0.3);
+  --r:12px;--r-lg:18px;
+}
+.light-mode{
+  --bg:#f4f6fb;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e8f4;
+  --border:#d8deec;--border2:#c4cde0;
+  --text:#0d1525;--text2:#4a5a78;--text3:#8898b8;
+  --card-shadow:0 4px 20px rgba(0,0,20,0.08);
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh;transition:background .3s,color .3s}
+
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--bg);position:relative;overflow:hidden}
+#login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%, rgba(212,168,67,0.07) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%, rgba(59,125,216,0.06) 0%,transparent 60%);pointer-events:none}
+.login-wrap{width:100%;max-width:960px;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:0.5px solid var(--border2)}
+.login-left{background:linear-gradient(145deg,#0a1628 0%,#0d1f3a 50%,#0a1628 100%);padding:50px 44px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,0.12),transparent 70%);pointer-events:none}
+.login-left::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(14,196,160,0.08),transparent 70%);pointer-events:none}
+.brand-logo{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#0a1628}
+.brand-name{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold2);letter-spacing:-0.5px}
+.brand-tag{font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.login-hero-title{font-family:'Playfair Display',serif;font-size:32px;color:#fff;line-height:1.25;margin-bottom:16px}
+.login-hero-title span{color:var(--gold2)}
+.login-hero-sub{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:32px}
+.hepi-badge-login{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:var(--teal-bg);border:0.5px solid var(--teal);border-radius:20px;font-size:11px;color:var(--teal);margin-bottom:12px}
+.login-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.login-stat{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px}
+.login-stat-val{font-size:18px;font-weight:600;color:var(--gold2)}
+.login-stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.login-right{background:var(--surface);padding:50px 44px;display:flex;flex-direction:column;justify-content:center}
+.login-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:32px}
+.login-tab{flex:1;text-align:center;padding:9px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);border:none;background:none;transition:all .2s}
+.login-tab.active{background:var(--surface3);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.login-title{font-size:22px;font-weight:600;margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--text3);margin-bottom:24px}
+.form-g{margin-bottom:16px}
+.form-lbl{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:6px}
+.form-inp{width:100%;padding:11px 14px;border:0.5px solid var(--border2);border-radius:9px;background:var(--surface2);color:var(--text);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:all .2s}
+.form-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,67,0.1)}
+.form-inp::placeholder{color:var(--text3)}
+.demo-creds{background:var(--gold-bg);border:0.5px solid rgba(212,168,67,0.3);border-radius:9px;padding:12px;margin-bottom:18px;font-size:11px}
+.demo-creds-title{color:var(--gold);font-weight:600;margin-bottom:6px}
+.demo-cred{display:flex;justify-content:space-between;color:var(--text2);margin-bottom:3px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.btn{padding:11px 20px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:'Sora',sans-serif}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a1628}
+.btn-gold:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,168,67,0.3)}
+.btn-outline{background:transparent;border:0.5px solid var(--border2);color:var(--text2)}
+.btn-outline:hover{background:var(--surface2);color:var(--text)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{opacity:.9}
+.btn-sm{padding:6px 13px;font-size:11px;border-radius:7px}
+.btn-xs{padding:4px 10px;font-size:10px;border-radius:6px}
+.btn-danger{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red)}
+.btn-w100{width:100%}
+
+#app-shell{display:none;flex-direction:column;height:100vh;overflow:hidden}
+#app-shell.visible{display:flex}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:54px;background:var(--surface);border-bottom:0.5px solid var(--border);flex-shrink:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-logo{display:flex;align-items:center;gap:9px}
+.topbar-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#0a1628}
+.topbar-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold2)}
+.role-badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.role-client{background:var(--teal-bg);color:var(--teal);border:0.5px solid var(--teal)}
+.role-admin{background:var(--gold-bg);color:var(--gold);border:0.5px solid var(--gold)}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-btn{background:none;border:0.5px solid var(--border2);color:var(--text2);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px;font-family:'Sora',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
+.topbar-btn:hover{background:var(--surface2);color:var(--text)}
+.notif-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:9px}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 12px;background:var(--surface2);border:0.5px solid var(--border2);border-radius:7px;cursor:pointer}
+.user-avatar{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#0a1628}
+.user-name-sm{font-size:12px;font-weight:500}
+
+.app-body{display:flex;flex:1;overflow:hidden}
+.sidebar{width:210px;background:var(--surface);border-right:0.5px solid var(--border);overflow-y:auto;flex-shrink:0;padding:12px 8px}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.main-content{flex:1;overflow-y:auto;padding:20px}
+.main-content::-webkit-scrollbar{width:6px}
+.main-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.nav-section-label{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:10px 10px 4px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;cursor:pointer;color:var(--text2);font-size:12px;font-weight:500;margin-bottom:1px;transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--gold-bg);color:var(--gold);border:0.5px solid rgba(212,168,67,0.2)}
+.nav-ico{font-size:14px;width:22px;text-align:center;flex-shrink:0}
+.nav-count{margin-left:auto;background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:9px}
+
+.page{display:none}.page.active{display:block}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--text3);margin-bottom:20px}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--card-shadow)}
+.card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-t{font-size:13px;font-weight:600;color:var(--text)}
+.card-sub{font-size:11px;color:var(--text3)}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:16px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+
+.metric{background:var(--surface2);border-radius:var(--r);padding:16px;border:0.5px solid var(--border)}
+.metric-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:5px}
+.metric-val{font-size:20px;font-weight:700;color:var(--text)}
+.metric-chg{font-size:11px;margin-top:3px}
+.chg-up{color:var(--green)}
+.chg-dn{color:var(--red)}
+.chg-neutral{color:var(--text3)}
+
+.acct-card{border-radius:var(--r-lg);padding:22px;position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;color:#fff}
+.acct-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.acct-card.g1{background:linear-gradient(135deg,#1a3a6b 0%,#0d2247 100%)}
+.acct-card.g2c{background:linear-gradient(135deg,#0a4a3a 0%,#053028 100%)}
+.acct-card.g3c{background:linear-gradient(135deg,#3a2060 0%,#220f45 100%)}
+.acct-card.gold{background:linear-gradient(135deg,#7a4a00 0%,#4a2a00 100%)}
+.acct-pattern{position:absolute;top:-20px;right:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.acct-pattern2{position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.03)}
+.acct-chip{width:32px;height:24px;background:rgba(255,255,255,0.2);border-radius:4px;margin-bottom:16px}
+.acct-lbl{font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.acct-num{font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.7;letter-spacing:.15em;margin-bottom:10px}
+.acct-bal{font-size:24px;font-weight:700;margin-bottom:12px}
+.acct-footer{display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.75}
+.acct-glow{position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(255,255,255,0.08),transparent 70%)}
+
+.txn-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.txn-item:last-child{border-bottom:none}
+.txn-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.txn-info{flex:1}
+.txn-name{font-size:12px;font-weight:600;color:var(--text)}
+.txn-meta{font-size:10px;color:var(--text3);margin-top:1px}
+.txn-amt{font-size:13px;font-weight:700}
+.txn-in{color:var(--green)}
+.txn-out{color:var(--red)}
+.txn-pending{color:var(--amber)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-gold{background:var(--gold-bg);color:var(--gold)}
+.badge-teal{background:var(--teal-bg);color:var(--teal)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-purple{background:var(--purple-bg);color:var(--purple)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+
+.fg{margin-bottom:14px}
+.fl{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.fi{width:100%;padding:10px 13px;border:0.5px solid var(--border2);border-radius:9px;background:var(--surface2);color:var(--text);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:all .2s}
+.fi:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,67,0.1)}
+.fi::placeholder{color:var(--text3)}
+select.fi{cursor:pointer}
+.fi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:8px 12px;color:var(--text3);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.06em;border-bottom:0.5px solid var(--border2);background:var(--surface2)}
+.tbl td{padding:10px 12px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tbody tr:hover td{background:var(--surface2)}
+.tbl tbody tr:last-child td{border-bottom:none}
+
+.prog{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* ─── HEPI RING ─── */
+.hepi-ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.hepi-ring svg{transform:rotate(-90deg)}
+.hepi-ring-label{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+
+.tab-bar{display:flex;gap:3px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:18px}
+.tab{padding:7px 14px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);border:none;background:none;font-family:'Sora',sans-serif;transition:all .15s}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+
+.ai-wrap{display:flex;flex-direction:column;height:380px}
+.ai-messages{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:8px}
+.ai-messages::-webkit-scrollbar{width:4px}
+.ai-messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ai-bubble{padding:10px 14px;border-radius:12px;font-size:12px;line-height:1.65;max-width:85%}
+.ai-bubble.bot{background:var(--surface2);border:0.5px solid var(--border2);color:var(--text);border-bottom-left-radius:3px}
+.ai-bubble.user{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a1628;font-weight:500;align-self:flex-end;border-bottom-right-radius:3px}
+.ai-typing{display:flex;gap:4px;align-items:center;padding:12px 14px;background:var(--surface2);border-radius:12px;border-bottom-left-radius:3px;width:60px}
+.ai-dot{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:bounce .8s infinite}
+.ai-dot:nth-child(2){animation-delay:.15s}
+.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.ai-input-row{display:flex;gap:8px;margin-top:10px}
+.ai-input-row .fi{flex:1}
+
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--r-lg);border:0.5px solid var(--border2);padding:26px;width:460px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.modal-t{font-size:16px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:9px}
+.modal-close{margin-left:auto;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1}
+
+#toast{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-item{background:var(--surface);border:0.5px solid var(--border2);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.3);transform:translateX(120%);opacity:0;transition:all .3s;max-width:280px;display:flex;align-items:center;gap:8px}
+.toast-item.show{transform:translateX(0);opacity:1;pointer-events:auto}
+.toast-item.success{border-left:3px solid var(--green)}
+.toast-item.error{border-left:3px solid var(--red)}
+.toast-item.info{border-left:3px solid var(--blue)}
+.toast-item.gold{border-left:3px solid var(--gold)}
+
+.divider{height:0.5px;background:var(--border);margin:14px 0}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.mb-1{margin-bottom:4px}.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}
+.text-gold{color:var(--gold)}.text-teal{color:var(--teal)}.text-green{color:var(--green)}.text-red{color:var(--red)}
+.text-sm{font-size:11px}.text-xs{font-size:10px}.text-muted{color:var(--text3)}
+.fw-bold{font-weight:700}.fw-semi{font-weight:600}
+.font-mono{font-family:'JetBrains Mono',monospace}
+.rounded{border-radius:var(--r)}
+.info-box{padding:12px 14px;border-radius:10px;font-size:11px;line-height:1.6}
+.info-teal{background:var(--teal-bg);border:0.5px solid rgba(14,196,160,0.3);color:var(--teal)}
+.info-gold{background:var(--gold-bg);border:0.5px solid rgba(212,168,67,0.3);color:var(--gold)}
+.info-blue{background:var(--blue-bg);border:0.5px solid rgba(59,125,216,0.3);color:var(--blue)}
+.info-red{background:var(--red-bg);border:0.5px solid rgba(229,75,75,0.3);color:var(--red)}
+.info-purple{background:var(--purple-bg);border:0.5px solid rgba(124,92,191,0.3);color:var(--purple)}
+
+/* ─── HEPI DIMENSIONS ─── */
+.hepi-d{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.hepi-d-lbl{font-size:11px;color:var(--text2);width:140px;flex-shrink:0}
+.hepi-d-bar{flex:1;height:7px;background:var(--surface3);border-radius:4px;overflow:hidden}
+.hepi-d-fill{height:100%;border-radius:4px}
+.hepi-d-val{font-size:11px;font-weight:700;width:28px;text-align:right;flex-shrink:0}
+
+.step-indicator{display:flex;align-items:center;margin-bottom:20px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.step-dot{width:28px;height:28px;border-radius:50%;background:var(--surface3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .3s}
+.step-dot.active{background:var(--gold);border-color:var(--gold);color:#0a1628}
+.step-dot.done{background:var(--green);border-color:var(--green);color:#fff}
+.step-line{flex:1;height:2px;background:var(--border2);margin-top:-18px;z-index:-1;transition:background .3s}
+.step-line.done{background:var(--green)}
+.step-lbl{font-size:10px;color:var(--text3);font-weight:500}
+
+.loan-c{border-radius:var(--r);border:0.5px solid var(--border2);padding:16px;margin-bottom:10px;display:flex;gap:14px}
+.loan-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+
+.toggle-wrap{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.toggle-wrap:last-child{border-bottom:none}
+.toggle-info{flex:1}
+.toggle-t{font-size:12px;font-weight:600}
+.toggle-s{font-size:10px;color:var(--text3);margin-top:1px}
+.toggle{position:relative;width:38px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:var(--surface3);border-radius:11px;cursor:pointer;transition:.2s;border:0.5px solid var(--border2)}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text3);border-radius:50%;transition:.2s}
+input:checked+.toggle-slider{background:var(--teal);border-color:var(--teal)}
+input:checked+.toggle-slider::before{left:18px;background:#fff}
+
+.admin-stat-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.admin-stat-card::after{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;opacity:.1}
+.alert-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:9px;margin-bottom:8px;border-left:3px solid}
+.alert-high{background:var(--red-bg);border-color:var(--red)}
+.alert-med{background:var(--amber-bg);border-color:var(--amber)}
+.alert-low{background:var(--blue-bg);border-color:var(--blue)}
+.customer-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.customer-row:last-child{border-bottom:none}
+.c-avatar{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+
+.goal-card{border:0.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
+
+.chart-area{height:180px;display:flex;align-items:flex-end;gap:6px;padding:10px 0;overflow:hidden}
+.chart-bar{flex:1;border-radius:5px 5px 0 0;min-width:20px;position:relative;cursor:pointer;transition:opacity .15s}
+.chart-bar:hover{opacity:.8}
+.chart-bar-lbl{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--text3);white-space:nowrap;opacity:0;transition:.15s}
+.chart-bar:hover .chart-bar-lbl{opacity:1}
+.chart-month-labels{display:flex;gap:6px;margin-top:4px}
+.chart-month-lbl{flex:1;text-align:center;font-size:9px;color:var(--text3)}
+
+.review-box{background:var(--surface2);border-radius:var(--r);padding:14px;margin-bottom:14px;border:0.5px solid var(--border2)}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px}
+.review-row:not(:last-child){border-bottom:0.5px solid var(--border)}
+.review-key{color:var(--text3)}
+.review-val{font-weight:600}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn .25s ease}
+@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:calc(200px + 100%) 0}}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:400px 100%;animation:shimmer 1.2s infinite}
+
+.otp-row{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.otp-digit{width:42px;height:50px;border:0.5px solid var(--border2);border-radius:9px;text-align:center;font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;background:var(--surface2);color:var(--text);outline:none;transition:border-color .2s}
+.otp-digit:focus{border-color:var(--gold)}
+
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-left">
+      <div>
+        <div class="brand-logo">
+          <div class="brand-icon">N</div>
+          <div>
+            <div class="brand-name">NurBank</div>
+            <div class="brand-tag">Islamic Digital Banking</div>
+          </div>
+        </div>
+        <div class="hepi-badge-login">✦ HEPI Certified · Shariah Compliant</div>
+        <div class="login-hero-title">Banking rooted in <span>purpose</span>,<br>powered by <span>values</span></div>
+        <div class="login-hero-sub">Experience truly halal banking with HEPI — a framework that goes beyond rules to ensure your money creates real good in the world.</div>
+      </div>
+      <div class="login-stats">
+        <div class="login-stat"><div class="login-stat-val">87/100</div><div class="login-stat-lbl">Your HEPI Score</div></div>
+        <div class="login-stat"><div class="login-stat-val">0%</div><div class="login-stat-lbl">Riba (Interest)</div></div>
+        <div class="login-stat"><div class="login-stat-val">12 Jobs</div><div class="login-stat-lbl">Created via SME</div></div>
+        <div class="login-stat"><div class="login-stat-val">BDT 8,450</div><div class="login-stat-lbl">Zakat Distributed</div></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="setLoginRole('client',this)">🏦 Client Portal</button>
+        <button class="login-tab" onclick="setLoginRole('admin',this)">🔐 Admin / Banker</button>
+      </div>
+      <div id="login-client-form">
+        <div class="login-title">Welcome back</div>
+        <div class="login-sub">Sign in to your NurBank account</div>
+        <div class="demo-creds">
+          <div class="demo-creds-title">🔑 Demo Credentials</div>
+          <div class="demo-cred"><span>Username:</span><span>ahmad.raza</span></div>
+          <div class="demo-cred"><span>Password:</span><span>nur1234</span></div>
+        </div>
+        <div class="form-g"><label class="form-lbl">Username / Account No.</label><input class="form-inp" id="c-user" placeholder="e.g. ahmad.raza" value="ahmad.raza"></div>
+        <div class="form-g"><label class="form-lbl">Password</label><input class="form-inp" type="password" id="c-pass" placeholder="••••••••" value="nur1234"></div>
+        <button class="btn btn-gold btn-w100" onclick="doLogin('client')" style="margin-bottom:10px">Sign In →</button>
+        <button class="btn btn-outline btn-w100 btn-sm" onclick="doLogin('client')">🔗 Sign in with Google (Demo)</button>
+      </div>
+      <div id="login-admin-form" style="display:none">
+        <div class="login-title">Admin Access</div>
+        <div class="login-sub">Authorized bank staff only</div>
+        <div class="demo-creds">
+          <div class="demo-creds-title">🔑 Admin Credentials</div>
+          <div class="demo-cred"><span>Staff ID:</span><span>NB-STAFF-001</span></div>
+          <div class="demo-cred"><span>Password:</span><span>admin2026</span></div>
+        </div>
+        <div class="form-g"><label class="form-lbl">Staff ID</label><input class="form-inp" id="a-user" placeholder="NB-STAFF-XXX" value="NB-STAFF-001"></div>
+        <div class="form-g"><label class="form-lbl">Password</label><input class="form-inp" type="password" id="a-pass" placeholder="••••••••" value="admin2026"></div>
+        <div class="form-g"><label class="form-lbl">Role</label>
+          <select class="form-inp" id="a-role">
+            <option value="branch_manager">Branch Manager</option>
+            <option value="loan_officer">Loan Officer</option>
+            <option value="compliance">Compliance Officer</option>
+            <option value="teller">Teller</option>
+          </select>
+        </div>
+        <button class="btn btn-gold btn-w100" onclick="doLogin('admin')">Access Admin Panel →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app-shell">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <div class="topbar-icon">N</div>
+        <span class="topbar-name">NurBank</span>
+      </div>
+      <div id="topbar-role-badge"></div>
+      <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace" id="topbar-date"></span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="openModal('notif')">🔔 <span class="notif-badge" id="notif-count">3</span></button>
+      <button class="topbar-btn" onclick="toggleTheme()">◑ Theme</button>
+      <div class="user-chip" onclick="openModal('profile')">
+        <div class="user-avatar" id="topbar-avatar">AR</div>
+        <span class="user-name-sm" id="topbar-uname">Ahmad Raza</span>
+      </div>
+      <button class="topbar-btn" onclick="doLogout()">↩ Logout</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar"></aside>
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="main-content"></main>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="modal-ov" id="modal-notif" onclick="if(event.target===this)closeModal('notif')">
+  <div class="modal">
+    <div class="modal-t">🔔 Notifications <button class="modal-close" onclick="closeModal('notif')">×</button></div>
+    <div id="notif-list"></div>
+    <button class="btn btn-outline btn-w100 mt-3" onclick="closeModal('notif')">Mark all read</button>
+  </div>
+</div>
+<!-- Profile -->
+<div class="modal-ov" id="modal-profile" onclick="if(event.target===this)closeModal('profile')">
+  <div class="modal">
+    <div class="modal-t">👤 Profile <button class="modal-close" onclick="closeModal('profile')">×</button></div>
+    <div id="profile-content"></div>
+  </div>
+</div>
+<!-- Payment -->
+<div class="modal-ov" id="modal-pay" onclick="if(event.target===this)closeModal('pay')">
+  <div class="modal">
+    <div class="modal-t">◈ Quick Payment <button class="modal-close" onclick="closeModal('pay')">×</button></div>
+    <div class="fg"><label class="fl">Bill Category</label><select class="fi" id="pay-cat"><option>Electricity (DESCO)</option><option>Water (WASA)</option><option>Mobile Top-up (Grameenphone)</option><option>Internet (Fiber@Home)</option><option>Education Fee</option><option>Sadaqah / Charity</option></select></div>
+    <div class="fg"><label class="fl">Consumer / Account No.</label><input class="fi" placeholder="Enter account number" id="pay-acct"></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" placeholder="0.00" id="pay-amount"></div>
+    <div class="fg"><label class="fl">Pay From</label><select class="fi"><option>Current •••• 4821 — BDT 2,45,000</option><option>Savings •••• 9034 — BDT 2,37,800</option></select></div>
+    <div class="info-teal info-box mb-2">✦ All transactions are monitored for Shariah compliance. No payments to haram merchants.</div>
+    <div class="flex gap-2">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('pay')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1" onclick="submitPayment()">Pay Now ↗</button>
+    </div>
+  </div>
+</div>
+<!-- Loan Apply -->
+<div class="modal-ov" id="modal-loan" onclick="if(event.target===this)closeModal('loan')">
+  <div class="modal">
+    <div class="modal-t">⬡ Islamic Financing Application <button class="modal-close" onclick="closeModal('loan')">×</button></div>
+    <div class="info-teal info-box mb-3">✦ All financing is interest-free (riba-free). We use Murabaha, Ijarah, and Diminishing Musharakah structures.</div>
+    <div class="fg"><label class="fl">Finance Type</label>
+      <select class="fi">
+        <option>Home Finance — Diminishing Musharakah</option>
+        <option>Auto Finance — Ijarah</option>
+        <option>SME Finance — Murabaha</option>
+        <option>Personal — Qard Hasan</option>
+        <option>Education — Qard Hasan</option>
+      </select>
+    </div>
+    <div class="fi-row">
+      <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" placeholder="0.00"></div>
+      <div class="fg"><label class="fl">Tenure (months)</label><input class="fi" type="number" value="60"></div>
+    </div>
+    <div class="fg"><label class="fl">Purpose</label><input class="fi" placeholder="Describe the purpose..."></div>
+    <div class="info-gold info-box mb-3">✓ HEPI Score 87 qualifies you for -0.5% preferential profit rate</div>
+    <div class="flex gap-2">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('loan')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1" onclick="closeModal('loan');toast('Application submitted! We\'ll respond within 24 hours.','success')">Submit Application</button>
+    </div>
+  </div>
+</div>
+<!-- OTP Modal -->
+<div class="modal-ov" id="modal-otp">
+  <div class="modal" style="text-align:center">
+    <div class="modal-t" style="justify-content:center">🔐 Verify Transfer</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Enter the 6-digit OTP sent to +880-17xx-xxx-891</div>
+    <div class="otp-row">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,0)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,1)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,2)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,3)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,4)">
+      <input class="otp-digit" maxlength="1" oninput="otpNext(this,5)">
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:18px">Demo: enter any 6 digits</div>
+    <div class="flex gap-2">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('otp')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1" onclick="confirmTransfer()">Confirm ✓</button>
+    </div>
+  </div>
+</div>
+<!-- Deposit modal -->
+<div class="modal-ov" id="modal-deposit" onclick="if(event.target===this)closeModal('deposit')">
+  <div class="modal">
+    <div class="modal-t">◑ New Mudarabah Term Deposit <button class="modal-close" onclick="closeModal('deposit')">×</button></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" placeholder="Min. BDT 10,000"></div>
+    <div class="fg"><label class="fl">Tenure</label>
+      <select class="fi">
+        <option>3 months — 6.5% p.a.</option>
+        <option>6 months — 7.2% p.a.</option>
+        <option>12 months — 8.0% p.a.</option>
+        <option>24 months — 8.5% p.a.</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Profit Distribution</label>
+      <select class="fi"><option>Monthly</option><option>Quarterly</option><option>At Maturity</option></select>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('deposit')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1" onclick="closeModal('deposit');toast('Mudarabah deposit created! Profit sharing starts next month.','success')">Create Deposit</button>
+    </div>
+  </div>
+</div>
+<!-- Zakat Pay -->
+<div class="modal-ov" id="modal-zakatpay" onclick="if(event.target===this)closeModal('zakatpay')">
+  <div class="modal">
+    <div class="modal-t">⊕ Pay Your Zakat <button class="modal-close" onclick="closeModal('zakatpay')">×</button></div>
+    <div class="info-teal info-box mb-3">Zakat amount: <strong id="modal-zakat-val">BDT 15,070</strong></div>
+    <div class="fg"><label class="fl">Distribute To</label>
+      <select class="fi">
+        <option>BRAC Education Fund</option>
+        <option>Manabik Shahajya Sangstha</option>
+        <option>NurBank Microfinance Pool</option>
+        <option>Islamic Relief Bangladesh</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Pay From</label>
+      <select class="fi"><option>Current Account •••• 4821</option></select>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('zakatpay')">Cancel</button>
+      <button class="btn btn-teal" style="flex:1" onclick="closeModal('zakatpay');toast('JazakAllah Khairan! Zakat paid. HEPI score +2 🌟','gold')">Pay Zakat ⊕</button>
+    </div>
+  </div>
+</div>
+<!-- Admin - Customer Details -->
+<div class="modal-ov" id="modal-customer" onclick="if(event.target===this)closeModal('customer')">
+  <div class="modal">
+    <div class="modal-t">👤 Customer Profile <button class="modal-close" onclick="closeModal('customer')">×</button></div>
+    <div id="customer-modal-content"></div>
+  </div>
+</div>
+<!-- Admin - Approve/Reject -->
+<div class="modal-ov" id="modal-approve" onclick="if(event.target===this)closeModal('approve')">
+  <div class="modal">
+    <div class="modal-t">⚡ Transaction Review <button class="modal-close" onclick="closeModal('approve')">×</button></div>
+    <div id="approve-modal-content"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast"></div>
+
+<script>
+
+const STATE = {
+  role: null, // 'client' or 'admin'
+  user: null,
+  currentPage: null,
+  lightMode: false,
+  transferData: {},
+  pendingTransfers: [],
+};
+
+const CLIENTS = {
+  'ahmad.raza': { id:'C001', name:'Ahmad Raza', initials:'AR', balance:245000, savings:237800, invest:120000, hepi:87, zakat:1205, phone:'+880-17xx-xxx-891', address:'Gulshan-2, Dhaka 1212', since:'March 2019', branch:'Gulshan-2', color:'#1a3a6b' }
+};
+const ADMINS = {
+  'NB-STAFF-001': { id:'NB-STAFF-001', name:'Mr. Hasan Ali', initials:'HA', role:'Branch Manager', branch:'Gulshan-2, Dhaka' }
+};
+
+const TXN_DATA = [
+  {id:'T001',date:'23 Apr 2026',desc:'Salary Credit',cat:'Income',amt:85000,dir:'in',status:'Completed',icon:'💰',bg:'rgba(46,204,113,0.1)',type:'NEFT'},
+  {id:'T002',date:'22 Apr 2026',desc:'DESCO Electricity',cat:'Utilities',amt:3200,dir:'out',status:'Completed',icon:'⚡',bg:'rgba(240,165,0,0.1)',type:'Bill Pay'},
+  {id:'T003',date:'20 Apr 2026',desc:'Transfer to Farida Raza',cat:'Family',amt:15000,dir:'out',status:'Completed',icon:'⇄',bg:'rgba(59,125,216,0.1)',type:'BEFTN'},
+  {id:'T004',date:'18 Apr 2026',desc:'Green Sukuk Profit',cat:'Investment',amt:1800,dir:'in',status:'Completed',icon:'📈',bg:'rgba(124,92,191,0.1)',type:'Credit'},
+  {id:'T005',date:'17 Apr 2026',desc:'Sadaqah — Islamic Relief',cat:'Charity',amt:2000,dir:'out',status:'Completed',icon:'🕌',bg:'rgba(14,196,160,0.1)',type:'Bill Pay'},
+  {id:'T006',date:'15 Apr 2026',desc:'Mudarabah Profit Share',cat:'Savings',amt:1030,dir:'in',status:'Completed',icon:'◑',bg:'rgba(14,196,160,0.1)',type:'Credit'},
+  {id:'T007',date:'14 Apr 2026',desc:'School Fee — Arif',cat:'Education',amt:12000,dir:'out',status:'Completed',icon:'🎓',bg:'rgba(240,165,0,0.1)',type:'Bill Pay'},
+  {id:'T008',date:'12 Apr 2026',desc:'Grocery — Agora',cat:'Food',amt:4500,dir:'out',status:'Completed',icon:'🛒',bg:'rgba(212,168,67,0.08)',type:'Card'},
+  {id:'T009',date:'10 Apr 2026',desc:'Freelance Payment',cat:'Income',amt:22000,dir:'in',status:'Completed',icon:'💻',bg:'rgba(46,204,113,0.1)',type:'RTGS'},
+  {id:'T010',date:'8 Apr 2026',desc:'Mobile Recharge',cat:'Utilities',amt:1199,dir:'out',status:'Completed',icon:'📱',bg:'rgba(212,168,67,0.08)',type:'Bill Pay'},
+  {id:'T011',date:'5 Apr 2026',desc:'Square Hospital',cat:'Health',amt:8200,dir:'out',status:'Completed',icon:'🏥',bg:'rgba(229,75,75,0.1)',type:'Card'},
+  {id:'T012',date:'3 Apr 2026',desc:'ATM Withdrawal',cat:'Cash',amt:5000,dir:'out',status:'Completed',icon:'💵',bg:'rgba(212,168,67,0.08)',type:'ATM'},
+  {id:'T013',date:'1 Apr 2026',desc:'International Remittance',cat:'Family',amt:45000,dir:'in',status:'Completed',icon:'✈️',bg:'rgba(59,125,216,0.1)',type:'SWIFT'},
+  {id:'T014',date:'29 Mar 2026',desc:'Waqf Contribution',cat:'Charity',amt:5000,dir:'out',status:'Completed',icon:'🌟',bg:'rgba(14,196,160,0.1)',type:'NEFT'},
+];
+
+const SAVED_RECIPIENTS = [
+  {name:'Farida Raza',acct:'•••• 2291',bank:'NurBank',type:'Family'},
+  {name:'Karim Brothers Ltd',acct:'•••• 7723',bank:'Islami Bank BD',type:'Business'},
+  {name:'Ammi — Gulshan',acct:'•••• 4451',bank:'NurBank',type:'Family'},
+  {name:'Al-Arafah Charity',acct:'•••• 9910',bank:'Al-Arafah Islami Bank',type:'Charity'},
+];
+
+const NOTIFICATIONS = [
+  {icon:'⊕',title:'Zakat due in 12 days',body:'BDT 1,205 calculated. Pay now to boost HEPI score by +2.',type:'warning',time:'Just now'},
+  {icon:'✦',title:'HEPI Score updated: 87 (+4)',body:'You unlocked preferential home finance rate. Excellent tier!',type:'gold',time:'2 hours ago'},
+  {icon:'📈',title:'New Green Sukuk: 7.2% yield',body:'NurBank Green Sukuk closes April 30. HEPI priority access.',type:'info',time:'Yesterday'},
+  {icon:'🔐',title:'Login from new device',body:'Chrome/Windows at Gulshan, Dhaka. If not you, act now.',type:'error',time:'2 days ago'},
+];
+
+const ADMIN_CUSTOMERS = [
+  {id:'C001',name:'Ahmad Raza',acct:'4821',balance:245000,hepi:87,status:'Active',risk:'Low',city:'Dhaka',kyc:'Verified'},
+  {id:'C002',name:'Fatima Begum',acct:'3345',balance:125000,hepi:72,status:'Active',risk:'Low',city:'Chittagong',kyc:'Verified'},
+  {id:'C003',name:'Karim Ahmed',acct:'7812',balance:890000,hepi:91,status:'Active',risk:'Low',city:'Dhaka',kyc:'Verified'},
+  {id:'C004',name:'Rana Islam',acct:'5521',balance:42000,hepi:55,status:'Flagged',risk:'High',city:'Rajshahi',kyc:'Pending'},
+  {id:'C005',name:'Nasrin Khatun',acct:'8834',balance:310000,hepi:83,status:'Active',risk:'Low',city:'Sylhet',kyc:'Verified'},
+  {id:'C006',name:'Bashir Uddin',acct:'6643',balance:18000,hepi:47,status:'Active',risk:'Medium',city:'Dhaka',kyc:'Partial'},
+];
+
+const PENDING_TXNS = [
+  {id:'PT001',from:'Rana Islam',to:'Unknown Acct',amt:95000,type:'RTGS',flag:'AML Alert — large outward transfer',risk:'High',time:'10:24 AM'},
+  {id:'PT002',from:'Bashir Uddin',to:'International',amt:42000,type:'SWIFT',flag:'First international transfer',risk:'Medium',time:'11:15 AM'},
+  {id:'PT003',from:'Ahmad Raza',to:'Al-Arafah Charity',amt:5000,type:'NEFT',flag:'Routine charity payment',risk:'Low',time:'12:02 PM'},
+];
+
+const AI_RESPONSES = {
+  client: [
+    "Great question! Based on your HEPI score of 87, you qualify for our best rates. Your Mudarabah savings at 5.2% is already excellent, but switching BDT 50,000 to our 12-month term deposit at 8.0% would earn you an extra BDT 1,400/year.",
+    "For halal transfers within Bangladesh, BEFTN (Bangladesh Electronic Funds Transfer Network) is free and settles in 2 hours. RTGS is instant for amounts over BDT 1 lakh. Both are Shariah-compliant as they involve no interest charges.",
+    "Your Zakat is due in 12 days! With total assets of BDT 6,02,800, your zakat is BDT 1,207. I recommend paying to BRAC Education Fund — they have the highest verified impact score in our HEPI partner network.",
+    "Your HEPI score of 87 is in the top 8% of NurBank customers. This means you get: -0.5% on home finance profit rate, +0.3% savings profit share, waived transfer fees, and priority access to Green Sukuk offerings.",
+    "The Green Sukuk at 7.2% closes April 30. Given your HEPI score, you have priority access. It's backed by a solar energy project in Sylhet — investing BDT 50,000 would add approximately 1.8 points to your Environmental HEPI dimension.",
+    "For international remittances, NurBank uses the SWIFT network with no correspondent bank interest charges. We route through Al Rajhi Bank for GCC transfers and HSBC Amanah for UK/EU — both fully halal.",
+    "Conventional banks score ~41/100 on HEPI equivalent metrics. The key differences: they charge riba (interest), fund haram industries, and have no mandatory zakat or community impact obligations. Your NurBank account avoids all of these.",
+    "Your Hajj savings goal is 33% complete at BDT 82,000 of BDT 2,50,000. At your current saving rate of BDT 8,000/month, you'll reach your goal in about 21 months — just in time for the 2028 Hajj season InshaAllah!",
+  ],
+  admin: [
+    "Transaction PT001 from Rana Islam warrants enhanced due diligence. The BDT 95,000 RTGS transfer exceeds his 90-day average by 8x. Under BB AML guidelines, file a Suspicious Transaction Report (STR) if the customer cannot provide satisfactory explanation.",
+    "Customer C006 Bashir Uddin has a HEPI score of 47 — below the 50-point threshold. His KYC is incomplete. I recommend scheduling a branch visit for biometric verification. Incomplete KYC limits his transfer limits to BDT 25,000/day.",
+    "The daily BEFTN settlement window closes at 3:30 PM. Transactions submitted after 3 PM will settle tomorrow. RTGS is real-time up to 4:00 PM. All high-value transactions (BDT 1L+) require dual authorization per Bangladesh Bank circular BRPD-18.",
+    "Based on today's portfolio: Non-Performing Finance (NPF) ratio is 2.1%, below the BB benchmark of 5%. Mudarabah profit sharing is on schedule. Shariah audit for Q1 2026 is pending — due date is May 15.",
+    "HEPI compliance summary: 94% of our financing portfolio is in Shariah-screened sectors. Green Sukuk deployment reached BDT 12.4 crore this quarter. Recommend filing quarterly HEPI impact report to Shariah Board before April 30.",
+  ]
+};
+let aiIdx = {client:0, admin:0};
+
+function setLoginRole(role, btn) {
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('login-client-form').style.display = role==='client'?'block':'none';
+  document.getElementById('login-admin-form').style.display = role==='admin'?'block':'none';
+}
+
+function doLogin(role) {
+  if (role === 'client') {
+    const u = document.getElementById('c-user').value.trim();
+    const p = document.getElementById('c-pass').value.trim();
+    if (!CLIENTS[u] || p !== 'nur1234') { toast('Invalid credentials. Try ahmad.raza / nur1234','error'); return; }
+    STATE.role = 'client';
+    STATE.user = CLIENTS[u];
+  } else {
+    const u = document.getElementById('a-user').value.trim();
+    const p = document.getElementById('a-pass').value.trim();
+    if (!ADMINS[u] || p !== 'admin2026') { toast('Invalid admin credentials','error'); return; }
+    STATE.role = 'admin';
+    STATE.user = ADMINS[u];
+    STATE.user.roleLabel = document.getElementById('a-role').value.replace('_',' ');
+  }
+  launchApp();
+}
+
+function doLogout() {
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('app-shell').classList.remove('visible');
+  document.getElementById('login-screen').style.display='flex';
+  STATE.role=null; STATE.user=null;
+}
+
+function launchApp() {
+  document.getElementById('login-screen').style.display='none';
+  const shell = document.getElementById('app-shell');
+  shell.style.display='flex';
+  shell.classList.add('visible');
+  // topbar
+  document.getElementById('topbar-date').textContent = 'Thu, 23 Apr 2026';
+  document.getElementById('topbar-uname').textContent = STATE.user.name;
+  document.getElementById('topbar-avatar').textContent = STATE.user.initials;
+  const rb = document.getElementById('topbar-role-badge');
+  if (STATE.role==='client') { rb.innerHTML='<span class="role-badge role-client">Client Portal</span>'; }
+  else { rb.innerHTML='<span class="role-badge role-admin">'+capitalize(STATE.user.roleLabel||STATE.user.role)+'</span>'; }
+  buildSidebar();
+  buildNotifList();
+  buildProfileModal();
+  if (STATE.role==='client') showPage('dashboard');
+  else showPage('admin-dashboard');
+}
+
+function buildSidebar() {
+  const el = document.getElementById('sidebar');
+  let html = '';
+  if (STATE.role === 'client') {
+    html = `
+      <div class="nav-section-label">Main</div>
+      <button class="nav-item" onclick="showPage('dashboard',this)"><span class="nav-ico">⊞</span> Dashboard</button>
+      <button class="nav-item" onclick="showPage('accounts',this)"><span class="nav-ico">◉</span> Accounts</button>
+      <button class="nav-item" onclick="showPage('transfer',this)"><span class="nav-ico">⇄</span> Transfer</button>
+      <button class="nav-item" onclick="showPage('payments',this)"><span class="nav-ico">◈</span> Payments</button>
+      <button class="nav-item" onclick="showPage('history',this)"><span class="nav-ico">≡</span> History</button>
+      <div class="nav-section-label">Finance</div>
+      <button class="nav-item" onclick="showPage('loans',this)"><span class="nav-ico">⬡</span> Financing</button>
+      <button class="nav-item" onclick="showPage('savings',this)"><span class="nav-ico">◑</span> Savings</button>
+      <button class="nav-item" onclick="showPage('invest',this)"><span class="nav-ico">△</span> Invest</button>
+      <div class="nav-section-label">Halal Tools</div>
+      <button class="nav-item" onclick="showPage('hepi',this)"><span class="nav-ico">✦</span> HEPI Score</button>
+      <button class="nav-item" onclick="showPage('zakat',this)"><span class="nav-ico">⊕</span> Zakat</button>
+      <button class="nav-item" onclick="showPage('ai-advisor',this)"><span class="nav-ico">🤖</span> AI Advisor</button>
+      <div class="nav-section-label">Account</div>
+      <button class="nav-item" onclick="showPage('security',this)"><span class="nav-ico">⊘</span> Security</button>
+      <button class="nav-item" onclick="showPage('settings',this)"><span class="nav-ico">⊛</span> Settings</button>`;
+  } else {
+    html = `
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item" onclick="showPage('admin-dashboard',this)"><span class="nav-ico">⊞</span> Dashboard</button>
+      <button class="nav-item" onclick="showPage('admin-customers',this)"><span class="nav-ico">👥</span> Customers</button>
+      <button class="nav-item" onclick="showPage('admin-transactions',this)"><span class="nav-ico">≡</span> Transactions <span class="nav-count">3</span></button>
+      <div class="nav-section-label">Operations</div>
+      <button class="nav-item" onclick="showPage('admin-financing',this)"><span class="nav-ico">⬡</span> Financing</button>
+      <button class="nav-item" onclick="showPage('admin-deposits',this)"><span class="nav-ico">◑</span> Deposits</button>
+      <button class="nav-item" onclick="showPage('admin-compliance',this)"><span class="nav-ico">⚖️</span> Compliance</button>
+      <div class="nav-section-label">Halal / HEPI</div>
+      <button class="nav-item" onclick="showPage('admin-hepi',this)"><span class="nav-ico">✦</span> HEPI Reports</button>
+      <button class="nav-item" onclick="showPage('admin-zakat',this)"><span class="nav-ico">⊕</span> Zakat Pool</button>
+      <button class="nav-item" onclick="showPage('admin-ai',this)"><span class="nav-ico">🤖</span> AI Assistant</button>
+      <div class="nav-section-label">System</div>
+      <button class="nav-item" onclick="showPage('admin-reports',this)"><span class="nav-ico">📊</span> Reports</button>
+      <button class="nav-item" onclick="showPage('admin-settings',this)"><span class="nav-ico">⊛</span> Settings</button>`;
+  }
+  el.innerHTML = html;
+}
+
+function showPage(id, btn) {
+  STATE.currentPage = id;
+  const main = document.getElementById('main-content');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-item').forEach(n=>{
+      if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');
+    });
+  }
+  main.innerHTML = '<div class="page active" id="page-'+id+'">'+buildPage(id)+'</div>';
+  initPage(id);
+}
+
+function buildPage(id) {
+  switch(id) {
+
+    case 'dashboard': return `
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <div class="page-title" style="margin-bottom:2px">Good morning, Ahmad 👋</div>
+          <div class="page-sub" style="margin-bottom:0">Thursday, 23 April 2026 · Your financial health at a glance</div>
+        </div>
+        <div class="badge badge-teal" style="font-size:11px;padding:5px 12px">✦ HEPI: 87 — Excellent</div>
+      </div>
+      <div class="g4 mb-3" id="dash-metrics"></div>
+      <div class="g2">
+        <div>
+          <div class="card mb-3" id="dash-accounts-card"></div>
+          <div class="card" id="dash-quick-actions"></div>
+        </div>
+        <div>
+          <div class="card mb-3" id="dash-recent-txn"></div>
+          <div class="card" id="dash-hepi-card"></div>
+        </div>
+      </div>`;
+
+    case 'accounts': return `
+      <div class="page-title">My Accounts</div>
+      <div class="page-sub">Manage your NurBank accounts</div>
+      <div class="g3 mb-3" id="acct-cards"></div>
+      <div class="card" id="acct-detail"></div>`;
+
+    case 'transfer': return `
+      <div class="page-title">Fund Transfer</div>
+      <div class="page-sub">Transfer money locally and internationally</div>
+      <div class="step-indicator mb-3" id="transfer-steps"></div>
+      <div class="g21">
+        <div class="card" id="transfer-form-card"></div>
+        <div>
+          <div class="card mb-3" id="transfer-recipients"></div>
+          <div class="card" id="transfer-limits"></div>
+        </div>
+      </div>`;
+
+    case 'payments': return `
+      <div class="page-title">Bill Payments & Services</div>
+      <div class="page-sub">Pay bills, utilities, and schedule recurring payments</div>
+      <div class="g4 mb-3" id="pay-services"></div>
+      <div class="card" id="pay-scheduled"></div>`;
+
+    case 'history': return `
+      <div class="page-title">Transaction History</div>
+      <div class="page-sub">Full record of all account activity</div>
+      <div class="card" id="history-card"></div>`;
+
+    case 'loans': return `
+      <div class="page-title">Islamic Financing</div>
+      <div class="page-sub">Riba-free financing solutions</div>
+      <div class="info-teal info-box mb-3">✦ All products are Shariah-compliant: Murabaha, Ijarah, Diminishing Musharakah, Qard Hasan. Zero riba (interest).</div>
+      <div class="g3 mb-3" id="loan-products"></div>
+      <div class="card" id="emi-calc-card"></div>`;
+
+    case 'savings': return `
+      <div class="page-title">Savings & Mudarabah</div>
+      <div class="page-sub">Profit-sharing savings products</div>
+      <div class="g2 mb-3" id="savings-top"></div>
+      <div class="card" id="savings-goals-card"></div>`;
+
+    case 'invest': return `
+      <div class="page-title">Halal Investments</div>
+      <div class="page-sub">Shariah-screened Sukuk and funds</div>
+      <div class="info-purple info-box mb-3">✦ All investments are Shariah-screened. No alcohol, tobacco, gambling, conventional finance, weapons, or adult entertainment.</div>
+      <div class="g2 mb-3" id="invest-portfolio"></div>`;
+
+    case 'hepi': return `
+      <div class="page-title">HEPI Score — Human-centric Economic & Profitable Innovations</div>
+      <div class="page-sub">A framework rooted in Maqasid al-Islam</div>
+      <div class="tab-bar" id="hepi-tabs">
+        <button class="tab active" onclick="hepiTab(0,this)">What is HEPI?</button>
+        <button class="tab" onclick="hepiTab(1,this)">Your Score</button>
+        <button class="tab" onclick="hepiTab(2,this)">vs Conventional</button>
+        <button class="tab" onclick="hepiTab(3,this)">Impact Report</button>
+      </div>
+      <div id="hepi-content"></div>`;
+
+    case 'zakat': return `
+      <div class="page-title">Zakat Calculator & Distribution</div>
+      <div class="page-sub">Calculate, pay, and track your annual Zakat</div>
+      <div class="g2" id="zakat-content"></div>`;
+
+    case 'ai-advisor': return `
+      <div class="page-title"> AI Financial Advisor</div>
+      <div class="page-sub">Powered by Islamic economics + AI — personalized halal finance guidance</div>
+      <div class="g12">
+        <div class="card">
+          <div class="card-h"><span class="card-t">Ask the Halal Finance Advisor</span><span class="badge badge-purple">AI Powered</span></div>
+          <div class="ai-wrap" id="ai-advisor-wrap">
+            <div class="ai-messages" id="ai-advisor-msgs"></div>
+          </div>
+          <div class="ai-input-row">
+            <input class="fi" id="ai-input-client" placeholder="Ask about transfers, HEPI, Zakat, halal products..." onkeypress="if(event.key==='Enter')sendAI('client')">
+            <button class="btn btn-gold" onclick="sendAI('client')">Ask ↗</button>
+          </div>
+        </div>
+        <div>
+          <div class="card mb-3" id="ai-suggestions"></div>
+          <div class="card" id="ai-why-hepi"></div>
+        </div>
+      </div>`;
+
+    case 'security': return `
+      <div class="page-title">Security & Privacy</div>
+      <div class="page-sub">Protect your account and manage data sharing</div>
+      <div class="g2" id="security-content"></div>`;
+
+    case 'settings': return `
+      <div class="page-title">Settings & Preferences</div>
+      <div class="page-sub">Manage your profile and account preferences</div>
+      <div class="g2" id="settings-content"></div>`;
+
+    case 'admin-dashboard': return `
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <div class="page-title" style="margin-bottom:2px">Branch Operations — Gulshan-2</div>
+          <div class="page-sub" style="margin-bottom:0">NurBank Islamic Banking · ${STATE.user.name} · ${capitalize(STATE.user.roleLabel||'')}</div>
+        </div>
+        <div class="flex gap-2">
+          <div class="badge badge-gold">Live ●</div>
+          <div class="badge badge-teal">HEPI Active</div>
+        </div>
+      </div>
+      <div class="g4 mb-3" id="admin-metrics"></div>
+      <div class="g2 mb-3">
+        <div class="card" id="admin-pending-card"></div>
+        <div class="card" id="admin-alerts-card"></div>
+      </div>
+      <div class="g2">
+        <div class="card" id="admin-recent-customers"></div>
+        <div class="card" id="admin-txn-chart"></div>
+      </div>`;
+    case 'admin-customers': return `
+      <div class="page-title">Customer Management</div>
+      <div class="page-sub">View and manage all customer accounts</div>
+      <div class="card" id="admin-customers-card"></div>`;
+    case 'admin-transactions': return `
+      <div class="page-title">Transaction Monitoring</div>
+      <div class="page-sub">Review, approve, and flag transactions</div>
+      <div class="card mb-3" id="admin-pending-txns-card"></div>
+      <div class="card" id="admin-all-txns-card"></div>`;
+    case 'admin-financing': return `
+      <div class="page-title">Financing Applications</div>
+      <div class="page-sub">Review and approve Islamic financing applications</div>
+      <div class="card" id="admin-financing-card"></div>`;
+    case 'admin-deposits': return `
+      <div class="page-title">Deposits Management</div>
+      <div class="page-sub">Mudarabah accounts and term deposits</div>
+      <div class="card" id="admin-deposits-card"></div>`;
+    case 'admin-compliance': return `
+      <div class="page-title">Shariah & Regulatory Compliance</div>
+      <div class="page-sub">AML, Bangladesh Bank, and Shariah Board requirements</div>
+      <div class="card mb-3" id="admin-compliance-card"></div>`;
+    case 'admin-hepi': return `
+      <div class="page-title">HEPI Reports & Analytics</div>
+      <div class="page-sub">Branch HEPI performance and customer impact metrics</div>
+      <div class="card" id="admin-hepi-card"></div>`;
+    case 'admin-zakat': return `
+      <div class="page-title">Zakat Pool Management</div>
+      <div class="page-sub">Manage Zakat collection and distribution</div>
+      <div class="card" id="admin-zakat-card"></div>`;
+    case 'admin-ai': return `
+      <div class="page-title">🤖 AI Banking Assistant</div>
+      <div class="page-sub">AI-powered insights for banking operations and compliance</div>
+      <div class="g12">
+        <div class="card">
+          <div class="card-h"><span class="card-t">Banking Operations AI</span><span class="badge badge-gold">Admin Mode</span></div>
+          <div class="ai-wrap" id="ai-admin-wrap">
+            <div class="ai-messages" id="ai-admin-msgs"></div>
+          </div>
+          <div class="ai-input-row">
+            <input class="fi" id="ai-input-admin" placeholder="Ask about compliance, AML, HEPI, BB regulations..." onkeypress="if(event.key==='Enter')sendAI('admin')">
+            <button class="btn btn-gold" onclick="sendAI('admin')">Ask ↗</button>
+          </div>
+        </div>
+        <div class="card" id="admin-ai-panel"></div>
+      </div>`;
+    case 'admin-reports': return `
+      <div class="page-title">Reports & Analytics</div>
+      <div class="page-sub">Financial, compliance, and HEPI reports</div>
+      <div class="card" id="admin-reports-card"></div>`;
+    case 'admin-settings': return `
+      <div class="page-title">System Settings</div>
+      <div class="page-sub">Branch configuration and system preferences</div>
+      <div class="card" id="admin-settings-card"></div>`;
+    default: return '<div class="page-title">Page not found</div>';
+  }
+}
+
+function initPage(id) {
+  switch(id) {
+    case 'dashboard': initDashboard(); break;
+    case 'accounts': initAccounts(); break;
+    case 'transfer': initTransfer(); break;
+    case 'payments': initPayments(); break;
+    case 'history': initHistory(); break;
+    case 'loans': initLoans(); break;
+    case 'savings': initSavings(); break;
+    case 'invest': initInvest(); break;
+    case 'hepi': hepiTab(0); break;
+    case 'zakat': initZakat(); break;
+    case 'ai-advisor': initAIAdvisor(); break;
+    case 'security': initSecurity(); break;
+    case 'settings': initSettings(); break;
+    case 'admin-dashboard': initAdminDashboard(); break;
+    case 'admin-customers': initAdminCustomers(); break;
+    case 'admin-transactions': initAdminTransactions(); break;
+    case 'admin-financing': initAdminFinancing(); break;
+    case 'admin-deposits': initAdminDeposits(); break;
+    case 'admin-compliance': initAdminCompliance(); break;
+    case 'admin-hepi': initAdminHEPI(); break;
+    case 'admin-zakat': initAdminZakat(); break;
+    case 'admin-ai': initAdminAI(); break;
+    case 'admin-reports': initAdminReports(); break;
+    case 'admin-settings': initAdminSettings(); break;
+  }
+}
+
+function initDashboard() {
+  const u = STATE.user;
+  // Metrics
+  document.getElementById('dash-metrics').innerHTML = `
+    <div class="metric"><div class="metric-lbl">Total Balance</div><div class="metric-val">BDT ${fmt(u.balance+u.savings+u.invest)}</div><div class="metric-chg chg-up">↑ 3.2% this month</div></div>
+    <div class="metric"><div class="metric-lbl">Monthly Income</div><div class="metric-val">BDT 85,000</div><div class="metric-chg chg-up">↑ 5.0% vs last</div></div>
+    <div class="metric"><div class="metric-lbl">Monthly Spend</div><div class="metric-val">BDT 42,300</div><div class="metric-chg chg-dn">↑ 1.8% vs last</div></div>
+    <div class="metric"><div class="metric-lbl">Zakat Due</div><div class="metric-val text-gold">BDT 1,205</div><div class="metric-chg" style="color:var(--amber)">⏰ Due in 12 days</div></div>`;
+  // Accounts
+  document.getElementById('dash-accounts-card').innerHTML = `
+    <div class="card-h"><span class="card-t">My Accounts</span><button class="btn btn-outline btn-sm" onclick="showPage('accounts')">View all</button></div>
+    <div class="acct-card g1 mb-2" onclick="showPage('accounts')" style="padding:18px">
+      <div class="acct-pattern"></div><div class="acct-pattern2"></div><div class="acct-glow"></div>
+      <div class="acct-chip"></div>
+      <div class="acct-lbl">Current Account (Wadiah)</div>
+      <div class="acct-num">•••• •••• •••• 4821</div>
+      <div class="acct-bal">BDT ${fmt(u.balance)}</div>
+      <div class="acct-footer"><span>Ahmad Raza</span><span class="badge badge-teal" style="color:#fff;background:rgba(255,255,255,0.15);border:none">Halal ✓</span></div>
+    </div>
+    <div class="acct-card g2c" onclick="showPage('savings')" style="padding:18px">
+      <div class="acct-pattern"></div><div class="acct-glow"></div>
+      <div class="acct-chip"></div>
+      <div class="acct-lbl">Mudarabah Savings</div>
+      <div class="acct-num">•••• •••• •••• 9034</div>
+      <div class="acct-bal">BDT ${fmt(u.savings)}</div>
+      <div class="acct-footer"><span>Profit: 5.2% p.a.</span><span>Active ●</span></div>
+    </div>`;
+  // Quick actions
+  document.getElementById('dash-quick-actions').innerHTML = `
+    <div class="card-h" style="margin-bottom:10px"><span class="card-t">Quick Actions</span></div>
+    <div class="g4" style="gap:8px">
+      ${['⇄|Transfer|transfer','◈|Pay Bills|payments','⬡|Financing|loans','⊕|Zakat|zakat'].map(a=>{const[ico,lbl,pg]=a.split('|');return`<button class="btn btn-outline" style="flex-direction:column;gap:4px;padding:12px 8px;font-size:11px;border-radius:var(--r)" onclick="showPage('${pg}')"><span style="font-size:20px">${ico}</span>${lbl}</button>`}).join('')}
+    </div>`;
+  // Recent transactions
+  document.getElementById('dash-recent-txn').innerHTML = `
+    <div class="card-h"><span class="card-t">Recent Transactions</span><button class="btn btn-outline btn-sm" onclick="showPage('history')">See all</button></div>
+    ${TXN_DATA.slice(0,5).map(txnRow).join('')}`;
+  // HEPI card
+  document.getElementById('dash-hepi-card').innerHTML = `
+    <div class="card-h"><span class="card-t">HEPI Impact Summary</span><button class="btn btn-outline btn-sm" onclick="showPage('hepi')">Details ✦</button></div>
+    <div class="flex gap-3 items-center">
+      <div class="hepi-ring" style="flex-shrink:0">
+        ${hepiRing(87,76)}
+        <div class="hepi-ring-label"><span style="font-size:18px;font-weight:700;color:var(--teal)">87</span><span style="font-size:9px;color:var(--text3)">/100</span></div>
+      </div>
+      <div style="flex:1">
+        ${hepiDim('Human Value','88',0.88,'var(--teal)')}
+        ${hepiDim('Ethical Align','92',0.92,'var(--purple)')}
+        ${hepiDim('Eco Stewardship','78',0.78,'var(--green)')}
+        ${hepiDim('Social Justice','85',0.85,'var(--amber)')}
+      </div>
+    </div>`;
+}
+
+function initAccounts() {
+  const u = STATE.user;
+  document.getElementById('acct-cards').innerHTML = `
+    <div class="acct-card g1" style="padding:20px">
+      <div class="acct-pattern"></div><div class="acct-glow"></div><div class="acct-chip"></div>
+      <div class="acct-lbl">Current Account (Wadiah)</div>
+      <div class="acct-num">•••• •••• •••• 4821</div>
+      <div class="acct-bal">BDT ${fmt(u.balance)}</div>
+      <div class="acct-footer"><span>Halal Certified</span><span class="badge" style="background:rgba(255,255,255,0.15);color:#fff;border:none">Active ●</span></div>
+    </div>
+    <div class="acct-card g2c" style="padding:20px">
+      <div class="acct-pattern"></div><div class="acct-glow"></div><div class="acct-chip"></div>
+      <div class="acct-lbl">Mudarabah Savings</div>
+      <div class="acct-num">•••• •••• •••• 9034</div>
+      <div class="acct-bal">BDT ${fmt(u.savings)}</div>
+      <div class="acct-footer"><span>5.2% profit share</span><span>Active ●</span></div>
+    </div>
+    <div class="acct-card g3c" style="padding:20px">
+      <div class="acct-pattern"></div><div class="acct-glow"></div><div class="acct-chip"></div>
+      <div class="acct-lbl">Investment — Sukuk</div>
+      <div class="acct-num">•••• •••• •••• 3312</div>
+      <div class="acct-bal">BDT ${fmt(u.invest)}</div>
+      <div class="acct-footer"><span>+8.1% YTD</span><span>Growing ↑</span></div>
+    </div>`;
+  document.getElementById('acct-detail').innerHTML = `
+    <div class="card-h"><span class="card-t">Account Details — Current #4821</span></div>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">Account Holder</label><div style="font-size:14px;font-weight:700">${u.name}</div></div>
+        <div class="fg"><label class="fl">Account Type</label><div>Halal Current Account (Wadiah)</div></div>
+        <div class="fg"><label class="fl">IBAN</label><div class="font-mono" style="font-size:11px">BD29 0010 0109 0134 6391 73</div></div>
+        <div class="fg"><label class="fl">Branch</label><div>${u.branch}, Dhaka</div></div>
+      </div>
+      <div>
+        <div class="fg"><label class="fl">Available Balance</label><div class="text-green fw-bold" style="font-size:18px">BDT ${fmt(u.balance)}</div></div>
+        <div class="fg"><label class="fl">HEPI Compliance</label><div class="badge badge-teal">✓ Fully Shariah Compliant</div></div>
+        <div class="fg"><label class="fl">Zakat Status</label><div class="badge badge-amber">⏰ Due: BDT 1,205</div></div>
+        <div class="fg"><label class="fl">Account Opened</label><div>${u.since}</div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="flex gap-2">
+      <button class="btn btn-gold" onclick="showPage('transfer')">⇄ Transfer Funds</button>
+      <button class="btn btn-outline" onclick="toast('Statement generation initiated. Check your email.','info')">↓ Statement</button>
+      <button class="btn btn-outline" onclick="toast('Card management coming soon.','info')">◈ Manage Card</button>
+    </div>`;
+}
+
+function initTransfer() {
+  renderTransferSteps(1);
+  document.getElementById('transfer-form-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Send Money</span></div>
+    <div class="fg"><label class="fl">From Account</label>
+      <select class="fi"><option>Current •••• 4821 — BDT 2,45,000</option><option>Savings •••• 9034 — BDT 2,37,800</option></select>
+    </div>
+    <div class="tab-bar" id="txn-type-tabs" style="margin-bottom:14px">
+      <button class="tab active" onclick="setTab(this)">Within NurBank</button>
+      <button class="tab" onclick="setTab(this)">BEFTN / RTGS</button>
+      <button class="tab" onclick="setTab(this)">SWIFT (Intl.)</button>
+      <button class="tab" onclick="setTab(this)">bKash / Nagad</button>
+    </div>
+    <div class="fg"><label class="fl">Recipient Account</label><input class="fi" id="rcpt-acct" placeholder="Account number or IBAN" oninput="lookupRecipient()"></div>
+    <div class="fg"><label class="fl">Recipient Name</label><input class="fi" id="rcpt-name" placeholder="Auto-fills after lookup" readonly></div>
+    <div class="fg"><label class="fl">Amount (BDT)</label><input class="fi" type="number" id="tx-amount" placeholder="0.00" oninput="calcTransfer()"></div>
+    <div class="fg"><label class="fl">Transfer Note / Purpose</label><input class="fi" id="tx-note" placeholder="e.g. Family support, Business payment"></div>
+    <div id="transfer-preview" style="display:none" class="review-box">
+      <div class="review-row"><span class="review-key">Amount</span><span class="review-val" id="prev-amount">—</span></div>
+      <div class="review-row"><span class="review-key">Transfer Type</span><span class="review-val" id="prev-type">Within NurBank</span></div>
+      <div class="review-row"><span class="review-key">Service Fee</span><span class="review-val text-green">BDT 0 (HEPI Waived)</span></div>
+      <div class="review-row"><span class="review-key fw-bold">Total Debit</span><span class="review-val fw-bold" id="prev-total">—</span></div>
+    </div>
+    <button class="btn btn-gold btn-w100" onclick="initTransferOTP()">Confirm & Send ⇄</button>`;
+  document.getElementById('transfer-recipients').innerHTML = `
+    <div class="card-h"><span class="card-t">Saved Recipients</span><button class="btn btn-outline btn-xs" onclick="toast('Add recipient form coming soon','info')">+ Add</button></div>
+    ${SAVED_RECIPIENTS.map(r=>`
+      <div class="txn-item" style="padding:8px 0">
+        <div class="txn-ico" style="background:var(--blue-bg);font-size:13px;font-weight:700;color:var(--blue)">${r.name.charAt(0)}</div>
+        <div class="txn-info"><div class="txn-name">${r.name}</div><div class="txn-meta">${r.acct} · ${r.bank} · <span class="badge badge-teal" style="font-size:9px">${r.type}</span></div></div>
+        <button class="btn btn-outline btn-xs" onclick="selectRecipient('${r.name}','${r.acct}')">Select</button>
+      </div>`).join('')}`;
+  document.getElementById('transfer-limits').innerHTML = `
+    <div class="card-h"><span class="card-t">Transfer Limits</span></div>
+    <div style="font-size:12px">
+      ${[['NEFT/BEFTN Daily','BDT 5,00,000'],['RTGS Daily','BDT 50,00,000'],['SWIFT Daily','BDT 20,00,000'],['Used Today','BDT 0'],['Remaining','BDT 5,00,000']].map(([k,v],i)=>`<div class="review-row ${i===3?'text-amber':i===4?'text-green':''}"><span class="review-key">${k}</span><span class="review-val">${v}</span></div>`).join('')}
+    </div>`;
+}
+
+function initPayments() {
+  const services = [
+    {ico:'⚡',name:'Electricity',sub:'DESCO / DPDC / REB'},
+    {ico:'💧',name:'Water (WASA)',sub:'Utility Bill'},
+    {ico:'📱',name:'Mobile Top-up',sub:'GP/Robi/Banglalink'},
+    {ico:'🌐',name:'Internet',sub:'Fiber@Home / ISP'},
+    {ico:'🎓',name:'Education',sub:'School / University'},
+    {ico:'🏥',name:'Hospital',sub:'Healthcare Bills'},
+    {ico:'🚍',name:'Transport',sub:'Bus / Rail Pass'},
+    {ico:'🕌',name:'Sadaqah',sub:'Charity / Waqf / Zakat'},
+  ];
+  document.getElementById('pay-services').innerHTML = services.map(s=>`
+    <button class="card" style="text-align:center;cursor:pointer;border:none;padding:20px 10px" onclick="openModal('pay')">
+      <div style="font-size:28px;margin-bottom:8px">${s.ico}</div>
+      <div style="font-size:12px;font-weight:600">${s.name}</div>
+      <div class="text-muted text-xs mt-1">${s.sub}</div>
+    </button>`).join('');
+  document.getElementById('pay-scheduled').innerHTML = `
+    <div class="card-h"><span class="card-t">Scheduled & Recurring Payments</span><button class="btn btn-gold btn-sm" onclick="openModal('pay')">+ Schedule</button></div>
+    <table class="tbl">
+      <thead><tr><th>Payee</th><th>Amount</th><th>Due</th><th>Type</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>DESCO Electricity</td><td>BDT 3,200</td><td>30 Apr 2026</td><td>One-time</td><td><span class="badge badge-amber">Upcoming</span></td><td><button class="btn btn-gold btn-xs" onclick="openModal('pay')">Pay</button></td></tr>
+        <tr><td>Grameenphone</td><td>BDT 1,199</td><td>28 Apr 2026</td><td>Monthly</td><td><span class="badge badge-amber">Upcoming</span></td><td><button class="btn btn-gold btn-xs" onclick="openModal('pay')">Pay</button></td></tr>
+        <tr><td>School Fee — Arif</td><td>BDT 12,000</td><td>5 May 2026</td><td>Monthly</td><td><span class="badge badge-blue">Scheduled</span></td><td><button class="btn btn-outline btn-xs">Edit</button></td></tr>
+        <tr><td>Sadaqah — Al-Arafah</td><td>BDT 2,000</td><td>Monthly</td><td>Auto</td><td><span class="badge badge-teal">Auto-pay ●</span></td><td><button class="btn btn-outline btn-xs">Manage</button></td></tr>
+        <tr><td>Waqf — Islamic Relief BD</td><td>BDT 1,000</td><td>Monthly</td><td>Auto</td><td><span class="badge badge-teal">Auto-pay ●</span></td><td><button class="btn btn-outline btn-xs">Manage</button></td></tr>
+      </tbody>
+    </table>`;
+}
+
+function initHistory() {
+  document.getElementById('history-card').innerHTML = `
+    <div class="flex gap-2 items-center mb-3" style="flex-wrap:wrap">
+      <input class="fi" style="max-width:200px" placeholder="🔍 Search transactions" oninput="filterHistory(this.value)">
+      <select class="fi" style="max-width:130px" onchange="filterHistoryType(this.value)">
+        <option value="">All Types</option>
+        <option value="in">Credits</option>
+        <option value="out">Debits</option>
+      </select>
+      <input type="month" class="fi" style="max-width:155px" value="2026-04">
+      <button class="btn btn-outline btn-sm" onclick="toast('CSV export downloaded.','success')">↓ Export CSV</button>
+      <button class="btn btn-outline btn-sm" onclick="toast('PDF statement sent to your email.','success')">📧 Email PDF</button>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="tbl">
+      <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Category</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody id="history-tbody"></tbody>
+    </table>
+    </div>`;
+  renderHistoryTable('','');
+}
+
+function renderHistoryTable(search, type) {
+  const tbody = document.getElementById('history-tbody');
+  if (!tbody) return;
+  const filtered = TXN_DATA.filter(t=>{
+    const ms = !search || t.desc.toLowerCase().includes(search.toLowerCase()) || t.cat.toLowerCase().includes(search.toLowerCase());
+    const mt = !type || t.dir===type;
+    return ms&&mt;
+  });
+  tbody.innerHTML = filtered.map(t=>`
+    <tr>
+      <td class="text-muted font-mono" style="font-size:11px">${t.date}</td>
+      <td><div class="flex items-center gap-2"><div style="width:28px;height:28px;border-radius:7px;background:${t.bg};display:flex;align-items:center;justify-content:center;font-size:13px">${t.icon}</div><span>${t.desc}</span></div></td>
+      <td><span class="badge badge-blue" style="font-size:9px">${t.type}</span></td>
+      <td><span class="badge badge-teal" style="font-size:9px">${t.cat}</span></td>
+      <td class="${t.dir==='in'?'txn-in':'txn-out'} fw-bold">${t.dir==='in'?'+':'-'}BDT ${fmt(t.amt)}</td>
+      <td><span class="badge badge-green">✓ ${t.status}</span></td>
+    </tr>`).join('');
+}
+let histSearchVal='', histTypeVal='';
+function filterHistory(v){histSearchVal=v;renderHistoryTable(v,histTypeVal);}
+function filterHistoryType(v){histTypeVal=v;renderHistoryTable(histSearchVal,v);}
+
+function initLoans() {
+  document.getElementById('loan-products').innerHTML = `
+    <div class="loan-c">
+      <div class="loan-ico" style="background:var(--blue-bg)">🏠</div>
+      <div>
+        <div class="fw-semi">Home Finance</div>
+        <div class="text-xs text-muted">Diminishing Musharakah · Up to BDT 1 Crore · 20 yrs</div>
+        <div class="text-sm mt-1" style="color:var(--blue)">Profit rate: 9.0% p.a. (HEPI -0.5%)</div>
+        <button class="btn btn-gold btn-xs mt-2" onclick="openModal('loan')">Apply Now</button>
+      </div>
+    </div>
+    <div class="loan-c">
+      <div class="loan-ico" style="background:var(--green-bg)">🚗</div>
+      <div>
+        <div class="fw-semi">Auto Finance</div>
+        <div class="text-xs text-muted">Ijarah · Up to BDT 30L · 7 yrs</div>
+        <div class="text-sm mt-1 text-green">Profit rate: 8.2% p.a.</div>
+        <button class="btn btn-gold btn-xs mt-2" onclick="openModal('loan')">Apply Now</button>
+      </div>
+    </div>
+    <div class="loan-c">
+      <div class="loan-ico" style="background:var(--amber-bg)">💼</div>
+      <div>
+        <div class="fw-semi">SME Finance</div>
+        <div class="text-xs text-muted">Murabaha · Up to BDT 50L · 5 yrs</div>
+        <div class="text-sm mt-1 text-gold">Profit rate: 10.0% p.a.</div>
+        <button class="btn btn-gold btn-xs mt-2" onclick="openModal('loan')">Apply Now</button>
+      </div>
+    </div>`;
+  document.getElementById('emi-calc-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Installment Calculator (EMI)</span></div>
+    <div class="g3" style="align-items:end;gap:10px">
+      <div class="fg" style="margin:0"><label class="fl">Finance Amount (BDT)</label><input class="fi" type="number" value="500000" id="loan-amt" oninput="calcEMI()"></div>
+      <div class="fg" style="margin:0"><label class="fl">Profit Rate (% p.a.)</label><input class="fi" type="number" value="9.0" id="loan-rate" oninput="calcEMI()"></div>
+      <div class="fg" style="margin:0"><label class="fl">Tenure (Months)</label><input class="fi" type="number" value="60" id="loan-tenure" oninput="calcEMI()"></div>
+    </div>
+    <div class="g3 mt-3">
+      <div class="metric"><div class="metric-lbl">Monthly Installment</div><div class="metric-val" id="emi-result">—</div></div>
+      <div class="metric"><div class="metric-lbl">Total Payable</div><div class="metric-val" id="emi-total">—</div></div>
+      <div class="metric"><div class="metric-lbl">Total Profit</div><div class="metric-val text-amber" id="emi-profit">—</div></div>
+    </div>`;
+  setTimeout(calcEMI, 100);
+}
+
+function initSavings() {
+  document.getElementById('savings-top').innerHTML = `
+    <div class="card">
+      <div class="card-h"><span class="card-t">Mudarabah Savings</span><span class="badge badge-teal">Active ●</span></div>
+      <div style="font-size:26px;font-weight:700;color:var(--teal)">BDT ${fmt(STATE.user.savings)}</div>
+      <div class="text-xs text-muted mt-1">Account •••• 9034</div>
+      <div class="divider"></div>
+      <div class="g2" style="gap:8px">
+        <div class="metric"><div class="metric-lbl">Profit Rate</div><div class="metric-val">5.2%</div><div class="metric-chg chg-neutral">Per annum</div></div>
+        <div class="metric"><div class="metric-lbl">Profit Earned</div><div class="metric-val">BDT 12,361</div><div class="metric-chg chg-up">This year</div></div>
+      </div>
+      <div class="text-sm text-muted mt-3">Next profit distribution: <strong style="color:var(--text)">30 Apr 2026</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Term Deposits</span><button class="btn btn-gold btn-sm" onclick="openModal('deposit')">+ New</button></div>
+      <table class="tbl">
+        <thead><tr><th>Amount</th><th>Term</th><th>Rate</th><th>Maturity</th></tr></thead>
+        <tbody>
+          <tr><td>BDT 50,000</td><td>3 months</td><td class="text-green">6.5%</td><td>15 Jul 2026</td></tr>
+          <tr><td>BDT 1,00,000</td><td>6 months</td><td class="text-green">7.2%</td><td>23 Oct 2026</td></tr>
+          <tr><td>BDT 2,00,000</td><td>12 months</td><td class="text-green">8.0%</td><td>23 Apr 2027</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+  document.getElementById('savings-goals-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Goal-Based Savings</span><button class="btn btn-outline btn-sm" onclick="toast('Add goal feature coming soon','info')">+ Add Goal</button></div>
+    ${[
+      {name:'Hajj Fund',target:250000,saved:82000,c:'var(--teal)',ico:'🕋'},
+      {name:'New Car',target:600000,saved:142000,c:'var(--blue)',ico:'🚗'},
+      {name:'Emergency Fund',target:100000,saved:94000,c:'var(--green)',ico:'🛡️'},
+    ].map(g=>`
+      <div class="goal-card">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2"><span style="font-size:18px">${g.ico}</span><span class="fw-semi">${g.name}</span></div>
+          <div class="text-sm text-muted">BDT ${fmt(g.saved)} / BDT ${fmt(g.target)}</div>
+        </div>
+        <div class="prog mb-1"><div class="prog-fill" style="width:${Math.round(g.saved/g.target*100)}%;background:${g.c}"></div></div>
+        <div class="text-xs text-muted">${Math.round(g.saved/g.target*100)}% complete · Est. ${Math.ceil((g.target-g.saved)/8000)} months at BDT 8,000/month</div>
+      </div>`).join('')}`;
+}
+
+function initInvest() {
+  document.getElementById('invest-portfolio').innerHTML = `
+    <div class="card">
+      <div class="card-h"><span class="card-t">Portfolio Overview</span></div>
+      <div style="font-size:26px;font-weight:700">BDT ${fmt(STATE.user.invest)}</div>
+      <div class="text-sm text-green">↑ BDT 9,720 (+8.1%) since inception</div>
+      <div class="divider"></div>
+      ${[
+        {name:'Govt. Ijarah Sukuk',amt:50000,pct:42,c:'var(--blue)'},
+        {name:'NurBank Green Sukuk',amt:40000,pct:33,c:'var(--teal)'},
+        {name:'Halal Equity Fund',amt:30000,pct:25,c:'var(--purple)'},
+      ].map(i=>`
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:10px;height:10px;border-radius:50%;background:${i.c};flex-shrink:0"></div>
+          <div style="flex:1">
+            <div class="flex justify-between mb-1 text-sm"><span>${i.name}</span><span class="fw-semi">BDT ${fmt(i.amt)}</span></div>
+            <div class="prog"><div class="prog-fill" style="width:${i.pct}%;background:${i.c}"></div></div>
+          </div>
+          <span class="text-xs text-muted">${i.pct}%</span>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Available Sukuk</span></div>
+      <table class="tbl">
+        <thead><tr><th>Sukuk</th><th>Yield</th><th>Term</th><th>Rating</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Govt. Ijarah Sukuk</td><td class="text-green fw-semi">6.5%</td><td>5 yr</td><td><span class="badge badge-teal">AAA</span></td><td><button class="btn btn-gold btn-xs">Buy</button></td></tr>
+          <tr><td>NurBank Green Sukuk</td><td class="text-green fw-semi">7.2%</td><td>3 yr</td><td><span class="badge badge-blue">AA+</span></td><td><button class="btn btn-gold btn-xs">Buy</button></td></tr>
+          <tr><td>Infrastructure Sukuk</td><td class="text-green fw-semi">8.0%</td><td>10 yr</td><td><span class="badge badge-amber">AA</span></td><td><button class="btn btn-gold btn-xs">Buy</button></td></tr>
+          <tr><td>Halal Equity Fund</td><td class="text-green fw-semi">9.5%</td><td>Open</td><td><span class="badge badge-purple">ESG+</span></td><td><button class="btn btn-gold btn-xs">Invest</button></td></tr>
+        </tbody>
+      </table>
+      <div class="info-teal info-box mt-3">✦ HEPI Priority: You qualify for pre-IPO access to Green Sukuk due to your score of 87.</div>
+    </div>`;
+}
+
+// ─── HEPI TABS ───
+function hepiTab(idx, btn) {
+  const content = document.getElementById('hepi-content');
+  if (!content) return;
+  if (btn) {
+    document.querySelectorAll('#hepi-tabs .tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  }
+  if (idx===0) {
+    content.innerHTML = `
+      <div class="g2 mb-3">
+        <div class="card">
+          <div style="font-size:24px;margin-bottom:8px">✦</div>
+          <div class="fw-semi" style="font-size:15px;margin-bottom:8px">What is HEPI?</div>
+          <div class="text-sm" style="color:var(--text2);line-height:1.8">HEPI — Human-centric Economic and Profitable Innovations — is a comprehensive performance framework rooted in the higher objectives of Islam (Maqasid al-Islam). It measures whether your banking genuinely benefits you, your community, and the planet — not just legal compliance.</div>
+          <div class="info-teal info-box mt-3">HEPI goes beyond "avoiding haram" to ask: <em>what good is being created?</em></div>
+        </div>
+        <div class="card">
+          <div style="font-size:24px;margin-bottom:8px">📖</div>
+          <div class="fw-semi" style="font-size:15px;margin-bottom:8px">Maqasid Foundation</div>
+          <div class="text-sm" style="color:var(--text2);line-height:1.8">Based on expanded Maqasid al-Shariah scholarship (Ibn Ashur, Jasser Auda, Chapra), HEPI protects: <strong style="color:var(--text)">Deen (Faith) · Nafs (Life) · Aql (Intellect) · Nasl (Family/Lineage) · Mal (Wealth)</strong> — and adds community welfare (Ummah) and environmental guardianship (Khalifa fil Ard).</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">The 5 HEPI Dimensions — How they are scored</span></div>
+        <div class="g3" style="gap:10px">
+          ${[
+            {ico:'👥',name:'1. Human Value Creation',d:'teal',desc:'Living wages, skills development, worker dignity, consumer protection, community empowerment. Measured via employer surveys, wage data, consumer satisfaction scores.'},
+            {ico:'📈',name:'2. Economic Viability with Purpose',d:'blue',desc:'Shariah-compliant financing, equitable value distribution, fair supplier relations, long-term sustainability. Measured via portfolio halal ratio, profit sharing equity.'},
+            {ico:'⚖️',name:'3. Ethical Alignment',d:'purple',desc:'Transparency, anti-corruption, Zakat compliance, fair marketing, Shariah governance. Measured via Shariah audit scores, disclosure ratings, Zakat payment history.'},
+            {ico:'🌱',name:'4. Environmental Stewardship',d:'green',desc:'Green Sukuk allocation, carbon footprint tracking, sustainable sourcing, waste reduction. Measured via CO2 impact reports, green finance ratio.'},
+            {ico:'🤝',name:'5. Social Justice & Inclusion',d:'amber',desc:'Workforce diversity, vulnerable group access, community investment, microfinance for underserved. Measured via Gini coefficient of loan distribution, accessibility scores.'},
+          ].map(d=>`
+            <div class="info-box info-${d.d}" style="border-radius:var(--r)">
+              <div style="font-size:20px;margin-bottom:6px">${d.ico}</div>
+              <div class="fw-semi text-sm mb-1">${d.name}</div>
+              <div class="text-xs" style="line-height:1.65">${d.desc}</div>
+            </div>`).join('')}
+          <div class="info-box" style="background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r)">
+            <div style="font-size:20px;margin-bottom:6px">🎯</div>
+            <div class="fw-semi text-sm mb-1">Benefits to You</div>
+            <div class="text-xs" style="line-height:1.65">Higher HEPI score = lower financing costs, better savings rates, priority investment access, waived fees, and the peace of mind that your money is doing good in the world.</div>
+          </div>
+        </div>
+      </div>`;
+  } else if (idx===1) {
+    content.innerHTML = `
+      <div class="g2">
+        <div class="card">
+          <div class="card-h"><span class="card-t">Your HEPI Score</span><span class="badge badge-teal">Excellent</span></div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="hepi-ring" style="flex-shrink:0;width:100px;height:100px">
+              ${hepiRing(87,100)}
+              <div class="hepi-ring-label"><span style="font-size:24px;font-weight:700;color:var(--teal)">87</span><span style="font-size:10px;color:var(--text3)">/100</span></div>
+            </div>
+            <div>
+              <div style="font-size:20px;font-weight:700;color:var(--teal)">Excellent</div>
+              <div class="text-sm text-muted mt-1">Top 8% of NurBank users</div>
+              <div class="text-sm text-muted">Updated: 23 Apr 2026</div>
+              <div class="badge badge-green mt-2">+4 points this month ↑</div>
+            </div>
+          </div>
+          ${hepiDim('Human Value Creation','88',0.88,'var(--teal)')}
+          ${hepiDim('Economic Viability','84',0.84,'var(--blue)')}
+          ${hepiDim('Ethical Alignment','92',0.92,'var(--purple)')}
+          ${hepiDim('Environmental','78',0.78,'var(--green)')}
+          ${hepiDim('Social Justice','85',0.85,'var(--amber)')}
+        </div>
+        <div>
+          <div class="card mb-3">
+            <div class="card-h"><span class="card-t">Benefits Unlocked</span></div>
+            ${['Preferential profit rate: -0.5% on home finance','Higher savings profit share: +0.3% on Mudarabah','Priority access to Green Sukuk offerings','Waived service charges on all transfers','Dedicated HEPI Advisor assigned'].map(b=>`<div class="flex items-center gap-2 text-sm" style="padding:7px 0;border-bottom:0.5px solid var(--border)"><span class="text-green">✓</span>${b}</div>`).join('')}
+          </div>
+          <div class="card">
+            <div class="card-h"><span class="card-t">Improvement Tips</span></div>
+            <div class="info-green info-box mb-2">🌱 Invest in Green Sukuk → +3 Environmental points</div>
+            <div class="info-gold info-box mb-2">⊕ Set up auto-Zakat deduction → +2 Ethical points</div>
+            <div class="info-blue info-box">🤝 Activate micro-sadaqah → +1 Social Justice point</div>
+          </div>
+        </div>
+      </div>`;
+  } else if (idx===2) {
+    content.innerHTML = `
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">HEPI vs Conventional Banking — Side-by-Side</span></div>
+        <table class="tbl">
+          <thead><tr><th>Metric</th><th>Conventional Bank</th><th>NurBank HEPI</th><th>Your Benefit</th></tr></thead>
+          <tbody>
+            ${[
+              ['Interest / Riba','✗ Charged on deposits & loans','✓ Zero — profit-sharing only','badge-teal'],
+              ['Wealth Distribution','Concentrated to shareholders','Equitable via Zakat-linked system','badge-green'],
+              ['Investment Screening','None — funds any sector','Shariah + ESG + HEPI screened','badge-teal'],
+              ['Community Impact','Low / Voluntary CSR','Mandatory SME + microfinance','badge-green'],
+              ['Transparency','Partial — complex fee structures','Full HEPI public reporting','badge-teal'],
+              ['Environmental','Not required','Green Sukuk, CO2 tracking','badge-green'],
+              ['Hidden Fees','Common — late fees, penalties','Zero for HEPI 80+ users','badge-teal'],
+              ['Accountability','Shareholders only','Shariah Board + Allah SWT','badge-purple'],
+            ].map(([m,cv,nv,b])=>`<tr><td class="fw-semi">${m}</td><td class="text-red">${cv}</td><td class="text-green">${nv}</td><td><span class="badge ${b}">✓ Better</span></td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-h"><span class="card-t">Score Comparison</span></div>
+          ${[
+            {label:'Your HEPI Score',score:87,c:'var(--teal)'},
+            {label:'Conventional Bank Equivalent',score:41,c:'var(--red)'},
+            {label:'NurBank Average',score:72,c:'var(--blue)'},
+            {label:'Top Tier (HEPI 90+)',score:95,c:'var(--gold)'},
+          ].map(s=>`
+            <div class="mb-3">
+              <div class="flex justify-between text-sm mb-1"><span>${s.label}</span><span class="fw-bold" style="color:${s.c}">${s.score}/100</span></div>
+              <div class="prog"><div class="prog-fill" style="width:${s.score}%;background:${s.c}"></div></div>
+            </div>`).join('')}
+        </div>
+        <div class="card">
+          <div class="card-h"><span class="card-t">Why HEPI Matters</span></div>
+          <div class="text-sm" style="line-height:1.8;color:var(--text2)">Unlike ESG scores (voluntary, often greenwashed), HEPI is grounded in <strong style="color:var(--text)">divine accountability</strong>.<br><br>Your deposits are not funding weapons, alcohol, or exploitative lending. They're circulating in halal sectors that employ people fairly.<br><br>This year, your HEPI score saved you <strong style="color:var(--gold)">BDT 14,200</strong> in fees + preferential rates, and your deposits supported <strong style="color:var(--teal)">12 jobs</strong> and reduced <strong style="color:var(--green)">2.1 tonnes CO2</strong>.</div>
+        </div>
+      </div>`;
+  } else if (idx===3) {
+    content.innerHTML = `
+      <div class="g4 mb-3">
+        <div class="metric"><div class="metric-lbl">Jobs Supported</div><div class="metric-val">12</div><div class="metric-chg chg-up">Via SME financing</div></div>
+        <div class="metric"><div class="metric-lbl">CO2 Saved (kg)</div><div class="metric-val">2,100</div><div class="metric-chg chg-up text-green">Green Sukuk</div></div>
+        <div class="metric"><div class="metric-lbl">Zakat Distributed</div><div class="metric-val">BDT 8,450</div><div class="metric-chg chg-neutral">Last 12 months</div></div>
+        <div class="metric"><div class="metric-lbl">Community Benefit</div><div class="metric-val">BDT 3.2L</div><div class="metric-chg chg-up">Indirect impact</div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Impact Breakdown by HEPI Dimension</span></div>
+        ${[
+          {ico:'👥',d:'teal',n:'Human Value Creation',v:'12 jobs supported via SME financing; BDT 2.4L microfinance deployed; 3 women entrepreneurs funded via Qard Hasan.'},
+          {ico:'📈',d:'blue',n:'Economic Viability',v:'BDT 8.2L in halal investments; zero riba transactions; 100% Shariah-compliant financing portfolio this year.'},
+          {ico:'⚖️',d:'purple',n:'Ethical Alignment',v:'Zakat BDT 8,450 paid on schedule; full tax compliance; all contracts Shariah Board reviewed.'},
+          {ico:'🌱',d:'green',n:'Environmental Stewardship',v:'2,100 kg CO2 saved via Green Sukuk (Sylhet Solar); paperless banking fully enabled.'},
+          {ico:'🤝',d:'amber',n:'Social Justice & Inclusion',v:'Sadaqah BDT 24,000 distributed; 5 micro-loans to vulnerable households; accessible banking features active.'},
+        ].map(i=>`
+          <div class="info-box info-${i.d} mb-2 flex gap-3" style="border-radius:var(--r)">
+            <span style="font-size:20px;flex-shrink:0">${i.ico}</span>
+            <div><div class="fw-semi text-sm">${i.n}</div><div class="text-xs mt-1" style="line-height:1.6">${i.v}</div></div>
+          </div>`).join('')}
+      </div>`;
+  }
+}
+
+function initZakat() {
+  document.getElementById('zakat-content').innerHTML = `
+    <div class="card">
+      <div class="card-h"><span class="card-t">Calculate Your Zakat</span></div>
+      <div class="fg"><label class="fl">Cash & Bank Balance (BDT)</label><input class="fi" type="number" value="482800" id="z-cash" oninput="calcZakat()"></div>
+      <div class="fg"><label class="fl">Gold Value (BDT)</label><input class="fi" type="number" value="0" id="z-gold" oninput="calcZakat()"></div>
+      <div class="fg"><label class="fl">Business / Investment Assets (BDT)</label><input class="fi" type="number" value="120000" id="z-invest" oninput="calcZakat()"></div>
+      <div class="fg"><label class="fl">Receivables (BDT)</label><input class="fi" type="number" value="0" id="z-recv" oninput="calcZakat()"></div>
+      <div class="fg"><label class="fl">Liabilities / Debts payable (BDT)</label><input class="fi" type="number" value="0" id="z-liab" oninput="calcZakat()"></div>
+      <div class="info-teal info-box mt-2 mb-3">
+        <div class="flex justify-between mb-1"><span>Nisab Threshold (85g gold)</span><span class="fw-bold">BDT 85,420</span></div>
+        <div class="flex justify-between mb-1"><span>Zakatable Wealth</span><span class="fw-bold" id="z-zakatable">—</span></div>
+        <div class="flex justify-between" style="font-size:14px;font-weight:700"><span>Zakat Due (2.5%)</span><span id="z-due">—</span></div>
+      </div>
+      <button class="btn btn-teal btn-w100" onclick="openModal('zakatpay')">Pay Zakat Now ⊕</button>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Verified Distribution Partners</span></div>
+      ${[
+        {name:'Manabik Shahajya Sangstha',desc:'Poverty alleviation · Dhaka',impact:'89/100 Impact Score'},
+        {name:'BRAC Education Fund',desc:'Education for underprivileged children',impact:'94/100 Impact Score'},
+        {name:'NurBank Microfinance Pool',desc:'SME support · Qard Hasan loans',impact:'91/100 Impact Score'},
+        {name:'Islamic Relief Bangladesh',desc:'Disaster relief · Healthcare',impact:'88/100 Impact Score'},
+      ].map((p,i)=>`
+        <div class="flex justify-between items-center" style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+          <div>
+            <div class="fw-semi text-sm">${p.name}</div>
+            <div class="text-xs text-muted mt-1">${p.desc}</div>
+            <div class="badge badge-teal mt-1" style="font-size:9px">${p.impact}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-green text-xs">Verified ✓</span>
+            <input type="radio" name="zakat-org" ${i===1?'checked':''}>
+          </div>
+        </div>`).join('')}
+      <div class="info-gold info-box mt-3">✦ Paying Zakat through NurBank adds +2 to your HEPI Ethical Alignment score and generates an official Zakat receipt for your records.</div>
+    </div>`;
+  setTimeout(calcZakat, 50);
+}
+
+function initAIAdvisor() {
+  const msgs = document.getElementById('ai-advisor-msgs');
+  if (!msgs) return;
+  msgs.innerHTML = `
+    <div class="ai-bubble bot">As-salamu alaykum Ahmad! I'm your NurBank AI Advisor, trained on Islamic economics, Maqasid al-Shariah, and Bangladesh Bank regulations. How can I help you today?</div>
+    <div class="ai-bubble bot">💡 <strong>Quick suggestions:</strong> I can help with transfer options, HEPI score optimization, Zakat calculation, halal investment advice, or comparing our products with conventional banks.</div>`;
+  document.getElementById('ai-suggestions').innerHTML = `
+    <div class="card-h"><span class="card-t">Suggested Questions</span></div>
+    ${[
+      'What is the best way to transfer money to Saudi Arabia?',
+      'How can I improve my HEPI score?',
+      'What is the difference between BEFTN and RTGS?',
+      'Should I invest in Green Sukuk or equity fund?',
+      'When should I pay my Zakat this year?',
+    ].map(q=>`<button class="btn btn-outline btn-w100 mb-1" style="text-align:left;justify-content:flex-start;font-size:11px" onclick="askAI('${q.replace(/'/g,"\\'")}','client')">${q}</button>`).join('')}`;
+  document.getElementById('ai-why-hepi').innerHTML = `
+    <div class="card-h"><span class="card-t">Why Choose HEPI Banking?</span></div>
+    ${[
+      {ico:'⊕',title:'Mandatory Zakat Integration',d:'Zakat is automatically calculated on all your assets and can be paid directly through the app to verified organizations.'},
+      {ico:'⇄',title:'Riba-Free Transfers',d:'All transfer products — BEFTN, RTGS, SWIFT — involve zero interest charges. Fees are flat, transparent, and halal.'},
+      {ico:'✦',title:'Real Impact Measurement',d:'Your HEPI score proves your money is doing good — tracked to actual jobs, CO2 saved, and communities served.'},
+    ].map(i=>`<div class="info-teal info-box mb-2"><span class="fw-semi">${i.ico} ${i.title}</span><div class="mt-1" style="line-height:1.6">${i.d}</div></div>`).join('')}`;
+}
+
+function initSecurity() {
+  document.getElementById('security-content').innerHTML = `
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Authentication</span></div>
+        ${secToggle('Two-Factor Authentication (OTP)','SMS to +880-17xx-xxx-891',true)}
+        ${secToggle('Biometric Login','Fingerprint / Face ID',true)}
+        ${secToggle('Login Notifications','Alert on new device',true)}
+        ${secToggle('Auto-Lock (5 min idle)','Session timeout',true)}
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Login Activity</span></div>
+        <table class="tbl">
+          <thead><tr><th>Device</th><th>Location</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Chrome / Windows</td><td>Dhaka, BD</td><td>Now</td><td><span class="badge badge-teal">Current</span></td></tr>
+            <tr><td>NurBank App / iOS</td><td>Dhaka, BD</td><td>2 hrs ago</td><td><span class="badge badge-blue">Safe</span></td></tr>
+            <tr><td>Firefox / Mac</td><td>Dhaka, BD</td><td>Yesterday</td><td><span class="badge badge-blue">Safe</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-3">
+        <div class="card-h"><span class="card-t">Transaction Controls</span></div>
+        ${secToggle('International Transfers','Require OTP + PIN',true)}
+        ${secToggle('Large Transaction Alert','Notify for BDT 10,000+',true)}
+        ${secToggle('Freeze Card Instantly','Debit card lock',false)}
+        ${secToggle('Haram Transaction Block','Block gambling, adult sites',true)}
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="card-t">Privacy & Data</span></div>
+        ${secToggle('HEPI Data Sharing','Anonymized — improves scoring',true)}
+        ${secToggle('Marketing (Halal only)','Halal product recommendations',false)}
+        ${secToggle('Analytics & Improvement','Help improve NurBank services',true)}
+      </div>
+    </div>`;
+}
+
+function initSettings() {
+  document.getElementById('settings-content').innerHTML = `
+    <div class="card">
+      <div class="card-h"><span class="card-t">Profile</span></div>
+      <div class="fg"><label class="fl">Full Name</label><input class="fi" value="Ahmad Raza"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" value="ahmad.raza@email.com" type="email"></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" value="+880 17xx xxx 891"></div>
+      <div class="fg"><label class="fl">Address</label><input class="fi" value="Gulshan-2, Dhaka 1212"></div>
+      <div class="fg"><label class="fl">National ID</label><input class="fi" value="19901234567890123" readonly></div>
+      <button class="btn btn-gold" onclick="toast('Profile saved successfully.','success')">Save Changes ✓</button>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="card-t">Preferences</span></div>
+      <div class="fg"><label class="fl">Language</label><select class="fi"><option>English</option><option>বাংলা</option><option>العربية</option></select></div>
+      <div class="fg"><label class="fl">Currency Display</label><select class="fi"><option>BDT (৳)</option><option>USD ($)</option><option>EUR (€)</option></select></div>
+      <div class="fg"><label class="fl">Calendar</label><select class="fi"><option>Gregorian + Hijri</option><option>Gregorian only</option><option>Hijri only</option></select></div>
+      <div class="fg"><label class="fl">Theme</label>
+        <select class="fi" onchange="if(this.value==='dark')document.body.classList.remove('light-mode');else document.body.classList.add('light-mode')">
+          <option value="dark">Dark (Default)</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Notification Delivery</label><select class="fi"><option>SMS + App</option><option>App only</option><option>Email + SMS</option></select></div>
+      <button class="btn btn-gold" onclick="toast('Preferences saved.','success')">Save Preferences ✓</button>
+    </div>`;
+}
+
+function initAdminDashboard() {
+  document.getElementById('admin-metrics').innerHTML = `
+    <div class="admin-stat-card"><div class="metric-lbl">Total Deposits</div><div style="font-size:20px;font-weight:700;color:var(--gold)">BDT 48.2 Cr</div><div class="metric-chg chg-up">↑ 4.8% this month</div></div>
+    <div class="admin-stat-card"><div class="metric-lbl">Active Financing</div><div style="font-size:20px;font-weight:700;color:var(--teal)">BDT 29.7 Cr</div><div class="metric-chg chg-neutral">NPF: 2.1%</div></div>
+    <div class="admin-stat-card"><div class="metric-lbl">Customers</div><div style="font-size:20px;font-weight:700">2,847</div><div class="metric-chg chg-up">+18 this week</div></div>
+    <div class="admin-stat-card"><div class="metric-lbl">Pending Reviews</div><div style="font-size:20px;font-weight:700;color:var(--red)">3</div><div class="metric-chg" style="color:var(--red)">⚠ Needs attention</div></div>`;
+  // Pending transactions
+  document.getElementById('admin-pending-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Pending Transactions</span><span class="badge badge-red">${PENDING_TXNS.length} new</span></div>
+    ${PENDING_TXNS.map(pt=>`
+      <div class="alert-row ${pt.risk==='High'?'alert-high':pt.risk==='Medium'?'alert-med':'alert-low'}">
+        <div style="flex:1">
+          <div class="fw-semi text-sm">${pt.from} → ${pt.to}</div>
+          <div class="text-xs text-muted mt-1">BDT ${fmt(pt.amt)} · ${pt.type} · ${pt.time}</div>
+          <div class="text-xs mt-1" style="color:${pt.risk==='High'?'var(--red)':pt.risk==='Medium'?'var(--amber)':'var(--teal)'}">${pt.flag}</div>
+        </div>
+        <div class="flex gap-1">
+          <button class="btn btn-gold btn-xs" onclick="adminApprove('${pt.id}','approve')">✓ Approve</button>
+          <button class="btn btn-danger btn-xs" onclick="adminApprove('${pt.id}','reject')">✗ Flag</button>
+        </div>
+      </div>`).join('')}`;
+  // Alerts
+  document.getElementById('admin-alerts-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Compliance Alerts</span></div>
+    <div class="alert-row alert-high"><div><div class="fw-semi text-sm">AML Alert — Rana Islam</div><div class="text-xs text-muted mt-1">BDT 95,000 outward transfer — exceeds 90-day average by 8x</div></div></div>
+    <div class="alert-row alert-med"><div><div class="fw-semi text-sm">KYC Incomplete — Bashir Uddin</div><div class="text-xs text-muted mt-1">Partial KYC — biometric verification pending</div></div></div>
+    <div class="alert-row alert-low"><div><div class="fw-semi text-sm">Shariah Audit Due — Q1 2026</div><div class="text-xs text-muted mt-1">Submit to Shariah Board by May 15, 2026</div></div></div>
+    <div class="alert-row alert-low"><div><div class="fw-semi text-sm">BB Circular BRPD-18</div><div class="text-xs text-muted mt-1">New dual-auth rule for RTGS BDT 1L+ — effective May 1</div></div></div>`;
+  // Recent customers
+  document.getElementById('admin-recent-customers').innerHTML = `
+    <div class="card-h"><span class="card-t">Recent Customers</span><button class="btn btn-outline btn-sm" onclick="showPage('admin-customers')">View all</button></div>
+    ${ADMIN_CUSTOMERS.slice(0,4).map(c=>`
+      <div class="customer-row">
+        <div class="c-avatar" style="background:var(--blue-bg);color:var(--blue)">${c.name.split(' ').map(n=>n[0]).join('')}</div>
+        <div style="flex:1">
+          <div class="fw-semi text-sm">${c.name}</div>
+          <div class="text-xs text-muted">•••• ${c.acct} · ${c.city} · HEPI ${c.hepi}</div>
+        </div>
+        <span class="badge ${c.status==='Active'?'badge-teal':c.status==='Flagged'?'badge-red':'badge-amber'}">${c.status}</span>
+      </div>`).join('')}`;
+  // Chart
+  const months = ['Nov','Dec','Jan','Feb','Mar','Apr'];
+  const vals = [38,42,45,39,48,51];
+  const max = Math.max(...vals);
+  document.getElementById('admin-txn-chart').innerHTML = `
+    <div class="card-h"><span class="card-t">Monthly Deposit Volume (Cr BDT)</span></div>
+    <div class="chart-area">
+      ${vals.map((v,i)=>`<div class="chart-bar" style="height:${Math.round(v/max*100)}%;background:${i===5?'var(--gold)':'var(--surface3)'};border:0.5px solid ${i===5?'var(--gold)':'var(--border2)'}"><div class="chart-bar-lbl">${v}Cr</div></div>`).join('')}
+    </div>
+    <div class="chart-month-labels">${months.map(m=>`<div class="chart-month-lbl">${m}</div>`).join('')}</div>`;
+}
+
+function initAdminCustomers() {
+  document.getElementById('admin-customers-card').innerHTML = `
+    <div class="flex gap-2 items-center mb-3">
+      <input class="fi" style="max-width:220px" placeholder="🔍 Search customers..." oninput="filterAdminCustomers(this.value)">
+      <select class="fi" style="max-width:140px">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Flagged</option>
+      </select>
+      <button class="btn btn-gold btn-sm" onclick="toast('New customer form coming soon','info')">+ New Customer</button>
+      <button class="btn btn-outline btn-sm" onclick="toast('Customer data exported.','success')">↓ Export</button>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="tbl" id="admin-cust-table">
+      <thead><tr><th>ID</th><th>Customer</th><th>Account</th><th>Balance</th><th>HEPI</th><th>KYC</th><th>Risk</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="admin-cust-tbody"></tbody>
+    </table>
+    </div>`;
+  renderAdminCustomers(ADMIN_CUSTOMERS);
+}
+
+function renderAdminCustomers(data) {
+  const tb = document.getElementById('admin-cust-tbody');
+  if (!tb) return;
+  tb.innerHTML = data.map(c=>`
+    <tr>
+      <td class="font-mono text-muted text-xs">${c.id}</td>
+      <td><div class="flex items-center gap-2"><div class="c-avatar" style="background:var(--blue-bg);color:var(--blue);width:28px;height:28px;font-size:10px">${c.name.split(' ').map(n=>n[0]).join('')}</div>${c.name}</div></td>
+      <td class="font-mono">•••• ${c.acct}</td>
+      <td class="fw-semi">BDT ${fmt(c.balance)}</td>
+      <td><span class="fw-bold" style="color:${c.hepi>=80?'var(--teal)':c.hepi>=60?'var(--amber)':'var(--red)'}">${c.hepi}</span></td>
+      <td><span class="badge ${c.kyc==='Verified'?'badge-green':c.kyc==='Partial'?'badge-amber':'badge-red'}">${c.kyc}</span></td>
+      <td><span class="badge ${c.risk==='Low'?'badge-green':c.risk==='Medium'?'badge-amber':'badge-red'}">${c.risk}</span></td>
+      <td><span class="badge ${c.status==='Active'?'badge-teal':c.status==='Flagged'?'badge-red':'badge-amber'}">${c.status}</span></td>
+      <td><button class="btn btn-outline btn-xs" onclick="openCustomerDetail('${c.id}')">View</button></td>
+    </tr>`).join('');
+}
+
+function filterAdminCustomers(v) {
+  const f = ADMIN_CUSTOMERS.filter(c=>c.name.toLowerCase().includes(v.toLowerCase())||c.id.includes(v)||c.acct.includes(v));
+  renderAdminCustomers(f);
+}
+
+function initAdminTransactions() {
+  document.getElementById('admin-pending-txns-card').innerHTML = `
+    <div class="card-h"><span class="card-t">⚠ Pending Approval</span><span class="badge badge-red">${PENDING_TXNS.length} items</span></div>
+    <table class="tbl">
+      <thead><tr><th>ID</th><th>From</th><th>To</th><th>Amount</th><th>Type</th><th>Risk Flag</th><th>Risk</th><th>Actions</th></tr></thead>
+      <tbody>${PENDING_TXNS.map(pt=>`
+        <tr>
+          <td class="font-mono text-xs text-muted">${pt.id}</td>
+          <td>${pt.from}</td><td>${pt.to}</td>
+          <td class="fw-bold">BDT ${fmt(pt.amt)}</td>
+          <td><span class="badge badge-blue">${pt.type}</span></td>
+          <td class="text-xs" style="color:${pt.risk==='High'?'var(--red)':pt.risk==='Medium'?'var(--amber)':'var(--teal)'}">${pt.flag}</td>
+          <td><span class="badge ${pt.risk==='High'?'badge-red':pt.risk==='Medium'?'badge-amber':'badge-teal'}">${pt.risk}</span></td>
+          <td><div class="flex gap-1"><button class="btn btn-gold btn-xs" onclick="adminApprove('${pt.id}','approve')">Approve</button><button class="btn btn-danger btn-xs" onclick="adminApprove('${pt.id}','reject')">Reject</button></div></td>
+        </tr>`).join('')}</tbody>
+    </table>`;
+  document.getElementById('admin-all-txns-card').innerHTML = `
+    <div class="card-h"><span class="card-t">All Recent Transactions</span></div>
+    <table class="tbl">
+      <thead><tr><th>Date</th><th>Customer</th><th>Description</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody>${TXN_DATA.map(t=>`
+        <tr>
+          <td class="text-xs text-muted font-mono">${t.date}</td>
+          <td>Ahmad Raza</td>
+          <td>${t.desc}</td>
+          <td><span class="badge badge-blue text-xs">${t.type}</span></td>
+          <td class="${t.dir==='in'?'txn-in':'txn-out'} fw-semi">${t.dir==='in'?'+':'-'}BDT ${fmt(t.amt)}</td>
+          <td><span class="badge badge-green">✓ ${t.status}</span></td>
+        </tr>`).join('')}</tbody>
+    </table>`;
+}
+
+function initAdminFinancing() {
+  document.getElementById('admin-financing-card').innerHTML = `
+    <div class="card-h"><span class="card-t">Financing Applications</span><button class="btn btn-gold btn-sm" onclick="toast('New application form launched','info')">+ New Application</button></div>
+    <table class="tbl">
+      <thead><tr><th>App. ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Purpose</th><th>HEPI</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="font-mono text-xs">F-2026-041</td><td>Ahmad Raza</td><td>Home (Musharakah)</td><td>BDT 40L</td><td>Primary Residence</td><td class="text-teal fw-bold">87</td><td><span class="badge badge-amber">Under Review</span></td><td><button class="btn btn-gold btn-xs" onclick="toast('Application F-2026-041 approved!','success')">Approve</button></td></tr>
+        <tr><td class="font-mono text-xs">F-2026-038</td><td>Karim Ahmed</td><td>SME (Murabaha)</td><td>BDT 20L</td><td>Business Expansion</td><td class="text-teal fw-bold">91</td><td><span class="badge badge-green">Approved</span></td><td><button class="btn btn-outline btn-xs">View</button></td></tr>
+        <tr><td class="font-mono text-xs">F-2026-035</td><td>Rana Islam</td><td>Personal (Qard Hasan)</td><td>BDT 2L</td><td>Medical Emergency</td><td class="text-amber fw-bold">55</td><td><span class="badge badge-red">On Hold</span></td><td><button class="btn btn-danger btn-xs" onclick="toast('Additional documentation requested.','info')">Request Docs</button></td></tr>
+        <tr><td class="font-mono text-xs">F-2026-032</td><td>Nasrin Khatun</td><td>Auto (Ijarah)</td><td>BDT 15L</td><td>Family Vehicle</td><td class="text-green fw-bold">83</td><td><span class="badge badge-green">Approved</span></td><td><button class="btn btn-outline btn-xs">View</button></td></tr>
+      </tbody>
+    </table>`;
+}
+
+function initAdminDeposits() {
+  document.getElementById('admin-deposits-card').innerHTML = `
+    <div class="g4 mb-3">
+      <div class="metric"><div class="metric-lbl">Total Deposits</div><div class="metric-val text-gold">BDT 48.2 Cr</div></div>
+      <div class="metric"><div class="metric-lbl">Mudarabah Accounts</div><div class="metric-val">1,842</div></div>
+      <div class="metric"><div class="metric-lbl">Term Deposits</div><div class="metric-val">634</div></div>
+      <div class="metric"><div class="metric-lbl">Avg. Profit Rate</div><div class="metric-val text-green">6.8%</div></div>
+    </div>
+    <div class="card-h" style="margin-top:8px"><span class="card-t">All Deposit Accounts</span></div>
+    <table class="tbl">
+      <thead><tr><th>Account</th><th>Customer</th><th>Type</th><th>Balance</th><th>Rate</th><th>Maturity</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="font-mono">•••• 9034</td><td>Ahmad Raza</td><td>Mudarabah Savings</td><td class="fw-semi">BDT 2,37,800</td><td class="text-green">5.2%</td><td>—</td><td><span class="badge badge-teal">Active</span></td></tr>
+        <tr><td class="font-mono">•••• 5512</td><td>Fatima Begum</td><td>Term Deposit 12M</td><td class="fw-semi">BDT 5,00,000</td><td class="text-green">8.0%</td><td>Dec 2026</td><td><span class="badge badge-blue">Term</span></td></tr>
+        <tr><td class="font-mono">•••• 7789</td><td>Karim Ahmed</td><td>Mudarabah Savings</td><td class="fw-semi">BDT 18,50,000</td><td class="text-green">5.2%</td><td>—</td><td><span class="badge badge-teal">Active</span></td></tr>
+      </tbody>
+    </table>`;
+}
+
+function initAdminCompliance() {
+  document.getElementById('admin-compliance-card').innerHTML = `
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Bangladesh Bank Requirements</span></div>
+        ${[
+          {name:'CRR (Cash Reserve Ratio)',required:'4%',current:'4.8%',status:'green'},
+          {name:'SLR (Statutory Liquidity)',required:'13%',current:'15.2%',status:'green'},
+          {name:'NPF Ratio (Non-Performing)',required:'<5%',current:'2.1%',status:'green'},
+          {name:'Capital Adequacy Ratio',required:'>10%',current:'12.4%',status:'green'},
+          {name:'AML Reporting (STR)',required:'Timely',current:'2 pending review',status:'amber'},
+        ].map(r=>`
+          <div class="flex justify-between items-center" style="padding:9px 0;border-bottom:0.5px solid var(--border)">
+            <div><div class="text-sm fw-semi">${r.name}</div><div class="text-xs text-muted">Required: ${r.required}</div></div>
+            <div class="text-right"><div class="fw-bold" style="color:${r.status==='green'?'var(--green)':'var(--amber)'}">${r.current}</div><span class="badge ${r.status==='green'?'badge-green':'badge-amber'}" style="font-size:9px">${r.status==='green'?'✓ Compliant':'⚠ Review'}</span></div>
+          </div>`).join('')}
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Shariah Board Status</span></div>
+        <div class="info-teal info-box mb-3">Next Shariah Board meeting: May 5, 2026 · Q1 audit due: May 15</div>
+        ${[
+          {name:'Financing Products',status:'Approved',d:'All 7 products certified'},
+          {name:'Investment Portfolio',status:'Approved',d:'94% in Shariah-screened sectors'},
+          {name:'Deposit Structures',status:'Approved',d:'Mudarabah profit-sharing verified'},
+          {name:'Marketing Materials',status:'Pending',d:'Q2 campaign review pending'},
+        ].map(i=>`
+          <div class="flex justify-between items-center" style="padding:8px 0;border-bottom:0.5px solid var(--border)">
+            <div><div class="text-sm fw-semi">${i.name}</div><div class="text-xs text-muted">${i.d}</div></div>
+            <span class="badge ${i.status==='Approved'?'badge-teal':'badge-amber'}">${i.status}</span>
+          </div>`).join('')}
+        <button class="btn btn-gold mt-3 btn-w100" onclick="toast('Shariah audit report generated and sent to board.','success')">Generate Shariah Report</button>
+      </div>
+    </div>`;
+}
+
+function initAdminHEPI() {
+  document.getElementById('admin-hepi-card').innerHTML = `
+    <div class="g4 mb-3">
+      <div class="metric"><div class="metric-lbl">Branch HEPI Avg</div><div class="metric-val text-teal">74.2</div><div class="metric-chg chg-up">↑ 2.1 this quarter</div></div>
+      <div class="metric"><div class="metric-lbl">HEPI 80+ Customers</div><div class="metric-val">1,204</div><div class="metric-chg chg-up">↑ 82 new</div></div>
+      <div class="metric"><div class="metric-lbl">Jobs Created</div><div class="metric-val">847</div><div class="metric-chg chg-up text-green">Via SME financing</div></div>
+      <div class="metric"><div class="metric-lbl">CO2 Saved (tonnes)</div><div class="metric-val">142</div><div class="metric-chg chg-up text-green">Green Sukuk</div></div>
+    </div>
+    <div class="card-h"><span class="card-t">HEPI Score Distribution — Branch Portfolio</span></div>
+    ${[
+      {label:'90–100 (Excellent)',count:312,pct:11,c:'var(--teal)'},
+      {label:'80–89 (Very Good)',count:892,pct:31,c:'var(--blue)'},
+      {label:'70–79 (Good)',count:985,pct:35,c:'var(--green)'},
+      {label:'60–69 (Fair)',count:428,pct:15,c:'var(--amber)'},
+      {label:'Below 60 (Needs Work)',count:230,pct:8,c:'var(--red)'},
+    ].map(s=>`
+      <div class="mb-3">
+        <div class="flex justify-between text-sm mb-1"><span>${s.label}</span><span class="fw-semi">${s.count} customers (${s.pct}%)</span></div>
+        <div class="prog"><div class="prog-fill" style="width:${s.pct}%;background:${s.c}"></div></div>
+      </div>`).join('')}`;
+}
+
+function initAdminZakat() {
+  document.getElementById('admin-zakat-card').innerHTML = `
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Zakat Pool Summary</span></div>
+        <div class="g2" style="gap:8px;margin-bottom:16px">
+          <div class="metric"><div class="metric-lbl">Collected (YTD)</div><div class="metric-val text-teal">BDT 24.8L</div></div>
+          <div class="metric"><div class="metric-lbl">Distributed</div><div class="metric-val text-green">BDT 22.1L</div></div>
+        </div>
+        <div class="card-h"><span class="card-t">Recent Zakat Payments</span></div>
+        <table class="tbl">
+          <thead><tr><th>Customer</th><th>Amount</th><th>Org</th><th>Date</th></tr></thead>
+          <tbody>
+            <tr><td>Ahmad Raza</td><td>BDT 8,450</td><td>BRAC Education</td><td>Apr 2026</td></tr>
+            <tr><td>Karim Ahmed</td><td>BDT 42,000</td><td>Islamic Relief</td><td>Apr 2026</td></tr>
+            <tr><td>Nasrin Khatun</td><td>BDT 7,750</td><td>Microfinance Pool</td><td>Mar 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Distribution by Organization</span></div>
+        ${[
+          {name:'BRAC Education Fund',pct:35,amt:'BDT 7.7L',c:'var(--teal)'},
+          {name:'Islamic Relief BD',pct:28,amt:'BDT 6.2L',c:'var(--blue)'},
+          {name:'NurBank Microfinance',pct:22,amt:'BDT 4.8L',c:'var(--purple)'},
+          {name:'Manabik Shahajya',pct:15,amt:'BDT 3.3L',c:'var(--green)'},
+        ].map(d=>`
+          <div class="mb-3">
+            <div class="flex justify-between text-sm mb-1"><span>${d.name}</span><span class="fw-semi">${d.amt} (${d.pct}%)</span></div>
+            <div class="prog"><div class="prog-fill" style="width:${d.pct}%;background:${d.c}"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function initAdminAI() {
+  const msgs = document.getElementById('ai-admin-msgs');
+  if (!msgs) return;
+  msgs.innerHTML = `
+    <div class="ai-bubble bot">Welcome, ${STATE.user.name}. I'm your NurBank Banking Operations AI. I can help with AML screening, compliance, HEPI analysis, Bangladesh Bank regulations, and operational decisions.</div>
+    <div class="ai-bubble bot">📊 Today's priority: 3 transactions need your review. One (PT001) has an AML risk flag. Recommend reviewing before 3 PM BEFTN cutoff.</div>`;
+  document.getElementById('admin-ai-panel').innerHTML = `
+    <div class="card-h"><span class="card-t">Quick Operations</span></div>
+    ${['What is BB Circular BRPD-18?','Explain STR filing requirements','AML red flags to watch for','How to calculate NPF ratio?','HEPI audit checklist'].map(q=>`<button class="btn btn-outline btn-w100 mb-1" style="text-align:left;font-size:11px" onclick="askAI('${q}','admin')">${q}</button>`).join('')}
+    <div class="divider"></div>
+    <div class="card-h"><span class="card-t">System Status</span></div>
+    ${[['BEFTN','Online ●','green'],['RTGS','Online ●','green'],['SWIFT','Online ●','green'],['Core Banking','Online ●','green'],['AML Engine','Active ●','teal']].map(([s,v,c])=>`<div class="flex justify-between text-sm" style="padding:4px 0"><span class="text-muted">${s}</span><span class="fw-semi text-${c}">${v}</span></div>`).join('')}`;
+}
+
+function initAdminReports() {
+  document.getElementById('admin-reports-card').innerHTML = `
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Generate Report</span></div>
+        <div class="fg"><label class="fl">Report Type</label>
+          <select class="fi">
+            <option>Monthly Financial Summary</option>
+            <option>Quarterly HEPI Impact Report</option>
+            <option>AML / Compliance Report</option>
+            <option>Zakat Distribution Report</option>
+            <option>Shariah Audit Report</option>
+            <option>NPF Analysis</option>
+          </select>
+        </div>
+        <div class="fi-row">
+          <div class="fg"><label class="fl">From</label><input class="fi" type="date" value="2026-04-01"></div>
+          <div class="fg"><label class="fl">To</label><input class="fi" type="date" value="2026-04-23"></div>
+        </div>
+        <div class="fg"><label class="fl">Format</label><select class="fi"><option>PDF</option><option>Excel (XLSX)</option><option>CSV</option></select></div>
+        <button class="btn btn-gold btn-w100" onclick="toast('Report generated and sent to your email.','success')">Generate Report ↓</button>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">Recent Reports</span></div>
+        ${[
+          {name:'March 2026 Financial Summary','date':'1 Apr 2026',type:'PDF'},
+          {name:'Q1 2026 HEPI Impact Report','date':'31 Mar 2026',type:'PDF'},
+          {name:'AML Review — March 2026','date':'28 Mar 2026',type:'PDF'},
+          {name:'Zakat Distribution Q1 2026','date':'31 Mar 2026',type:'Excel'},
+        ].map(r=>`
+          <div class="flex justify-between items-center" style="padding:9px 0;border-bottom:0.5px solid var(--border)">
+            <div><div class="text-sm fw-semi">${r.name}</div><div class="text-xs text-muted">${r.date}</div></div>
+            <div class="flex gap-1 items-center">
+              <span class="badge badge-blue" style="font-size:9px">${r.type}</span>
+              <button class="btn btn-outline btn-xs" onclick="toast('Downloading ${r.name}','info')">↓</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function initAdminSettings() {
+  document.getElementById('admin-settings-card').innerHTML = `
+    <div class="g2">
+      <div>
+        <div class="card-h"><span class="card-t">Branch Configuration</span></div>
+        <div class="fg"><label class="fl">Branch Name</label><input class="fi" value="NurBank Gulshan-2 Branch"></div>
+        <div class="fg"><label class="fl">Branch Code</label><input class="fi" value="NB-DH-GUL2" class="font-mono"></div>
+        <div class="fg"><label class="fl">BEFTN Cutoff</label><select class="fi"><option>3:30 PM</option></select></div>
+        <div class="fg"><label class="fl">RTGS Cutoff</label><select class="fi"><option>4:00 PM</option></select></div>
+        <button class="btn btn-gold" onclick="toast('Branch settings saved.','success')">Save Settings</button>
+      </div>
+      <div>
+        <div class="card-h"><span class="card-t">System Toggles</span></div>
+        ${secToggle('AML Auto-Screening','Auto-flag high-risk transactions',true)}
+        ${secToggle('HEPI Live Scoring','Real-time HEPI calculation',true)}
+        ${secToggle('Dual Authorization','RTGS BDT 1L+ requires 2 approvals',true)}
+        ${secToggle('Shariah Block','Block haram merchant categories',true)}
+        ${secToggle('Maintenance Mode','Temporarily disable online banking',false)}
+      </div>
+    </div>`;
+}
+
+function txnRow(t) {
+  return `<div class="txn-item">
+    <div class="txn-ico" style="background:${t.bg}">${t.icon}</div>
+    <div class="txn-info"><div class="txn-name">${t.desc}</div><div class="txn-meta">${t.date} · ${t.cat} · <span class="text-xs" style="opacity:.7">${t.type}</span></div></div>
+    <div class="txn-amt ${t.dir==='in'?'txn-in':'txn-out'}">${t.dir==='in'?'+':'-'}BDT ${fmt(t.amt)}</div>
+  </div>`;
+}
+
+function hepiRing(score, size) {
+  const r = size ? size/2*0.76 : 38;
+  const circ = 2*Math.PI*r;
+  const offset = circ - (score/100)*circ;
+  return `<svg viewBox="0 0 ${size||100} ${size||100}" width="${size||100}" height="${size||100}">
+    <circle cx="${size/2||50}" cy="${size/2||50}" r="${r}" fill="none" stroke="var(--surface3)" stroke-width="8"/>
+    <circle cx="${size/2||50}" cy="${size/2||50}" r="${r}" fill="none" stroke="var(--teal)" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" transform="rotate(-90 ${size/2||50} ${size/2||50})"/>
+  </svg>`;
+}
+
+function hepiDim(label, val, pct, color) {
+  return `<div class="hepi-d">
+    <div class="hepi-d-lbl">${label}</div>
+    <div class="hepi-d-bar"><div class="hepi-d-fill" style="width:${pct*100}%;background:${color}"></div></div>
+    <div class="hepi-d-val" style="color:${color}">${val}</div>
+  </div>`;
+}
+
+function secToggle(title, sub, checked) {
+  return `<div class="toggle-wrap">
+    <div class="toggle-info"><div class="toggle-t">${title}</div><div class="toggle-s">${sub}</div></div>
+    <label class="toggle"><input type="checkbox" ${checked?'checked':''}><span class="toggle-slider"></span></label>
+  </div>`;
+}
+
+function calcEMI() {
+  const P = parseFloat(document.getElementById('loan-amt')?.value)||0;
+  const r = parseFloat(document.getElementById('loan-rate')?.value)/100/12;
+  const n = parseInt(document.getElementById('loan-tenure')?.value)||1;
+  const emi = r>0 ? P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1) : P/n;
+  const total = emi*n;
+  const res = document.getElementById('emi-result');
+  const tot = document.getElementById('emi-total');
+  const pro = document.getElementById('emi-profit');
+  if(res) res.textContent='BDT '+fmt(Math.round(emi));
+  if(tot) tot.textContent='BDT '+fmt(Math.round(total));
+  if(pro) pro.textContent='BDT '+fmt(Math.round(total-P));
+}
+
+function calcTransfer() {
+  const amt = parseFloat(document.getElementById('tx-amount')?.value)||0;
+  const prev = document.getElementById('transfer-preview');
+  if (!prev) return;
+  if (amt>0) {
+    prev.style.display='block';
+    document.getElementById('prev-amount').textContent='BDT '+fmt(amt);
+    document.getElementById('prev-total').textContent='BDT '+fmt(amt);
+  } else prev.style.display='none';
+}
+
+function calcZakat() {
+  const cash = parseFloat(document.getElementById('z-cash')?.value)||0;
+  const gold = parseFloat(document.getElementById('z-gold')?.value)||0;
+  const inv = parseFloat(document.getElementById('z-invest')?.value)||0;
+  const recv = parseFloat(document.getElementById('z-recv')?.value)||0;
+  const liab = parseFloat(document.getElementById('z-liab')?.value)||0;
+  const total = cash+gold+inv+recv-liab;
+  const nisab = 85420;
+  const due = total>nisab ? total*0.025 : 0;
+  const zk = document.getElementById('z-zakatable');
+  const zd = document.getElementById('z-due');
+  const mzv = document.getElementById('modal-zakat-val');
+  if(zk) zk.textContent='BDT '+fmt(Math.round(total));
+  if(zd) zd.textContent='BDT '+fmt(Math.round(due));
+  if(mzv) mzv.textContent='BDT '+fmt(Math.round(due));
+}
+
+function renderTransferSteps(active) {
+  const el = document.getElementById('transfer-steps');
+  if (!el) return;
+  const steps = ['Enter Details','Review','OTP Verify','Complete'];
+  el.innerHTML = steps.map((s,i)=>`
+    <div class="step">
+      <div class="step-dot ${i+1<active?'done':i+1===active?'active':''}">${i+1<active?'✓':i+1}</div>
+      <div class="step-lbl">${s}</div>
+    </div>
+    ${i<steps.length-1?`<div class="step-line ${i+1<active?'done':''}"></div>`:''}`).join('');
+}
+
+function selectRecipient(name, acct) {
+  const rn = document.getElementById('rcpt-name');
+  const ra = document.getElementById('rcpt-acct');
+  if(rn) rn.value=name;
+  if(ra) ra.value=acct;
+  calcTransfer();
+  toast('Recipient selected: '+name,'info');
+}
+
+function lookupRecipient() {
+  const acct = document.getElementById('rcpt-acct')?.value||'';
+  const rn = document.getElementById('rcpt-name');
+  if (!rn) return;
+  const match = SAVED_RECIPIENTS.find(r=>r.acct.includes(acct.slice(-4)));
+  if (match && acct.length>4) rn.value=match.name;
+  else if (acct.length===0) rn.value='';
+}
+
+function initTransferOTP() {
+  const amt = parseFloat(document.getElementById('tx-amount')?.value)||0;
+  if (amt<=0) { toast('Please enter a valid amount','error'); return; }
+  if (!document.getElementById('rcpt-name')?.value) { toast('Please select or enter a recipient','error'); return; }
+  renderTransferSteps(3);
+  openModal('otp');
+}
+
+function otpNext(inp, idx) {
+  if (inp.value.length===1 && idx<5) {
+    document.querySelectorAll('.otp-digit')[idx+1]?.focus();
+  }
+}
+
+function confirmTransfer() {
+  const otpDigits = [...document.querySelectorAll('.otp-digit')].map(d=>d.value);
+  if (otpDigits.some(d=>d==='')) { toast('Please enter all 6 digits','error'); return; }
+  closeModal('otp');
+  renderTransferSteps(4);
+  const amt = parseFloat(document.getElementById('tx-amount')?.value)||0;
+  const rcpt = document.getElementById('rcpt-name')?.value||'Recipient';
+  // Add to transaction list
+  TXN_DATA.unshift({id:'T'+Date.now(),date:'23 Apr 2026',desc:'Transfer to '+rcpt,cat:'Transfer',amt,dir:'out',status:'Completed',icon:'⇄',bg:'rgba(59,125,216,0.1)',type:'NurBank'});
+  toast('Transfer of BDT '+fmt(amt)+' to '+rcpt+' successful! ✓','success');
+  setTimeout(()=>{
+    document.getElementById('tx-amount').value='';
+    document.getElementById('rcpt-name').value='';
+    document.getElementById('rcpt-acct').value='';
+    const prev=document.getElementById('transfer-preview');
+    if(prev) prev.style.display='none';
+    renderTransferSteps(1);
+  },500);
+}
+
+function submitPayment() {
+  const acct = document.getElementById('pay-acct')?.value;
+  const amt = document.getElementById('pay-amount')?.value;
+  if (!acct || !amt) { toast('Please fill all required fields','error'); return; }
+  closeModal('pay');
+  toast('Payment of BDT '+fmt(parseFloat(amt))+' submitted successfully!','success');
+}
+
+function askAI(question, role) {
+  const inputId = role==='client' ? 'ai-input-client' : 'ai-input-admin';
+  const inp = document.getElementById(inputId);
+  if (inp) inp.value = question;
+  sendAI(role);
+}
+
+function sendAI(role) {
+  const inputId = role==='client' ? 'ai-input-client' : 'ai-input-admin';
+  const msgsId = role==='client' ? 'ai-advisor-msgs' : 'ai-admin-msgs';
+  const inp = document.getElementById(inputId);
+  const msgs = document.getElementById(msgsId);
+  if (!inp || !msgs || !inp.value.trim()) return;
+  const q = inp.value.trim();
+  msgs.innerHTML += `<div class="ai-bubble user">${q}</div>`;
+  msgs.innerHTML += `<div class="ai-typing"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+  inp.value = '';
+  setTimeout(()=>{
+    const typing = msgs.querySelector('.ai-typing');
+    if (typing) typing.remove();
+    const responses = AI_RESPONSES[role];
+    const r = responses[aiIdx[role] % responses.length];
+    aiIdx[role]++;
+    msgs.innerHTML += `<div class="ai-bubble bot">${r}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1200);
+}
+
+function adminApprove(id, action) {
+  const pt = PENDING_TXNS.find(t=>t.id===id);
+  if (!pt) return;
+  if (action==='approve') toast(`Transaction ${id} approved. BDT ${fmt(pt.amt)} released.`,'success');
+  else toast(`Transaction ${id} flagged and rejected. STR filed.`,'error');
+}
+
+function openCustomerDetail(id) {
+  const c = ADMIN_CUSTOMERS.find(x=>x.id===id);
+  if (!c) return;
+  document.getElementById('customer-modal-content').innerHTML = `
+    <div class="flex items-center gap-3 mb-3">
+      <div class="c-avatar" style="background:var(--blue-bg);color:var(--blue);width:48px;height:48px;font-size:16px">${c.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div><div class="fw-bold" style="font-size:16px">${c.name}</div><div class="text-muted text-sm">${c.id} · Account •••• ${c.acct}</div></div>
+    </div>
+    <div class="g2" style="gap:10px;margin-bottom:14px">
+      <div class="metric"><div class="metric-lbl">Balance</div><div class="metric-val">BDT ${fmt(c.balance)}</div></div>
+      <div class="metric"><div class="metric-lbl">HEPI Score</div><div class="metric-val" style="color:${c.hepi>=80?'var(--teal)':c.hepi>=60?'var(--amber)':'var(--red)'}">${c.hepi}</div></div>
+    </div>
+    ${[['City',c.city],['KYC Status',c.kyc],['Risk Level',c.risk],['Account Status',c.status]].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:0.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-semi">${v}</span></div>`).join('')}
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-gold" style="flex:1" onclick="toast('Editing customer ${c.name}','info');closeModal('customer')">Edit Profile</button>
+      <button class="btn ${c.status==='Flagged'?'btn-teal':'btn-danger'}" style="flex:1" onclick="toast('Customer status updated','success');closeModal('customer')">${c.status==='Flagged'?'Clear Flag':'Flag Account'}</button>
+    </div>`;
+  openModal('customer');
+}
+
+function buildNotifList() {
+  const el = document.getElementById('notif-list');
+  if (!el) return;
+  el.innerHTML = NOTIFICATIONS.map(n=>`
+    <div class="flex gap-3 items-start" style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${n.icon}</div>
+      <div style="flex:1"><div class="fw-semi text-sm">${n.title}</div><div class="text-xs text-muted mt-1">${n.body}</div><div class="text-xs text-muted mt-1">${n.time}</div></div>
+    </div>`).join('');
+}
+
+function buildProfileModal() {
+  const el = document.getElementById('profile-content');
+  if (!el) return;
+  const u = STATE.user;
+  el.innerHTML = `
+    <div class="flex items-center gap-3 mb-4">
+      
+      <div class="c-avatar" style="width:52px;height:52px;font-size:18px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a1628;border-radius:12px">${u.initials}</div>
+      <div><div class="fw-bold" style="font-size:16px">${u.name}</div><div class="text-muted text-sm">${STATE.role==='client'?'NurBank HEPI Certified Client':'Admin — '+capitalize(u.roleLabel||u.role||'')}</div>${STATE.role==='client'?`<div class="badge badge-teal mt-1">HEPI Score: 87 — Excellent</div>`:''}</div>
+    </div>
+    ${STATE.role==='client'?`
+      ${[['Customer Since',u.since],['Branch',u.branch+', Dhaka'],['Account Status','Active ●'],['KYC Status','Fully Verified']].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:0.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-semi">${v}</span></div>`).join('')}
+    `:`
+      ${[['Staff ID',u.id],['Branch',u.branch],['Role',capitalize(u.roleLabel||u.role||'')]].map(([k,v])=>`<div class="flex justify-between text-sm" style="padding:7px 0;border-bottom:0.5px solid var(--border)"><span class="text-muted">${k}</span><span class="fw-semi">${v}</span></div>`).join('')}
+    `}
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-outline" style="flex:1" onclick="${STATE.role==='client'?'showPage(\'settings\')':'showPage(\'admin-settings\')'}; closeModal('profile')">Settings</button>
+      <button class="btn btn-danger" style="flex:1" onclick="doLogout()">Sign Out ↩</button>
+    </div>`;
+}
+
+function openModal(id) {
+  const m = document.getElementById('modal-'+id);
+  if (m) { m.classList.add('open'); calcZakat(); }
+}
+function closeModal(id) {
+  const m = document.getElementById('modal-'+id);
+  if (m) m.classList.remove('open');
+}
+
+let toastQueue = [];
+function toast(msg, type='info') {
+  const container = document.getElementById('toast');
+  const item = document.createElement('div');
+  item.className = 'toast-item '+(type||'info');
+  const icons = {success:'✓',error:'✗',info:'ℹ',gold:'★'};
+  item.innerHTML = `<span>${icons[type]||'ℹ'}</span><span>${msg}</span>`;
+  container.appendChild(item);
+  setTimeout(()=>item.classList.add('show'),10);
+  setTimeout(()=>{item.classList.remove('show');setTimeout(()=>item.remove(),400)},3500);
+}
+
+function setTab(btn) {
+  btn.closest('.tab-bar').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const typeVal = btn.textContent.trim();
+  const prev = document.getElementById('prev-type');
+  if (prev) prev.textContent = typeVal;
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+}
+
+function fmt(n) {
+  return Math.round(n).toLocaleString('en-IN');
+}
+
+function capitalize(s) {
+  return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+}
+
+window.onload = () => {
+  setTimeout(()=>{
+    toast('Welcome to NurBank — please login to continue','info');
+  },500);
+};
+</script>
+</body>
+</html>

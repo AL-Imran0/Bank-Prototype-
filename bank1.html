@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HEPI Bank Diagnostic — Halal Economy Performance Indicators</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --gold-dim: rgba(201,168,76,0.15);
+  --deep: #0D1117;
+  --surface: #161B22;
+  --surface2: #1E2530;
+  --border: rgba(201,168,76,0.2);
+  --border-soft: rgba(255,255,255,0.06);
+  --text: #E8E6E0;
+  --text-muted: #8B8880;
+  --text-dim: #5A5855;
+  --teal: #2DD4BF;
+  --purple: #A78BFA;
+  --coral: #F87171;
+  --green: #4ADE80;
+  --blue: #60A5FA;
+  --amber: #FBBF24;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--deep);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;}
+
+/* ── SCREEN MANAGEMENT ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ── WELCOME SCREEN ── */
+#screen-welcome{align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 70%);}
+.welcome-inner{max-width:680px;width:100%;text-align:center;}
+.bismillah{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:2.5rem;opacity:0.8;}
+.welcome-badge{display:inline-block;border:1px solid var(--border);padding:0.3rem 1rem;border-radius:2rem;font-size:0.75rem;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;}
+.welcome-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.2;margin-bottom:1rem;}
+.welcome-title span{color:var(--gold);}
+.welcome-sub{color:var(--text-muted);font-size:1rem;max-width:520px;margin:0 auto 2.5rem;}
+.welcome-pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.75rem;margin-bottom:2.5rem;}
+.pillar{background:var(--surface);border:1px solid var(--border-soft);border-radius:0.75rem;padding:0.9rem 0.5rem;font-size:0.78rem;color:var(--text-muted);}
+.pillar-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 0.5rem;}
+.btn-primary{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold);color:#0D1117;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;padding:0.85rem 2rem;border-radius:0.5rem;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.chapter-ref{margin-top:2rem;font-size:0.75rem;color:var(--text-dim);font-family:'DM Mono',monospace;}
+
+/* ── ONBOARDING SCREEN ── */
+#screen-onboard{padding:2rem;}
+.onboard-inner{max-width:600px;margin:0 auto;padding-top:3rem;}
+.step-header{margin-bottom:2rem;}
+.step-label{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:0.5rem;}
+.step-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:600;}
+.form-group{margin-bottom:1.5rem;}
+.form-label{display:block;font-size:0.82rem;color:var(--text-muted);margin-bottom:0.5rem;letter-spacing:0.05em;}
+.form-input,.form-select{width:100%;background:var(--surface);border:1px solid var(--border-soft);border-radius:0.5rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0.75rem 1rem;outline:none;transition:border 0.2s;}
+.form-input:focus,.form-select:focus{border-color:var(--gold);}
+.form-select option{background:var(--surface2);}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+.radio-card{background:var(--surface);border:1px solid var(--border-soft);border-radius:0.5rem;padding:0.75rem 1rem;cursor:pointer;transition:all 0.2s;font-size:0.85rem;}
+.radio-card:hover{border-color:var(--border);}
+.radio-card.selected{border-color:var(--gold);background:var(--gold-dim);}
+.radio-card input{display:none;}
+
+/* ── DIAGNOSTIC SCREEN ── */
+#screen-diagnostic{flex-direction:row;}
+.diag-sidebar{width:260px;min-width:260px;background:var(--surface);border-right:1px solid var(--border-soft);padding:1.5rem;display:flex;flex-direction:column;gap:0.5rem;}
+.sidebar-logo{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-soft);}
+.sidebar-bank{font-size:0.78rem;color:var(--text-muted);margin-bottom:1.5rem;}
+.dim-item{padding:0.6rem 0.75rem;border-radius:0.4rem;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:0.6rem;transition:background 0.15s;}
+.dim-item.active{background:var(--gold-dim);color:var(--gold);}
+.dim-item.done{color:var(--green);}
+.dim-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dim-progress{margin-top:auto;padding-top:1rem;border-top:1px solid var(--border-soft);}
+.progress-bar-wrap{background:var(--surface2);border-radius:1rem;height:4px;margin-top:0.5rem;}
+.progress-bar{height:4px;border-radius:1rem;background:var(--gold);transition:width 0.4s;}
+.progress-label{font-size:0.72rem;color:var(--text-muted);display:flex;justify-content:space-between;}
+
+.diag-main{flex:1;padding:2rem 2.5rem;overflow-y:auto;display:flex;flex-direction:column;}
+.diag-section-title{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.3rem;}
+.diag-section-sub{font-size:0.82rem;color:var(--text-muted);margin-bottom:2rem;}
+.question-card{background:var(--surface);border:1px solid var(--border-soft);border-radius:0.75rem;padding:1.25rem 1.5rem;margin-bottom:1.25rem;transition:border 0.2s;}
+.question-card:focus-within{border-color:var(--border);}
+.q-label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-family:'DM Mono',monospace;margin-bottom:0.4rem;}
+.q-text{font-size:0.92rem;margin-bottom:1rem;line-height:1.5;}
+.q-options{display:flex;flex-direction:column;gap:0.4rem;}
+.q-option{display:flex;align-items:flex-start;gap:0.6rem;padding:0.55rem 0.75rem;border-radius:0.4rem;cursor:pointer;font-size:0.85rem;border:1px solid transparent;transition:all 0.15s;}
+.q-option:hover{background:var(--surface2);}
+.q-option.selected{background:var(--gold-dim);border-color:var(--border);}
+.q-option input{display:none;}
+.q-score{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.65rem;color:var(--text-dim);}
+.q-option.selected .q-score{background:var(--gold);border-color:var(--gold);color:#0D1117;font-weight:600;}
+.nav-btns{display:flex;gap:1rem;margin-top:2rem;}
+.btn-ghost{background:transparent;border:1px solid var(--border-soft);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.85rem;padding:0.65rem 1.25rem;border-radius:0.4rem;cursor:pointer;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--border);color:var(--text);}
+.btn-next{background:var(--gold);color:#0D1117;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.85rem;padding:0.65rem 1.5rem;border-radius:0.4rem;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-next:hover{background:var(--gold-light);}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* ── RESULTS SCREEN ── */
+#screen-results{padding:2rem 3rem;max-width:860px;margin:0 auto;width:100%;}
+.results-header{text-align:center;padding:2rem 0 1.5rem;}
+.results-badge{display:inline-block;background:var(--gold-dim);border:1px solid var(--border);border-radius:2rem;padding:0.3rem 1rem;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.results-title{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem;}
+.results-bank{color:var(--text-muted);font-size:0.9rem;}
+
+.roadmap-stage{background:var(--surface);border:1px solid var(--gold);border-radius:0.75rem;padding:1.25rem 1.5rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:flex-start;}
+.stage-icon{width:44px;height:44px;border-radius:0.5rem;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);}
+.stage-info h3{font-size:1rem;font-weight:500;margin-bottom:0.2rem;}
+.stage-info p{font-size:0.82rem;color:var(--text-muted);}
+
+.hepi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+.hepi-card{background:var(--surface);border:1px solid var(--border-soft);border-radius:0.75rem;padding:1.1rem 1.25rem;}
+.hepi-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;}
+.hepi-card-name{font-size:0.82rem;font-weight:500;}
+.hepi-card-pct{font-family:'DM Mono',monospace;font-size:0.9rem;}
+.hepi-bar-wrap{background:var(--surface2);border-radius:1rem;height:5px;}
+.hepi-bar{height:5px;border-radius:1rem;transition:width 0.8s ease;}
+.hepi-verdict{font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;}
+
+.findings-section{margin:1.5rem 0;}
+.findings-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:1rem;}
+.finding-item{display:flex;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--border-soft);}
+.finding-item:last-child{border-bottom:none;}
+.finding-type{width:70px;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;font-family:'DM Mono',monospace;padding-top:0.15rem;flex-shrink:0;}
+.finding-type.gap{color:var(--coral);}
+.finding-type.strength{color:var(--green);}
+.finding-type.action{color:var(--amber);}
+.finding-text{font-size:0.85rem;line-height:1.6;}
+
+.maqasid-section{background:var(--surface);border:1px solid var(--border-soft);border-radius:0.75rem;padding:1.5rem;margin:1.5rem 0;}
+.maqasid-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:1rem;}
+.maqasid-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.75rem;}
+.maqasid-item{text-align:center;padding:0.75rem;}
+.maqasid-item-name{font-size:0.75rem;color:var(--text-muted);margin-bottom:0.3rem;}
+.maqasid-item-status{font-size:0.8rem;font-weight:500;}
+
+.action-plan{margin:1.5rem 0;}
+.action-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:1rem;}
+.action-item{background:var(--surface);border-left:3px solid var(--gold);padding:0.9rem 1.1rem;border-radius:0 0.5rem 0.5rem 0;margin-bottom:0.75rem;}
+.action-item h4{font-size:0.88rem;font-weight:500;margin-bottom:0.25rem;}
+.action-item p{font-size:0.8rem;color:var(--text-muted);}
+.action-priority{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:0.3rem;}
+.priority-high{color:var(--coral);}
+.priority-med{color:var(--amber);}
+.priority-low{color:var(--green);}
+
+.ai-insight{background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(167,139,250,0.05));border:1px solid var(--border);border-radius:0.75rem;padding:1.25rem 1.5rem;margin:1.5rem 0;}
+.ai-insight-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;color:var(--purple);margin-bottom:0.6rem;}
+.ai-insight-text{font-size:0.88rem;color:var(--text-muted);line-height:1.7;}
+
+.results-footer{display:flex;gap:1rem;justify-content:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-soft);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;padding:0.65rem 1.25rem;border-radius:0.4rem;cursor:pointer;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── AI LOADING ── */
+.ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:1rem;padding:3rem;}
+.ai-spinner{width:40px;height:40px;border:2px solid var(--border-soft);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ai-loading-text{font-size:0.85rem;color:var(--text-muted);animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+
+/* ── OVERALL SCORE ── */
+.score-ring-wrap{display:flex;justify-content:center;margin:1.5rem 0;}
+.score-ring{position:relative;width:140px;height:140px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-ring-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);}
+.score-ring-label{font-size:0.68rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;}
+
+@media(max-width:700px){
+  #screen-diagnostic{flex-direction:column;}
+  .diag-sidebar{width:100%;min-width:unset;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border-soft);}
+  .hepi-grid{grid-template-columns:1fr;}
+  #screen-results{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     SCREEN 1: WELCOME
+═════════════════════════════════════════ -->
+<div id="screen-welcome" class="screen active">
+  <div class="welcome-inner">
+    <div class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+    <div class="welcome-badge">HEPI Diagnostic Tool — Banking Edition</div>
+    <h1 class="welcome-title">Toward a <span>Mature</span><br/>Halal Economy</h1>
+    <p class="welcome-sub">An AI-powered assessment framework grounded in Maqāṣid al-Islam — measuring your bank's true halal performance beyond compliance.</p>
+    <div class="welcome-pillars">
+      <div class="pillar"><div class="pillar-dot" style="background:#2DD4BF;"></div>Human Value</div>
+      <div class="pillar"><div class="pillar-dot" style="background:#A78BFA;"></div>Economic Viability</div>
+      <div class="pillar"><div class="pillar-dot" style="background:#FBBF24;"></div>Ethical Alignment</div>
+      <div class="pillar"><div class="pillar-dot" style="background:#4ADE80;"></div>Environment</div>
+      <div class="pillar"><div class="pillar-dot" style="background:#F87171;"></div>Social Justice</div>
+    </div>
+    <button class="btn-primary" onclick="showScreen('screen-onboard')">Begin Assessment →</button>
+    <div class="chapter-ref">Based on Chapter 11 · Book: The Halal Economy · HEPI Framework</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 2: ONBOARDING
+═════════════════════════════════════════ -->
+<div id="screen-onboard" class="screen">
+  <div class="onboard-inner">
+    <div class="step-header">
+      <div class="step-label">Step 1 of 2 — Bank Profile</div>
+      <h2 class="step-title">Tell us about your bank</h2>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Bank name</label>
+      <input class="form-input" id="bankName" type="text" placeholder="e.g. Bank Islam Malaysia Berhad"/>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Country of operation</label>
+      <select class="form-select" id="bankCountry">
+        <option value="">Select country</option>
+        <option>Malaysia</option><option>Bangladesh</option><option>Indonesia</option>
+        <option>Pakistan</option><option>UAE</option><option>Saudi Arabia</option>
+        <option>Turkey</option><option>Nigeria</option><option>United Kingdom</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Bank type</label>
+      <div class="radio-grid">
+        <label class="radio-card" onclick="selectRadio(this,'bankType')">
+          <input type="radio" name="bankType" value="full-islamic"/>Full Islamic Bank
+        </label>
+        <label class="radio-card" onclick="selectRadio(this,'bankType')">
+          <input type="radio" name="bankType" value="islamic-window"/>Conventional with Islamic Window
+        </label>
+        <label class="radio-card" onclick="selectRadio(this,'bankType')">
+          <input type="radio" name="bankType" value="development"/>Islamic Development Bank
+        </label>
+        <label class="radio-card" onclick="selectRadio(this,'bankType')">
+          <input type="radio" name="bankType" value="microfinance"/>Islamic Microfinance Institution
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Bank size (total assets)</label>
+      <div class="radio-grid">
+        <label class="radio-card" onclick="selectRadio(this,'bankSize')">
+          <input type="radio" name="bankSize" value="small"/>Small (&lt; USD 1 billion)</label>
+        <label class="radio-card" onclick="selectRadio(this,'bankSize')">
+          <input type="radio" name="bankSize" value="medium"/>Medium (USD 1–10 billion)</label>
+        <label class="radio-card" onclick="selectRadio(this,'bankSize')">
+          <input type="radio" name="bankSize" value="large"/>Large (&gt; USD 10 billion)</label>
+        <label class="radio-card" onclick="selectRadio(this,'bankSize')">
+          <input type="radio" name="bankSize" value="sme"/>SME-focused</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Assessor role</label>
+      <select class="form-select" id="assessorRole">
+        <option value="">Select role</option>
+        <option>CEO / Senior Management</option>
+        <option>Shariah Compliance Officer</option>
+        <option>Sustainability / ESG Officer</option>
+        <option>Risk & Compliance Manager</option>
+        <option>Researcher / Academic</option>
+        <option>Regulator / Policy Maker</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+      <button class="btn-ghost" onclick="showScreen('screen-welcome')">← Back</button>
+      <button class="btn-primary" onclick="startDiagnostic()">Start Diagnostic →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 3: DIAGNOSTIC
+═════════════════════════════════════════ -->
+<div id="screen-diagnostic" class="screen">
+  <div class="diag-sidebar">
+    <div class="sidebar-logo">HEPI Assessment</div>
+    <div class="sidebar-bank" id="sidebar-bank-name">—</div>
+    <div class="dim-item active" id="nav-0" onclick="jumpTo(0)">
+      <div class="dim-dot" style="background:#2DD4BF;"></div>Level 1 — Compliance
+    </div>
+    <div class="dim-item" id="nav-1" onclick="jumpTo(1)">
+      <div class="dim-dot" style="background:#2DD4BF;"></div>Human Value
+    </div>
+    <div class="dim-item" id="nav-2" onclick="jumpTo(2)">
+      <div class="dim-dot" style="background:#A78BFA;"></div>Economic Viability
+    </div>
+    <div class="dim-item" id="nav-3" onclick="jumpTo(3)">
+      <div class="dim-dot" style="background:#FBBF24;"></div>Ethical Alignment
+    </div>
+    <div class="dim-item" id="nav-4" onclick="jumpTo(4)">
+      <div class="dim-dot" style="background:#4ADE80;"></div>Environment
+    </div>
+    <div class="dim-item" id="nav-5" onclick="jumpTo(5)">
+      <div class="dim-dot" style="background:#F87171;"></div>Social Justice
+    </div>
+    <div class="dim-progress">
+      <div class="progress-label">
+        <span>Progress</span><span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="prog-bar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="diag-main" id="diag-main">
+    <!-- Injected dynamically -->
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 4: AI PROCESSING
+═════════════════════════════════════════ -->
+<div id="screen-loading" class="screen">
+  <div class="ai-loading">
+    <div class="ai-spinner"></div>
+    <div class="ai-loading-text" id="loading-msg">Analysing your responses against HEPI framework…</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 5: RESULTS
+═════════════════════════════════════════ -->
+<div id="screen-results" class="screen">
+  <div id="results-content"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+const state = {
+  bankName: '', bankCountry: '', bankType: '', bankSize: '', assessorRole: '',
+  currentSection: 0,
+  answers: {} // { sectionIndex_qIndex: scoreValue }
+};
+
+/* ═══════════════════════════════════════
+   QUESTION BANK
+   Grounded in Tables 11.2-11.7 of Chapter 11,
+   adapted for the banking sector
+═══════════════════════════════════════ */
+const sections = [
+  {
+    id: 'compliance',
+    title: 'Level 1 — Foundational Compliance',
+    subtitle: 'Baseline Shariah certification and halal integrity (Table 11.2)',
+    color: '#2DD4BF',
+    questions: [
+      {
+        text: 'Does your bank hold a recognised Shariah certification from a credible, independent body with international standing?',
+        options: [
+          {label:'Yes — internationally recognised certification, regularly renewed',score:3},
+          {label:'Yes — national certification only',score:2},
+          {label:'In process / partial certification',score:1},
+          {label:'No formal Shariah certification',score:0}
+        ]
+      },
+      {
+        text: 'Is there an independent, functioning Shariah Supervisory Board (SSB) that reviews products and operations?',
+        options: [
+          {label:'Yes — fully independent SSB, meets regularly, publishes reports',score:3},
+          {label:'Yes — SSB exists but limited independence or irregular meetings',score:2},
+          {label:'Shariah advisory committee only, no formal SSB',score:1},
+          {label:'No Shariah governance structure',score:0}
+        ]
+      },
+      {
+        text: 'Are all financing products (murabahah, ijarah, musharakah, etc.) verified free from riba, gharar and maysir?',
+        options: [
+          {label:'Full verification with documented audit trails for all products',score:3},
+          {label:'Most products verified; some gaps in documentation',score:2},
+          {label:'Partial — some products are verified',score:1},
+          {label:'No systematic verification process',score:0}
+        ]
+      },
+      {
+        text: 'Are all employees involved in product structuring trained in Shariah compliance requirements?',
+        options: [
+          {label:'Mandatory training with competency assessments and records',score:3},
+          {label:'Training provided but not systematically tracked',score:2},
+          {label:'Awareness-level training only',score:1},
+          {label:'No formal Shariah training programme',score:0}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'human',
+    title: 'Human Value Creation',
+    subtitle: 'Wages, financial inclusion, workforce development (Table 11.3)',
+    color: '#2DD4BF',
+    questions: [
+      {
+        text: 'Do all bank employees — including contract and outsourced staff — earn wages sufficient for basic needs plus discretionary income in their local context (living wage standard)?',
+        options: [
+          {label:'Yes — formal living wage policy, reviewed annually, third-party assessed',score:3},
+          {label:'Above minimum wage for most, but no formal living wage commitment',score:2},
+          {label:'Minimum wage compliance only',score:1},
+          {label:'No documented wage policy beyond legal minimum',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank actively extend financial services to underserved populations — low-income households, rural communities, SMEs, or marginalised groups?',
+        options: [
+          {label:'Dedicated financial inclusion strategy with measurable targets and outcomes',score:3},
+          {label:'Some inclusion products (microfinance, SME) but no formal strategy',score:2},
+          {label:'Occasional outreach, not systematic',score:1},
+          {label:'No financial inclusion focus',score:0}
+        ]
+      },
+      {
+        text: 'What percentage of the bank\'s financing portfolio is directed toward social priority sectors — agriculture, SMEs, affordable housing, education, healthcare?',
+        options: [
+          {label:'More than 30% with documented targets',score:3},
+          {label:'10–30%, monitored but not formally targeted',score:2},
+          {label:'Less than 10%',score:1},
+          {label:'Not tracked',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank have structured career development pathways and training investment for all staff levels, including lower-grade staff?',
+        options: [
+          {label:'Formal development plans for all levels; training budget published',score:3},
+          {label:'Development programmes exist for professional grades; limited for others',score:2},
+          {label:'Ad hoc training only',score:1},
+          {label:'No structured development programme',score:0}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'economic',
+    title: 'Economic Viability with Purpose',
+    subtitle: 'Profit sharing, value distribution, supply chain fairness (Table 11.4)',
+    color: '#A78BFA',
+    questions: [
+      {
+        text: 'Are profit-and-loss sharing (musharakah / mudarabah) products genuinely offered and actively promoted — not just token offerings?',
+        options: [
+          {label:'Core part of portfolio; performance-based sharing clearly disclosed',score:3},
+          {label:'Offered but not dominant; disclosure is adequate',score:2},
+          {label:'Available but rarely used; murabahah dominates',score:1},
+          {label:'Virtually absent from product mix',score:0}
+        ]
+      },
+      {
+        text: 'How equitably is value distributed — between depositors (mudarib returns), staff, shareholders, and community reinvestment?',
+        options: [
+          {label:'Transparent value-added statement published; distribution is balanced',score:3},
+          {label:'Some disclosure; distribution favours shareholders significantly',score:2},
+          {label:'Minimal disclosure; depositor returns are disproportionately low',score:1},
+          {label:'No transparency on value distribution',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank prioritise long-term sustainable growth over short-term profit maximisation in its strategic decisions?',
+        options: [
+          {label:'Board-level mandate for long-term sustainability; linked to executive KPIs',score:3},
+          {label:'Long-term orientation stated in strategy but not embedded in incentives',score:2},
+          {label:'Short-term financial targets dominate decision-making',score:1},
+          {label:'No discernible long-term sustainability orientation',score:0}
+        ]
+      },
+      {
+        text: 'Are financing charges, fees and profit rates transparent and free from exploitative pricing — particularly for vulnerable borrowers?',
+        options: [
+          {label:'Full fee transparency; pricing policy published; no evidence of exploitation',score:3},
+          {label:'Generally transparent but some complex products obscure true costs',score:2},
+          {label:'Limited disclosure; fees are sometimes hidden or bundled',score:1},
+          {label:'Little transparency; complaints about exploitative pricing exist',score:0}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'ethical',
+    title: 'Ethical Alignment',
+    subtitle: 'Transparency, zakat, anti-corruption, contractual fairness (Table 11.5)',
+    color: '#FBBF24',
+    questions: [
+      {
+        text: 'Does the bank calculate and distribute zakat on its corporate wealth in accordance with recognised Shariah standards, with full documentation?',
+        options: [
+          {label:'Annual zakat calculated, distributed to eligible recipients, fully documented',score:3},
+          {label:'Zakat paid but methodology unclear or not published',score:2},
+          {label:'Zakat encouraged for individual staff; no corporate zakat policy',score:1},
+          {label:'No corporate zakat practice',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank have documented anti-corruption and anti-bribery policies with training, monitoring, whistleblower protection, and enforcement?',
+        options: [
+          {label:'Comprehensive policy, training records, whistleblower mechanism, incident log',score:3},
+          {label:'Policy exists; training is inconsistent; limited whistleblower protection',score:2},
+          {label:'Basic policy only; no systematic monitoring',score:1},
+          {label:'No formal anti-corruption programme',score:0}
+        ]
+      },
+      {
+        text: 'Are all financing contracts — especially for retail customers — written in clear, accessible language with fair dispute resolution accessible to weaker parties?',
+        options: [
+          {label:'Plain language contracts; accessible dispute mechanism; independently reviewed',score:3},
+          {label:'Generally fair; some complex clauses; dispute process exists',score:2},
+          {label:'Standard dense contracts; dispute process is bank-controlled',score:1},
+          {label:'Contracts heavily favour the bank; poor dispute access',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank fully disclose all Shariah audit findings, relevant certifications, and governance reports to stakeholders?',
+        options: [
+          {label:'Annual Shariah report published; audit findings disclosed; accessible online',score:3},
+          {label:'Summary report published; full findings not always disclosed',score:2},
+          {label:'Internal reporting only; minimal public disclosure',score:1},
+          {label:'No public Shariah reporting',score:0}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'environment',
+    title: 'Environmental Stewardship',
+    subtitle: 'Green financing, carbon footprint, sustainable operations (Table 11.6)',
+    color: '#4ADE80',
+    questions: [
+      {
+        text: 'Does the bank have a green or sustainable finance strategy — including green sukuk, ESG-linked financing, or climate-aligned investment criteria?',
+        options: [
+          {label:'Formal green finance strategy; green sukuk issued or in pipeline; ESG criteria embedded',score:3},
+          {label:'Exploring green products; no formal strategy yet',score:2},
+          {label:'Aware of topic; no concrete products or commitments',score:1},
+          {label:'Environmental financing not on the agenda',score:0}
+        ]
+      },
+      {
+        text: 'Has the bank assessed its own operational carbon footprint (branches, data centres, paper, travel) and set reduction targets?',
+        options: [
+          {label:'Full Scope 1 & 2 assessment; documented targets aligned with climate science',score:3},
+          {label:'Partial assessment; some reduction initiatives but no formal targets',score:2},
+          {label:'Basic awareness; no assessment conducted',score:1},
+          {label:'No attention to operational environmental impact',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank apply environmental risk screening to its financing — avoiding or reducing exposure to environmentally harmful industries?',
+        options: [
+          {label:'Formal environmental risk policy; exclusion lists; sector-specific limits',score:3},
+          {label:'Reputational risk considered; no formal environmental screening policy',score:2},
+          {label:'Industry standards followed; no bank-specific environmental policy',score:1},
+          {label:'No environmental screening in credit decisions',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank actively promote resource efficiency in its own operations — energy, water, paper, waste?',
+        options: [
+          {label:'Measurable efficiency targets; reported annually; branch-level programmes',score:3},
+          {label:'Some initiatives exist; not systematically tracked',score:2},
+          {label:'Basic awareness campaigns only',score:1},
+          {label:'No resource efficiency focus',score:0}
+        ]
+      }
+    ]
+  },
+  {
+    id: 'social',
+    title: 'Social Justice & Inclusion',
+    subtitle: 'Workforce diversity, waqf, community investment, grievance (Table 11.7)',
+    color: '#F87171',
+    questions: [
+      {
+        text: 'Does the bank\'s workforce at all levels — including leadership — reflect the diversity of the communities it serves?',
+        options: [
+          {label:'Diversity data published; targets set for leadership; inclusion programmes active',score:3},
+          {label:'Diverse at operational level; leadership less representative; no formal targets',score:2},
+          {label:'Diversity acknowledged but no measurement or targets',score:1},
+          {label:'No diversity focus',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank support waqf, sadaqah jariyah, or other Islamic social finance mechanisms that benefit the broader community?',
+        options: [
+          {label:'Active waqf management programme; sadaqah collection with documented distribution',score:3},
+          {label:'Some waqf or sadaqah activity; limited scale or documentation',score:2},
+          {label:'Facilitates individual waqf but no institutional programme',score:1},
+          {label:'No engagement with Islamic social finance instruments',score:0}
+        ]
+      },
+      {
+        text: 'Is there a confidential, accessible grievance mechanism for both customers and employees to raise ethical concerns — with documented outcomes?',
+        options: [
+          {label:'Confidential hotline + Shariah complaints channel; outcomes tracked and reported',score:3},
+          {label:'Complaint channel exists; limited confidentiality or tracking',score:2},
+          {label:'Basic complaint process; ethically-specific concerns not distinguished',score:1},
+          {label:'No independent grievance mechanism',score:0}
+        ]
+      },
+      {
+        text: 'Does the bank invest a meaningful share of profits in community development — beyond statutory CSR obligations?',
+        options: [
+          {label:'Formal community investment budget (>1% net profit); impact assessed annually',score:3},
+          {label:'Regular community activities; below 1% of profits; impact not formally assessed',score:2},
+          {label:'Ad hoc donations; no strategic community investment',score:1},
+          {label:'Statutory CSR only; no voluntary community investment',score:0}
+        ]
+      }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function selectRadio(el,name){
+  document.querySelectorAll(`[onclick*="${name}"]`).forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked=true;
+}
+
+function startDiagnostic(){
+  state.bankName = document.getElementById('bankName').value || 'Your Bank';
+  state.bankCountry = document.getElementById('bankCountry').value;
+  state.bankType = document.querySelector('input[name="bankType"]:checked')?.value || '';
+  state.bankSize = document.querySelector('input[name="bankSize"]:checked')?.value || '';
+  state.assessorRole = document.getElementById('assessorRole').value;
+  state.currentSection = 0;
+  document.getElementById('sidebar-bank-name').textContent = state.bankName;
+  renderSection(0);
+  showScreen('screen-diagnostic');
+}
+
+function jumpTo(idx){
+  if(idx <= state.currentSection){
+    state.currentSection = idx;
+    renderSection(idx);
+  }
+}
+
+function renderSection(idx){
+  const sec = sections[idx];
+  const main = document.getElementById('diag-main');
+
+  // Update sidebar
+  document.querySelectorAll('.dim-item').forEach((el,i)=>{
+    el.classList.remove('active');
+    if(i===idx) el.classList.add('active');
+    if(i<idx) el.classList.add('done');
+  });
+
+  // Progress
+  const total = sections.reduce((a,s)=>a+s.questions.length,0);
+  const answered = Object.keys(state.answers).length;
+  const pct = Math.round(answered/total*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-bar').style.width = pct+'%';
+
+  let html = `
+    <div class="diag-section-title" style="color:${sec.color}">${sec.title}</div>
+    <div class="diag-section-sub">${sec.subtitle}</div>
+  `;
+
+  sec.questions.forEach((q,qi)=>{
+    const key = `${idx}_${qi}`;
+    const saved = state.answers[key];
+    html += `<div class="question-card" id="qc-${key}">
+      <div class="q-label">Question ${qi+1} of ${sec.questions.length}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-options">`;
+    q.options.forEach((opt,oi)=>{
+      const sel = saved===opt.score ? 'selected' : '';
+      html += `<label class="q-option ${sel}" onclick="selectAnswer('${key}',${opt.score},this)">
+        <div class="q-score">${opt.score}</div>
+        <span>${opt.label}</span>
+      </label>`;
+    });
+    html += `</div></div>`;
+  });
+
+  const isLast = idx===sections.length-1;
+  html += `<div class="nav-btns">
+    ${idx>0?`<button class="btn-ghost" onclick="prevSection()">← Previous</button>`:''}
+    <button class="btn-next" id="btn-next-main" onclick="${isLast?'submitDiagnostic()':'nextSection()'}">${isLast?'Generate Report →':'Next Dimension →'}</button>
+  </div>`;
+
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function selectAnswer(key, score, el){
+  state.answers[key] = score;
+  el.closest('.q-options').querySelectorAll('.q-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  // Update progress
+  const total = sections.reduce((a,s)=>a+s.questions.length,0);
+  const answered = Object.keys(state.answers).length;
+  const pct = Math.round(answered/total*100);
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-bar').style.width = pct+'%';
+}
+
+function nextSection(){
+  state.currentSection++;
+  renderSection(state.currentSection);
+}
+function prevSection(){
+  state.currentSection--;
+  renderSection(state.currentSection);
+}
+
+/* ═══════════════════════════════════════
+   SUBMIT + AI ANALYSIS
+═══════════════════════════════════════ */
+async function submitDiagnostic(){
+  showScreen('screen-loading');
+  const msgs = [
+    'Analysing responses against HEPI framework…',
+    'Mapping to maqasid al-Islam dimensions…',
+    'Identifying gaps and strengths…',
+    'Locating your bank on the maturity roadmap…',
+    'Generating action plan…'
+  ];
+  let mi=0;
+  const interval = setInterval(()=>{
+    document.getElementById('loading-msg').textContent = msgs[Math.min(mi++,msgs.length-1)];
+  },2000);
+
+  // Build scores per section
+  const scores = {};
+  sections.forEach((sec,si)=>{
+    let total=0, max=sec.questions.length*3;
+    sec.questions.forEach((_,qi)=>{
+      const v = state.answers[`${si}_${qi}`];
+      total += (v!==undefined?v:0);
+    });
+    scores[sec.id] = {raw:total, max, pct:Math.round(total/max*100)};
+  });
+
+  // Build prompt for Claude API
+  const profileText = `
+Bank: ${state.bankName}
+Country: ${state.bankCountry || 'Not specified'}
+Type: ${state.bankType || 'Not specified'}
+Size: ${state.bankSize || 'Not specified'}
+Assessor role: ${state.assessorRole || 'Not specified'}
+  `.trim();
+
+  const scoresText = sections.map((sec,si)=>{
+    const sc = scores[sec.id];
+    const details = sec.questions.map((q,qi)=>{
+      const ans = state.answers[`${si}_${qi}`];
+      const chosen = q.options.find(o=>o.score===ans);
+      return `  Q: ${q.text}\n  A: ${chosen?chosen.label:'Not answered'} (Score: ${ans!==undefined?ans:'0'}/3)`;
+    }).join('\n');
+    return `\n[${sec.title}] — ${sc.pct}%\n${details}`;
+  }).join('\n');
+
+  const prompt = `You are an expert in Islamic finance, the halal economy, and the HEPI (Human-centric Economic and Profitable Innovations) framework from Chapter 11 of the book "The Halal Economy". 
+
+A bank has completed the HEPI diagnostic assessment. Analyse their responses and generate a structured, insightful report.
+
+BANK PROFILE:
+${profileText}
+
+ASSESSMENT SCORES AND RESPONSES:
+${scoresText}
+
+SCORES SUMMARY:
+- Compliance: ${scores.compliance.pct}%
+- Human Value: ${scores.human.pct}%
+- Economic Viability: ${scores.economic.pct}%
+- Ethical Alignment: ${scores.ethical.pct}%
+- Environmental Stewardship: ${scores.environment.pct}%
+- Social Justice: ${scores.social.pct}%
+- OVERALL: ${Math.round(Object.values(scores).reduce((a,s)=>a+s.pct,0)/6)}%
+
+Based on this data, generate a JSON response with this exact structure:
+{
+  "roadmapStage": {
+    "number": <1-6>,
+    "name": "<one of: Awareness / Institution Building / Standardization / Integration / Innovation / Maqasid Alignment>",
+    "description": "<2 sentence explanation of why this bank is at this stage based on their scores>"
+  },
+  "overallScore": <0-100 number>,
+  "overallVerdict": "<one short sentence overall assessment>",
+  "dimensionInsights": {
+    "compliance": "<1 sentence specific to this bank's compliance answers>",
+    "human": "<1 sentence>",
+    "economic": "<1 sentence>",
+    "ethical": "<1 sentence>",
+    "environment": "<1 sentence>",
+    "social": "<1 sentence>"
+  },
+  "strengths": [
+    "<specific strength based on their actual answers>",
+    "<specific strength>",
+    "<specific strength>"
+  ],
+  "gaps": [
+    "<specific gap based on actual answers>",
+    "<specific gap>",
+    "<specific gap>"
+  ],
+  "actionPlan": [
+    {
+      "priority": "high",
+      "title": "<action title>",
+      "description": "<specific, actionable 2-sentence recommendation grounded in maqasid al-Islam>",
+      "timeframe": "<e.g. 0-6 months>"
+    },
+    {
+      "priority": "high",
+      "title": "<action title>",
+      "description": "<recommendation>",
+      "timeframe": "<timeframe>"
+    },
+    {
+      "priority": "medium",
+      "title": "<action title>",
+      "description": "<recommendation>",
+      "timeframe": "<timeframe>"
+    },
+    {
+      "priority": "medium",
+      "title": "<action title>",
+      "description": "<recommendation>",
+      "timeframe": "<timeframe>"
+    },
+    {
+      "priority": "low",
+      "title": "<action title>",
+      "description": "<recommendation>",
+      "timeframe": "<timeframe>"
+    }
+  ],
+  "maqasidAlignment": {
+    "faith": "<Assessed / Partial / Needs Work>",
+    "life": "<Assessed / Partial / Needs Work>",
+    "intellect": "<Assessed / Partial / Needs Work>",
+    "progeny": "<Assessed / Partial / Needs Work>",
+    "wealth": "<Assessed / Partial / Needs Work>"
+  },
+  "aiInsight": "<A 3-4 sentence maqasid-grounded narrative insight about this bank's journey, referencing their specific context (country, type, size), what the chapter calls a purpose-driven halal economy, and what meaningful next steps look like for them specifically.>"
+}
+
+Return ONLY valid JSON. No markdown, no explanation, no preamble.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const data = await response.json();
+    clearInterval(interval);
+    const raw = data.content.map(c=>c.text||'').join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const result = JSON.parse(clean);
+    renderResults(scores, result);
+  } catch(e){
+    clearInterval(interval);
+    renderResults(scores, generateFallback(scores));
+  }
+}
+
+/* ═══════════════════════════════════════
+   FALLBACK (if API unavailable)
+═══════════════════════════════════════ */
+function generateFallback(scores){
+  const overall = Math.round(Object.values(scores).reduce((a,s)=>a+s.pct,0)/6);
+  const stage = overall<25?1:overall<40?2:overall<55?3:overall<70?4:overall<85?5:6;
+  const stageNames=['Awareness','Institution Building','Standardization','Integration','Innovation','Maqasid Alignment'];
+  return {
+    roadmapStage:{
+      number:stage,
+      name:stageNames[stage-1],
+      description:`Based on your assessment scores averaging ${overall}%, your bank is positioned at the ${stageNames[stage-1]} stage of the halal economy maturity journey. This reflects your current institutional capacity and alignment with maqasid al-Islam principles.`
+    },
+    overallScore:overall,
+    overallVerdict:`Your bank shows ${overall>=70?'strong':'developing'} commitment to halal economy principles with clear opportunities for deeper maqasid alignment.`,
+    dimensionInsights:{
+      compliance:`Shariah compliance structures score ${scores.compliance.pct}% — ${scores.compliance.pct>=70?'a solid foundation':'foundational work is needed'}.`,
+      human:`Human value creation at ${scores.human.pct}% — ${scores.human.pct>=70?'financial inclusion is well considered':'inclusion and living wage policies need attention'}.`,
+      economic:`Economic viability scores ${scores.economic.pct}% — ${scores.economic.pct>=70?'profit-sharing structures are meaningful':'genuine PLS products need development'}.`,
+      ethical:`Ethical alignment at ${scores.ethical.pct}% — ${scores.ethical.pct>=70?'transparency and zakat practices are commendable':'zakat and transparency require strengthening'}.`,
+      environment:`Environmental stewardship at ${scores.environment.pct}% — ${scores.environment.pct>=70?'green finance is on the agenda':'environmental integration needs to begin'}.`,
+      social:`Social justice at ${scores.social.pct}% — ${scores.social.pct>=70?'community investment is meaningful':'waqf and community programmes need expansion'}.`
+    },
+    strengths:[
+      scores.compliance.pct>=scores.human.pct?'Shariah compliance foundation is established':'Financial inclusion efforts are notable',
+      scores.ethical.pct>=60?'Ethical governance structures show commitment':'Willingness to engage with the HEPI framework itself is a strength',
+      'Assessment completion demonstrates institutional readiness for maqasid-aligned improvement'
+    ],
+    gaps:[
+      Object.entries(scores).sort((a,b)=>a[1].pct-b[1].pct)[0][0]+' dimension requires most urgent attention',
+      'Gap between compliance focus and purpose-driven outcomes needs bridging',
+      'Maqasid-aligned performance measurement systems are not yet in place'
+    ],
+    actionPlan:[
+      {priority:'high',title:'Establish living wage policy',description:'Commission a living wage assessment for all staff levels including contracted workers. Publish a binding commitment with annual review — this directly realises hifz al-nafs (protection of life) and hifz al-nasl (protection of progeny).',timeframe:'0-6 months'},
+      {priority:'high',title:'Strengthen zakat governance',description:'Formalise corporate zakat calculation methodology with an independent Shariah authority. Publish distribution records annually to demonstrate ethical accountability (amanah).',timeframe:'0-6 months'},
+      {priority:'medium',title:'Launch green sukuk exploration',description:'Form a working group to assess the feasibility of green sukuk or ESG-linked murabahah. This positions the bank at the Innovation stage of the halal economy roadmap and advances hifz al-aql.',timeframe:'6-18 months'},
+      {priority:'medium',title:'Develop financial inclusion strategy',description:'Set measurable targets for financing to SMEs, low-income households and rural communities. Report outcomes annually — this is the operational expression of maqasid social justice.',timeframe:'6-12 months'},
+      {priority:'low',title:'Integrate HEPI into annual reporting',description:'Begin disclosing performance on all five HEPI dimensions in your annual report alongside financial results. This transforms compliance reporting into a maqasid-aligned accountability framework.',timeframe:'12-24 months'}
+    ],
+    maqasidAlignment:{
+      faith:scores.compliance.pct>=70?'Assessed':'Partial',
+      life:scores.human.pct>=70?'Assessed':'Needs Work',
+      intellect:scores.environment.pct>=60?'Partial':'Needs Work',
+      progeny:scores.social.pct>=70?'Assessed':'Partial',
+      wealth:scores.economic.pct>=70?'Assessed':'Partial'
+    },
+    aiInsight:`This assessment reveals a bank navigating the transition described in Chapter 11 — from a compliance-centred halal identity toward a genuinely purpose-driven halal economy actor. The gap between your compliance score and your maqasid alignment dimensions is precisely what the HEPI framework is designed to surface. A mature halal economy, as the chapter argues, is not measured by what is avoided but by what is achieved for human flourishing. Your bank's next strategic horizon should be closing this gap — not through tick-box expansion, but through institutional commitment to justice, dignity, and balanced prosperity as operational benchmarks.`
+  };
+}
+
+/* ═══════════════════════════════════════
+   RENDER RESULTS
+═══════════════════════════════════════ */
+function renderResults(scores, r){
+  const dimColors = {compliance:'#2DD4BF',human:'#2DD4BF',economic:'#A78BFA',ethical:'#FBBF24',environment:'#4ADE80',social:'#F87171'};
+  const dimNames = {compliance:'Compliance',human:'Human Value',economic:'Economic Viability',ethical:'Ethical Alignment',environment:'Environmental',social:'Social Justice'};
+  const stageNums = ['I','II','III','IV','V','VI'];
+
+  // Score ring
+  const score = r.overallScore;
+  const circ = 2*Math.PI*54;
+  const dash = circ*(score/100);
+
+  const maqasidColors = {
+    'Assessed':'#4ADE80',
+    'Partial':'#FBBF24',
+    'Needs Work':'#F87171'
+  };
+
+  const html = `
+    <div class="results-header">
+      <div class="results-badge">Assessment Complete</div>
+      <h2 class="results-title">HEPI Diagnostic Report</h2>
+      <div class="results-bank">${state.bankName} · ${state.bankCountry||''} · ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
+    </div>
+
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+          <circle cx="70" cy="70" r="54" fill="none" stroke="${score>=70?'#4ADE80':score>=45?'#FBBF24':'#F87171'}" stroke-width="10"
+            stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-ring-num">${score}</div>
+          <div class="score-ring-label">Overall</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-stage">
+      <div class="stage-icon">${stageNums[(r.roadmapStage.number||1)-1]}</div>
+      <div class="stage-info">
+        <h3>Roadmap Stage: ${r.roadmapStage.name}</h3>
+        <p>${r.roadmapStage.description}</p>
+      </div>
+    </div>
+
+    <div class="hepi-grid">
+      ${Object.entries(scores).map(([id,sc])=>`
+        <div class="hepi-card">
+          <div class="hepi-card-top">
+            <div class="hepi-card-name" style="color:${dimColors[id]}">${dimNames[id]}</div>
+            <div class="hepi-card-pct" style="color:${sc.pct>=70?'#4ADE80':sc.pct>=45?'#FBBF24':'#F87171'}">${sc.pct}%</div>
+          </div>
+          <div class="hepi-bar-wrap">
+            <div class="hepi-bar" style="width:${sc.pct}%;background:${dimColors[id]}"></div>
+          </div>
+          <div class="hepi-verdict">${r.dimensionInsights?.[id]||''}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="findings-section">
+      <div class="findings-title">Key Findings</div>
+      ${r.strengths?.map(s=>`<div class="finding-item"><div class="finding-type strength">Strength</div><div class="finding-text">${s}</div></div>`).join('')||''}
+      ${r.gaps?.map(g=>`<div class="finding-item"><div class="finding-type gap">Gap</div><div class="finding-text">${g}</div></div>`).join('')||''}
+    </div>
+
+    <div class="maqasid-section">
+      <div class="maqasid-title">Maqāṣid al-Islam Alignment</div>
+      <div class="maqasid-grid">
+        ${Object.entries(r.maqasidAlignment||{}).map(([k,v])=>`
+          <div class="maqasid-item">
+            <div class="maqasid-item-name">Hifz al-${k}</div>
+            <div class="maqasid-item-status" style="color:${maqasidColors[v]||'#8B8880'}">${v}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="action-plan">
+      <div class="action-title">Recommended Action Plan</div>
+      ${r.actionPlan?.map(a=>`
+        <div class="action-item">
+          <div class="action-priority priority-${a.priority}">${a.priority} priority · ${a.timeframe||''}</div>
+          <h4>${a.title}</h4>
+          <p>${a.description}</p>
+        </div>
+      `).join('')||''}
+    </div>
+
+    <div class="ai-insight">
+      <div class="ai-insight-label">Maqasid-Grounded Analysis</div>
+      <div class="ai-insight-text">${r.aiInsight||''}</div>
+    </div>
+
+    <div class="results-footer">
+      <button class="btn-outline" onclick="showScreen('screen-welcome')">New Assessment</button>
+      <button class="btn-primary" onclick="window.print()">Export Report</button>
+    </div>
+  `;
+
+  document.getElementById('results-content').innerHTML = html;
+  showScreen('screen-results');
+}
+</script>
+</body>
+</html>
